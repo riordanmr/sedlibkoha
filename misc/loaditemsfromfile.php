@@ -12,7 +12,15 @@
 
     global $fieldNames;
     global $currentDate;
-    $currentDate = date('Y-m-d');
+
+    function init()
+    {
+        date_default_timezone_set('America/Phoenix');
+        global $currentDate;
+        $currentDate = date('Y-m-d');
+        echo "currentDate: $currentDate\n";
+        echo "currentDateTime: " . currentDateTime() . "\n";
+    }
 
     // This defines the DB_* constants used below.
     require_once '../../../holdskoha.config.php';
@@ -64,10 +72,10 @@
         $aryNames = str_getcsv($line);
         for($i=0; $i<count($aryNames); $i++) {
             $nameTrimmed = trim($aryNames[$i]);
-            echo "Field $i: $nameTrimmed\n";
+            //echo "Field $i: $nameTrimmed\n";
             $fieldNames[$nameTrimmed] = $i;
         }
-        echo "End of processing field names\n";
+        // echo "End of processing field names\n";
     }
 
     function getFieldByName($fields, $name)
@@ -165,27 +173,27 @@
 
         $titleRaw = getFieldByName($fields, "Title");
         $title = parseTitle($titleRaw);
-        echo "Title raw: $titleRaw\n";
-        echo "Title: $title\n";
+        // echo "Title raw: $titleRaw\n";
+        // echo "Title: $title\n";
 
         $callNumRaw = getFieldByName($fields, "Call number");
         list($location, $callNum) = parseCallNumber($callNumRaw);
-        echo "Call number raw: $callNumRaw\n";
-        echo "Location: $location\nCall number: $callNum\n";
+        // echo "Call number raw: $callNumRaw\n";
+        // echo "Location: $location\nCall number: $callNum\n";
 
         $barcodeRaw = getFieldByName($fields, "Barcode");
         $barcode = parseBarcode($barcodeRaw);
-        echo "Barcode raw: $barcodeRaw\n";
-        echo "Barcode: $barcode\n";
+        // echo "Barcode raw: $barcodeRaw\n";
+        // echo "Barcode: $barcode\n";
 
         $copyNum = getFieldByName($fields, "Copy number");
-        echo "Copy number: $copyNum\n";
+        // echo "Copy number: $copyNum\n";
 
         $itemType = getFieldByName($fields, "Item type");
-        echo "Item type: $itemType\n";
+        // echo "Item type: $itemType\n";
 
         $collection = getFieldByName($fields, "Collection");
-        echo "Collection: $collection\n";
+        // echo "Collection: $collection\n";
 
         $stmt = $connection->prepare("INSERT INTO items (dateloaded, stampupdated, callnum, callnumraw" .
             ", copynum, title, titleraw, itemid, itemidraw, collection, itemtype, location)" .
@@ -195,7 +203,7 @@
             $copyNum, $title, $titleRaw, $barcode, $barcodeRaw, $collection, $itemType, $location);
 
         if ($stmt->execute()  === TRUE) {
-            echo "New record $callNum inserted successfully";
+            // echo "New record $callNum inserted successfully";
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
@@ -205,18 +213,19 @@
     function processItems($connection, $content)
     {
         $lines = preg_split("/\r\n|\n/", $content);
-        echo "Processing " . count($lines) . " lines.\n";
+        echo "Processing " . count($lines)-1 . " items.\n";
         learnFieldNames($lines[0]);
         for($i=1; $i<count($lines); $i++) {
             $fields = str_getcsv($lines[$i]);
-            echo "\n";
-            echo "Processing record $i\n";
+            // echo "\n";
+            // echo "Processing record $i\n";
             processItem($connection, $fields);
             //if($i>4) break; // For testing, only process a few items.
         }
     }
     
     function main() {
+        init();
         $fileContent = file_get_contents("/Users/mrr/Downloads/Holds queue › Circulation › Koha-2.csv");
         echo "Read " . strlen($fileContent) . " characters.\n";
         $connection = connectToDb();
