@@ -30,7 +30,7 @@
     
         // Check the connection
         if ($connection->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+            die("Connection failed: " . $connection->connect_error);
         }
         return $connection;
     }
@@ -127,6 +127,7 @@
     {
         // The Call Number field in the CSV file has various formats, such as:
         // Children's Area - Beginner Readers - Fiction HOURAN
+        // Children's Area - Boardbooks BB
         // Biography Collection BIOGRAPHY WILLIAMS, T.
         // Mystery Collection MYSTERY CHILD, L.
         // Nonfiction Books 153.35 RUBIN
@@ -140,10 +141,14 @@
             $location = "Children";
             $rest = substr($fld, strlen("Children's Area - "));
             $childparts = explode(" - ", $rest, 2);
-            if(count($childparts) == 2) {
+            if(count($childparts) >= 2) {
                 $location = $location . " " . $childparts[0];
                 $callNum = $childparts[1];
             } else {
+                // I need to see more examples to know what to do here.
+                // For now, just use the text after "Children's Area - "
+                // as both the location and call number.
+                $location = $location . " " . $childparts[0];
                 $callNum = $childparts[0];
             }
         } else {
@@ -205,7 +210,7 @@
         if ($stmt->execute()  === TRUE) {
             // echo "New record $callNum inserted successfully";
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "Error: " . $stmt->error;
         }
         $stmt->close();
     }
@@ -226,7 +231,7 @@
     
     function main() {
         init();
-        $fileContent = file_get_contents("/Users/mrr/Downloads/Holds queue › Circulation › Koha-2.csv");
+        $fileContent = file_get_contents("/Users/mrr/Downloads/Holds queue › Circulation › Koha-3.csv");
         echo "Read " . strlen($fileContent) . " characters.\n";
         $connection = connectToDb();
         if($connection) {
