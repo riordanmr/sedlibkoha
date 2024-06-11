@@ -249,7 +249,7 @@
         // echo "Collection: $collection\n";
 
         $stmt = $connection->prepare("INSERT INTO items (dateloaded, stampupdated, callnum, callnumraw" .
-            ", copynum, title, titleraw, itemid, itemidraw, collection, itemtype, location)" .
+            ", copynum, title, titleraw, barcode, barcoderaw, collection, itemtype, location)" .
             " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $currentDateAndTime = currentDateTime();
         $stmt->bind_param("ssssssssssss", $currentDate, $currentDateAndTime, $callNum, $callNumRaw,
