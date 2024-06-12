@@ -5,6 +5,8 @@
 // this version is for the the Koha ILS.
 // Mark Riordan   2024-06-11
 
+global $currentDate;
+
 // This defines the DB_* constants used below.
 require_once '../../holdskoha.config.php';
 function connectToDb() {
@@ -30,6 +32,7 @@ class ItemCounts {
 }
 
 function processRequest($connection) {
+    global $currentDate;
     // Obtain the raw data from the request
     $json = file_get_contents('php://input');
     // Convert it into a PHP object
@@ -57,7 +60,7 @@ function processRequest($connection) {
     // Now that the DB has been updated, get the new counts of items with
     // various statuses.
     $resp = new ItemCounts();
-    $sql = "SELECT status, COUNT(*) AS count FROM items GROUP BY status;";
+    $sql = "SELECT status, COUNT(*) AS count FROM items WHERE dateloaded='$currentDate' GROUP BY status;";
     $result = $connection->query($sql);
     if ($result->num_rows > 0) {
         // Loop through each row of the result set
@@ -82,6 +85,8 @@ function processRequest($connection) {
 function postItemMain() {
     header('Content-Type: application/json');
     date_default_timezone_set('America/Phoenix');
+    global $currentDate;
+    $currentDate = date('Y-m-d');
     $connection = connectToDb();
     processRequest($connection);
     $connection->close();
