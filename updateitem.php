@@ -46,9 +46,9 @@ function processRequest($connection) {
         exit;
     }
     // Update the item's record.
-    $stmt = $connection->prepare("UPDATE items SET stampupdated=?, status=?, notes=? WHERE barcode=?;");
+    $stmt = $connection->prepare("UPDATE items SET stampupdated=?, status=?, notes=? WHERE barcode=? AND dateloaded=?;");
     $currentStamp = currentDateTime();
-    $stmt->bind_param("ssss", $currentStamp, $data->status, $data->notes, $data->itemId);
+    $stmt->bind_param("sssss", $currentStamp, $data->status, $data->notes, $data->itemId, $currentDate);
 
     if ($stmt->execute() === TRUE) {
         // SQL executed successfully.
