@@ -268,13 +268,16 @@
         $lines = preg_split("/\r\n|\n/", $content);
         echo "Processing " . count($lines)-1 . " items.\n";
         learnFieldNames($lines[0]);
+        $nItems = 0;
         for($i=1; $i<count($lines); $i++) {
             $fields = str_getcsv($lines[$i]);
             // echo "\n";
             // echo "Processing record $i\n";
             processItem($connection, $fields);
             //if($i>4) break; // For testing, only process a few items.
+            $nItems += 1;
         }
+        echo "Loaded $nItems items.\n";
     }
     
     function main() {
