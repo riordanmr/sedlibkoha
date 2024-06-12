@@ -163,3 +163,6 @@ cython_debug/
 
 # MRR
 misc/pasted.html
+.DS_Store
+misc/items.sql
+
