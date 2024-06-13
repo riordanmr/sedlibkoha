@@ -165,4 +165,5 @@ cython_debug/
 misc/pasted.html
 .DS_Store
 misc/items.sql
-
+desktop/senditemskoha
+desktop/senditems.py

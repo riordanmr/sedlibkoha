@@ -122,6 +122,19 @@
         // echo "End of processing field names\n";
     }
 
+    function ensureRequiredFieldsPresent()
+    {
+        global $fieldNames;
+        $requiredFields = array("Title", "Call number", "Barcode", "Copy number", "Item type", "Collection");
+        foreach ($requiredFields as $name) {
+            if (!array_key_exists($name, $fieldNames)) {
+                echo "Required field $name not found in CSV file.\n";
+                return false;
+            }
+        }
+        return true;
+    }
+
     function getFieldByName($fields, $name)
     {
         global $fieldNames;
@@ -268,6 +281,9 @@
         $lines = preg_split("/\r\n|\n/", $content);
         echo "Processing " . count($lines)-1 . " items.\n";
         learnFieldNames($lines[0]);
+        if(!ensureRequiredFieldsPresent()) {
+            return;
+        }
         $nItems = 0;
         for($i=1; $i<count($lines); $i++) {
             $fields = str_getcsv($lines[$i]);

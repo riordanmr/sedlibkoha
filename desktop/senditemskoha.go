@@ -138,6 +138,18 @@ func parseLoadedItemsCount(responseBody string) int {
 	return loadedItems
 }
 
+// Report the messages from the response body.
+func reportMessagesFromResponse(responseBody string) {
+	re := regexp.MustCompile(`(?s)<pre>(.*?)</pre>`)
+	matches := re.FindAllStringSubmatch(responseBody, -1)
+
+	for _, match := range matches {
+		if len(match) > 1 {
+			fmt.Println(match[1])
+		}
+	}
+}
+
 func main() {
 	filename := findNewestCSV()
 	for {
@@ -155,8 +167,9 @@ func main() {
 		//url := "http://localhost/~mrr/sedlibkoha/loaditems.php"
 		response := postToWebsite(url, "se", contents)
 		//fmt.Println(response)
-		loadedItems := parseLoadedItemsCount(response)
-		fmt.Println("Loaded", loadedItems, "items")
+		reportMessagesFromResponse(response)
+		// loadedItems := parseLoadedItemsCount(response)
+		// fmt.Println("Loaded", loadedItems, "items")
 		break
 	}
 }
