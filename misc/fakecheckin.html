@@ -80,9 +80,9 @@
 
     <div id="dialog" class="dialog-buttons">
         <div class="dialog-content">
-            <button onclick="confirmHold()">Confirm Hold (Y)</button>
-            <button onclick="printAndConfirm()">Print slip and confirm (P)</button>
-            <button onclick="ignore()">Ignore (I)</button>
+            <button id="btnConfirm" onclick="confirmHold()">Confirm Hold (Y)</button>
+            <button id="btnPrint" onclick="printAndConfirm()">Print slip and confirm (P)</button>
+            <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>
         </div>
     </div>
 
@@ -104,7 +104,8 @@
         }
 
         function logMsg(msg) {
-            document.getElementById('messages').innerHTML += getCurrentTime() + " " + msg + '\n';
+            //document.getElementById('messages').innerHTML += getCurrentTime() + " " + msg + '\n';
+            document.getElementById('messages').innerHTML = getCurrentTime() + " " + msg + '\n';
         }
 
         function confirmHold() {
