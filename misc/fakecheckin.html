@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Barcode Check In</title>
+    <style>
+        h2 {
+            color: #000;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+        }
+
+        .explanation {
+            font-family: Georgia;
+            font-style: italic;
+            font-size: 80%;
+        }
+
+        .dialog-buttons {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 60%;
+            /*height: 100%;*/
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 100px;
+        }
+
+        .dialog-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .main {
+            margin-left: 10px;
+        }
+
+        #messages {
+            width: 72ch;
+            /* ch unit sets the width to the width of the "0" character, approximating monospace column width */
+            height: 8em;
+            /* em unit sets the height to the line-height of the current font-size */
+            overflow: auto;
+            /* adds scrollbars if content exceeds the specified width/height */
+            white-space: pre-wrap;
+            /* ensures that the text within the <pre> element is wrapped */
+            font-family: 'Lucida Console', Monaco, monospace;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+
+        <h2>Fake Check In</h2>
+        <p class="explanation">This is a mockup of a Koha-like page to check in holds. 
+            It's to be used to test an application that will interact with the Koha ILS.
+        </p>
+        <p>
+            <input type="text" id="barcode" placeholder="Enter barcode">
+            <button id="btnSubmitBarcode" onclick="openDialog()">Check In</button>
+        </p>
+    </div>
+    <div>
+        <div class="messages">
+            <pre id="messages"></pre>
+        </div>
+    </div>
+
+    <div id="dialog" class="dialog-buttons">
+        <div class="dialog-content">
+            <button onclick="confirmHold()">Confirm Hold (Y)</button>
+            <button onclick="printAndConfirm()">Print slip and confirm (P)</button>
+            <button onclick="ignore()">Ignore (I)</button>
+        </div>
+    </div>
+
+    <script>
+        function openDialog() {
+            document.getElementById('dialog').style.display = "block";
+        }
+
+        function getCurrentTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        function logMsg(msg) {
+            document.getElementById('messages').innerHTML += getCurrentTime() + " " + msg + '\n';
+        }
+
+        function confirmHold() {
+            logMsg('Confirm Hold');
+            closeDialog();
+        }
+
+        function printAndConfirm() {
+            logMsg('Print slip and confirm');
+            closeDialog();
+        }
+
+        function ignore() {
+            logMsg('Ignore');
+            closeDialog();
+        }
+
+        function closeDialog() {
+            document.getElementById('dialog').style.display = "none";
+        }
+    </script>
+</body>
+
+</html>
