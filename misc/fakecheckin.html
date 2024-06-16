@@ -4,6 +4,11 @@
 <head>
     <title>Barcode Check In</title>
     <style>
+        body {
+            font-family:sans-serif;
+            font-size: 14px;
+        }
+
         h2 {
             color: #000;
             font-family: Arial, sans-serif;
@@ -14,7 +19,7 @@
         }
 
         .explanation {
-            font-family: Georgia;
+            font-family: "STIX Two Text", "Palatino", "Palatino Linotype", Georgia;
             font-style: italic;
             font-size: 80%;
         }
@@ -39,6 +44,11 @@
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
+        }
+
+        .holddesttext {
+            font-size: 18px;
+            font-weight: bold;
         }
 
         .main {
@@ -77,51 +87,49 @@
             <button id="btnSubmitBarcode" onclick="openDialog(getElementById('barcode'))">Check In</button>
         </p>
     </div>
-    <div>
+    <div style="margin-top: 120px;">
         <div class="messages">
             <pre id="messages"></pre>
         </div>
     </div>
 
-    <div id="dialoglocal" class="dialog-buttons">
-        <div class="destination">
-            Hold at Sedona Public Library
-        </div>
+    <div id="dialogroute" class="dialog-buttons">
         <div class="dialog-content">
-            <button id="btnConfirm" onclick="confirmHold()">Confirm hold (Y)</button>
-            <button id="btnPrint" onclick="printAndConfirm()">Print slip and confirm (P)</button>
-            <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>
-        </div>
-    </div>
-
-    <div id="dialogvoc" class="dialog-buttons">
-        <div class="dialog-content">
-            <button id="btnConfirm" onclick="confirmHold()">Confirm Hold and transfer(Y)</button>
-            <button id="btnPrint" onclick="printAndConfirm()">Print slip and confirm (P)</button>
-            <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>
-        </div>
-    </div>
-
-    <div id="dialogother" class="dialog-buttons">
-        <div class="dialog-content">
-            <button id="btnConfirm" onclick="confirmHold()">Confirm Hold (Y)</button>
-            <button id="btnPrint" onclick="printAndConfirm()">Print slip and confirm (P)</button>
-            <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>
+            <p id="desttext" class="holddesttext">hi there</p>
+            <div id="buttons" class="dialog-content">
+                <button id="btnConfirm" onclick="confirmHold()">Confirm hold (Y)</button>
+                <button id="btnPrint" onclick="printAndConfirm()">Print slip and confirm (P)</button>
+                <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>
+            </div>
         </div>
     </div>
 
     <script>
         function openDialog(barcode) {
             const barcodeValue = barcode.value;
-            var dialogId;
+            var destText='', buttonHTML='';
             if (barcodeValue.startsWith('1')) {
-                dialogId = 'dialoglocal';
+                destText = 'Hold at Sedona Public Library';
+                buttonHTML = '<button id="btnConfirm" onclick="confirmHold()">Confirm hold (Y)</button>' +
+                    ' <button id="btnPrintConfirm" onclick="printConfirm()">Print slip and confirm (P)</button>' +
+                    ' <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>';
             } else if (barcodeValue.startsWith('2')) {
-                dialogId = 'dialogvoc';
+                destText = 'Transfer to: SPL in the Village';
+                buttonHTML = '<button id="btnConfirmTransfer" onclick="confirmAndTransfer()">Confirm hold and transfer (Y)</button>' +
+                    ' <button id="btnPrintTransferConfirm" onclick="printTransferAndConfirm()">Print slip, transfer, and confirm (P)</button>' +
+                    ' <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>';
+            } else if (barcodeValue.startsWith('3')) {
+                destText = 'Transfer to: Prescott';
+                buttonHTML = '<button id="btnConfirmTransfer" onclick="confirmAndTransfer()">Confirm hold and transfer (Y)</button>' +
+                    ' <button id="btnPrintTransferConfirm" onclick="printTransferAndConfirm()">Print slip, transfer, and confirm (P)</button>' +
+                    ' <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>';
             } else {
-                dialogId = 'dialogother';
+                destText = 'Unrecognized barcode!';
+                buttonHTML = ' <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>';
             }
-            document.getElementById(dialogId).style.display = "block";
+            document.getElementById('desttext').innerHTML = destText;
+            document.getElementById('buttons').innerHTML = buttonHTML;
+            document.getElementById('dialogroute').style.display = "block";
         }
 
         function getCurrentTime() {
@@ -146,7 +154,7 @@
             closeDialog();
         }
 
-        function printAndConfirm() {
+        function printConfirm() {
             logMsg('Print slip and confirm');
             closeDialog();
         }
@@ -156,10 +164,19 @@
             closeDialog();
         }
 
+        function printTransferAndConfirm() {
+            logMsg('Print slip, transfer, and confirm');
+            closeDialog();
+        }
+
+        function confirmAndTransfer() {
+            logMsg('Confirm hold and transfer');
+            closeDialog();
+        }
+
         function closeDialog() {
-            document.getElementById('dialoglocal').style.display = "none";
-            document.getElementById('dialogvoc').style.display = "none";
-            document.getElementById('dialogother').style.display = "none";
+            document.getElementById('dialogroute').style.display = "none";
+            document.getElementById('barcode').value = '';
         }
     </script>
 </body>
