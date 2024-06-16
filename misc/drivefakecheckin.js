@@ -21,6 +21,10 @@ async function run() {
 
     try {
         const page = await browser.newPage();
+        console.log('When entering (fake) barcodes, type "quit" to exit the program.');
+        console.log('Barcodes starting with 1 will show as local holds.');
+        console.log('Barcodes starting with 2 will show as holds for Village of Oak Creek.');
+        console.log('Barcodes starting with 3 will show as holds for other libraries.');
 
         // Replace with your URL
         url = 'file:///Users/mrr/Documents/GitHub/sedlibkoha/misc/fakecheckin.html'

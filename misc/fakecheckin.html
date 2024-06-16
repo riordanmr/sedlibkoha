@@ -67,9 +67,14 @@
         <p class="explanation">This is a mockup of a Koha-like page to check in holds. 
             It's to be used to test an application that will interact with the Koha ILS.
         </p>
+        <ul class="explanation">
+            <li>Barcodes starting with 1 will show as local holds.</li>
+            <li>Barcodes starting with 2 will show as holds for Village of Oak Creek.</li>
+            <li>Barcodes starting with 3 will show as holds for other libraries.</li>
+        </ul>
         <p>
             <input type="text" id="barcode" placeholder="Enter barcode">
-            <button id="btnSubmitBarcode" onclick="openDialog()">Check In</button>
+            <button id="btnSubmitBarcode" onclick="openDialog(getElementById('barcode'))">Check In</button>
         </p>
     </div>
     <div>
@@ -78,7 +83,26 @@
         </div>
     </div>
 
-    <div id="dialog" class="dialog-buttons">
+    <div id="dialoglocal" class="dialog-buttons">
+        <div class="destination">
+            Hold at Sedona Public Library
+        </div>
+        <div class="dialog-content">
+            <button id="btnConfirm" onclick="confirmHold()">Confirm hold (Y)</button>
+            <button id="btnPrint" onclick="printAndConfirm()">Print slip and confirm (P)</button>
+            <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>
+        </div>
+    </div>
+
+    <div id="dialogvoc" class="dialog-buttons">
+        <div class="dialog-content">
+            <button id="btnConfirm" onclick="confirmHold()">Confirm Hold and transfer(Y)</button>
+            <button id="btnPrint" onclick="printAndConfirm()">Print slip and confirm (P)</button>
+            <button id="btnIgnore" onclick="ignore()">Ignore (I)</button>
+        </div>
+    </div>
+
+    <div id="dialogother" class="dialog-buttons">
         <div class="dialog-content">
             <button id="btnConfirm" onclick="confirmHold()">Confirm Hold (Y)</button>
             <button id="btnPrint" onclick="printAndConfirm()">Print slip and confirm (P)</button>
@@ -87,8 +111,17 @@
     </div>
 
     <script>
-        function openDialog() {
-            document.getElementById('dialog').style.display = "block";
+        function openDialog(barcode) {
+            const barcodeValue = barcode.value;
+            var dialogId;
+            if (barcodeValue.startsWith('1')) {
+                dialogId = 'dialoglocal';
+            } else if (barcodeValue.startsWith('2')) {
+                dialogId = 'dialogvoc';
+            } else {
+                dialogId = 'dialogother';
+            }
+            document.getElementById(dialogId).style.display = "block";
         }
 
         function getCurrentTime() {
@@ -124,7 +157,9 @@
         }
 
         function closeDialog() {
-            document.getElementById('dialog').style.display = "none";
+            document.getElementById('dialoglocal').style.display = "none";
+            document.getElementById('dialogvoc').style.display = "none";
+            document.getElementById('dialogother').style.display = "none";
         }
     </script>
 </body>
