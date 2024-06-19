@@ -168,3 +168,7 @@ misc/items.sql
 desktop/senditemskoha
 desktop/senditems.py
 node_modules/
+misc/barcodecheck*.py
+*.mrc
+misc/dewey_counts.py
+misc/genbarcodes.py
