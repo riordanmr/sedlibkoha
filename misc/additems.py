@@ -121,7 +121,7 @@ def main():
     start_time = time.perf_counter()
     nextBarcode = read_next_barcode()
     # The biblio record numbers start at 1 and go up to the number of records.
-    start_recNum = 165
+    start_recNum = 365
     num_to_process = 200
     num_processed = 0
     for recNum in range(start_recNum, start_recNum + num_to_process):
