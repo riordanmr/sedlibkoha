@@ -9,8 +9,32 @@ const readline = require('readline').createInterface({
     output: process.stdout
 });
 
+var kohaUrlStaffBase, kohaUsername, kohaPassword;
+
+
 function getUserInput(query) {
     return new Promise(resolve => readline.question(query, resolve));
+}
+
+async function getSettings() {
+    // Environment variable KOHA_URL_STAFF must be set to the base URL of the Koha staff interface;
+    // e.g., https://staff-yavapaiaz.bywatersolutions.com
+    // Environment variables KOHA_USERNAME and KOHA_PASSWORD may be set to the username and password.
+    console.log("You may set env vars KOHA_URL_STAFF, KOHA_USERNAME, and KOHA_PASSWORD.");
+    kohaUrlStaffBase = process.env.KOHA_URL_STAFF;
+    if (kohaUrlStaffBase == null) {
+        // The env var is not set, so use the default.
+        kohaUrlStaffBase = "https://staff-yavapaiaz.bywatersolutions.com";
+        console.log("KOHA_URL_STAFF not set, so using " + kohaUrlStaffBase);
+    }
+    kohaUsername = process.env.KOHA_USERNAME;
+    if (kohaUsername == null) {
+        kohaUsername = await getUserInput('Enter Koha username: ');
+    }
+    kohaPassword = process.env.KOHA_PASSWORD;
+    if (kohaPassword == null) {
+        kohaPassword = await getUserInput('Enter Koha password: ');
+    }
 }
 
 async function run() {
@@ -20,14 +44,9 @@ async function run() {
     try {
         const page = await browser.newPage();
 
-        // Environment variable KOHA_URL_STAFF must be set to the base URL of the Koha staff interface;
-        // e.g., https://staff-yavapaiaz.bywatersolutions.com
-        urlStaffBase = process.env.KOHA_URL_STAFF;
-        url = urlStaffBase + '/cgi-bin/koha/circ/returns.pl'
+        url = kohaUrlStaffBase + '/cgi-bin/koha/circ/returns.pl'
         await page.goto(url);
 
-        const kohaUsername = process.env.KOHA_USERNAME;
-        const kohaPassword = process.env.KOHA_PASSWORD;
         await page.type('#userid', kohaUsername);
         await page.type('#password', kohaPassword);
         await Promise.all([
@@ -61,10 +80,6 @@ async function run() {
             // Wait for the page to load
             await page.waitForNavigation({ waitUntil: 'networkidle0' });
 
-            // const h3Exists = await page.evaluate(() => {
-            //     const h3Elements = Array.from(document.querySelectorAll('h3'));
-            //     return h3Elements.some(h3 => h3.textContent.includes('Hold found'));
-            // });
             const h3Text = await page.evaluate(() => {
                 const h3Elements = Array.from(document.querySelectorAll('h3'));
                 for (let h3 of h3Elements) {
@@ -135,4 +150,9 @@ async function run() {
     })
 }
 
-run();
+async function main() {
+    await getSettings();
+    run();
+}
+
+main();
