@@ -125,7 +125,7 @@
     function ensureRequiredFieldsPresent()
     {
         global $fieldNames;
-        $requiredFields = array("Title", "Call number", "Barcode", "Copy number", "Item type", "Collection");
+        $requiredFields = array("Title", "Call number", "Barcode", "Copy number", "Item type");
         foreach ($requiredFields as $name) {
             if (!array_key_exists($name, $fieldNames)) {
                 echo "Required field $name not found in CSV file.\n";
