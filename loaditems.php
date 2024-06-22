@@ -102,6 +102,10 @@
     {
         return substr_compare($haystack, $needle, 0, strlen($needle)) === 0;
     }
+
+    function containsSubstring($strToSearch, $substring) {
+        return strpos($strToSearch, $substring) !== false;
+    }
     
     function currentDateTime() {
         return date('Y-m-d H:i:s');
@@ -113,7 +117,7 @@
         $fieldNames = array();
         if (strlen(trim($line)) > 0) {
             $aryNames = str_getcsv($line);
-            for ($i = 0; $i < count($aryNames); $i++) {
+            for($i=0; $i<count($aryNames); $i++) {
                 $nameTrimmed = trim($aryNames[$i]);
                 //echo "Field $i: $nameTrimmed\n";
                 $fieldNames[$nameTrimmed] = $i;
@@ -180,49 +184,105 @@
         }
     }
 
-    function parseCallNumber($fld)
+    function isAllUppercaseAlphabetic($word) {
+        // Check if the word is composed only of uppercase letters A-Z.
+        return preg_match('/^[A-Z]+$/', $word) === 1;
+    }
+
+    // Parse a call number into these fields:
+    // area - A for adult, C for children
+    // location - the location of the book
+    // callNum - the call number of the book
+    function parseCallNumber($callNumRaw)
     {
         // The Call Number field in the CSV file has various formats, such as:
+        // BIO - Biography Collection BIOGRAPHY BRODEUR, A.
         // Children's Area - Beginner Readers - Fiction HOURAN
         // Children's Area - Boardbooks BB
-        // Biography Collection BIOGRAPHY WILLIAMS, T.
-        // Mystery Collection MYSTERY CHILD, L.
-        // Nonfiction Books 153.35 RUBIN
-        // Fiction Books HUANG, L.
-        // DVD Collection WHITE SEASON 1
-        // Playaway PLAYAWAY PENNY, L.
+        // Children's Area - Easy Books - Nonfiction 590 MONTGOMERY
+        // DVD Collection 780.966 THEY
+        // DVD Collection BIOGRAPHY HUBERMAN, B.
+        // DVD Collection FARGO SEASON 2
+        // FIC - Fiction Books HOLM, C.
+        // JBGNF - Children's Area - Beginner Readers - Nonfiction BIOGRAPHY WASHINGTON, G.
+        // JDVD - Children's Area - DVDs 591.9 WILD
+        // JFIC - Children's Area - Fiction HINOJOSA, S. #1
+        // JNF - Children's Area - Nonfiction 736.982 GEORGE
+        // Mystery Collection MYSTERY KING, L.
+        // NBFIC - New Books - Fiction MEDINA, N.
+        // NF - Nonfiction Books 516.1 DU SAUTOY
+        // Shelving Cart SINNER SEASON 2
+        // YAFIC - Young Adult Area - Fiction WESTERFELD, S. UGLIES #2
+        // 
+        // Parsing this is quite ad hoc.
+        // As you can see, often the first word is the old code for the location, but 
+        // not always. For that reason, I will ignore the first word if it appears to be
+        // an old location code (only uppercase letters followed by -), and try to 
+        // contruct a location from the rest of the call number. 
+        $area = "A"; // Default to "Adult"
         $location = "";
         $callNum = "";
 
-        if(startsWith($fld, "Children's Area - ")) { 
+        $fld = $callNumRaw;
+
+        // Check for whether it starts with an old location code.
+        $words = explode(" ", $fld);
+        if(count($words)>1 && isAllUppercaseAlphabetic($words[0]) && $words[1]=="-") {
+            // Ignore the first word and "-".
+            $fld = implode(" ", array_slice($words, 2));
+        }
+
+        // By now, if the field contains "Children's Area -" at all, it should be at the start.
+        if(startsWith($fld, "Children's Area -")) {
+            $area = "C";
             $location = "Children";
+            // Strip off "Children's Area - " from the start of the string.
             $rest = substr($fld, strlen("Children's Area - "));
-            $childparts = explode(" - ", $rest, 2);
-            if(count($childparts) >= 2) {
-                $location = $location . " " . $childparts[0];
-                $callNum = $childparts[1];
-            } else {
-                // I need to see more examples to know what to do here.
-                // For now, just use the text after "Children's Area - "
-                // as both the location and call number.
-                $location = $location . " " . $childparts[0];
-                $callNum = $childparts[0];
+            // print "Rest: $rest\n";
+            // Now $rest should be something like "Beginner Readers - Nonfiction BIOGRAPHY WASHINGTON, G.";
+            // namely, the location is the text up to and including the first " - ", plus the next word.
+            $childparts = explode(" ", $rest);
+            $idxStartCallNum = 1;
+            for($idx=0; $idx<count($childparts); $idx++) {
+                if($childparts[$idx]=="-") {
+                    if($idx+2 <= count($childparts)) {
+                        $idxStartCallNum = $idx + 2;
+                        break;
+                    }
+                }
             }
+            
+            // Handle JCDBK - Children's Area - CD Books CDBOOK PENNYPACKER, S.
+            if($childparts[0] == "CD" && $childparts[1] == "Books") {
+                $idxStartCallNum++;
+            }
+
+            $location = "J " . implode(" ", array_slice($childparts, 0, $idxStartCallNum));
+            $callNum = implode(" ", array_slice($childparts, $idxStartCallNum));
         } else {
             $words = explode(" ", $fld);
-            if(count($words) > 1) {
-                if($words[1]=="Collection" || $words[1]=="Books" || $words[1]=="Area" || $words[1] == "Cart") {
-                    $location = $words[0];
-                    $callNum = implode(" ", array_slice($words, 2));
-                } else {
-                    $location = $words[0];
-                    $callNum = implode(" ", array_slice($words, 1));
+            // Look for a word that indicates the end of the name of the location.
+            for($idx=0; $idx<count($words); $idx++) {
+                if($words[$idx]=="Collection" || $words[$idx]=="Books" || $words[$idx]=="Area" || $words[$idx] == "Cart") {
+                    if(count($words)>$idx+1 && $words[$idx+1] == "-") {
+                        // We have something like Young Adult Area - Fiction BLUME, J.
+                        $location = implode(" ", array_slice($words, 0, $idx)) . " " . $words[$idx+2];
+                        $callNum = implode(" ", array_slice($words, $idx+3));
+                    } else {
+                        $location = implode(" ", array_slice($words, 0, $idx));
+                        $callNum = implode(" ", array_slice($words, $idx+1));
+                    }
+                    break;
                 }
-            } else {
-                $callNum = $fld;
+            } 
+            if($location == "" && $callNum == "") {
+                // If we get here, it's probably bad input or a bug.
+                $location = $words[0]; 
+                $callNum = implode(" ", array_slice($words, 1));
             }
         }
-        return array($location, $callNum);
+        //print "$callNumRaw\t$area\t$location\t$callNum\n";
+        return array($area, $location, $callNum);
     }
 
     function processItem($connection, $fields)
@@ -243,7 +303,7 @@
         // echo "Title: $title\n";
 
         $callNumRaw = getFieldByName($fields, "Call number");
-        list($location, $callNum) = parseCallNumber($callNumRaw);
+        list($area, $location, $callNum) = parseCallNumber($callNumRaw);
         // echo "Call number raw: $callNumRaw\n";
         // echo "Location: $location\nCall number: $callNum\n";
 
@@ -258,14 +318,17 @@
         $itemType = getFieldByName($fields, "Item type");
         // echo "Item type: $itemType\n";
 
-        $collection = getFieldByName($fields, "Collection");
+        $collection = "";
+        if(array_key_exists("Collection", $fields)) {
+            $collection = getFieldByName($fields, "Collection");
+        }
         // echo "Collection: $collection\n";
 
-        $stmt = $connection->prepare("INSERT INTO items (dateloaded, stampupdated, callnum, callnumraw" .
+        $stmt = $connection->prepare("INSERT INTO items (dateloaded, stampupdated, area, callnum, callnumraw" .
             ", copynum, title, titleraw, barcode, barcoderaw, collection, itemtype, location)" .
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $currentDateAndTime = currentDateTime();
-        $stmt->bind_param("ssssssssssss", $currentDate, $currentDateAndTime, $callNum, $callNumRaw,
+        $stmt->bind_param("sssssssssssss", $currentDate, $currentDateAndTime, $area, $callNum, $callNumRaw,
             $copyNum, $title, $titleRaw, $barcode, $barcodeRaw, $collection, $itemType, $location);
 
         if ($stmt->execute()  === TRUE) {
