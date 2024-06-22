@@ -163,8 +163,18 @@ func main() {
 			fmt.Println("Cannot read file")
 			break
 		}
-		url := "http://scopehustler.net/sedlibkoha/loaditems.php"
-		//url := "http://localhost/~mrr/sedlibkoha/loaditems.php"
+
+		// Check if the environment variable SENDITEMSKOHA_URL is set
+		envURL := os.Getenv("SENDITEMSKOHA_URL")
+		url := "http://scopehustler.net/sedlibkoha/loaditems.php" // Default URL
+		if envURL != "" {
+			fmt.Println("Using URL from environment variable SENDITEMSKOHA_URL.")
+			// Typically during dev this is http://localhost/~mrr/sedlibkoha/loaditems.php
+			url = envURL
+		} else {
+			fmt.Println("Environment variable SENDITEMSKOHA_URL is not set. Using default URL.")
+		}
+
 		response := postToWebsite(url, "se", contents)
 		//fmt.Println(response)
 		reportMessagesFromResponse(response)
