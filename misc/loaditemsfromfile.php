@@ -196,6 +196,12 @@
                     }
                 }
             }
+            
+            // Handle JCDBK - Children's Area - CD Books CDBOOK PENNYPACKER, S.
+            if($childparts[0] == "CD" && $childparts[1] == "Books") {
+                $idxStartCallNum++;
+            }
+
             $location = "J " . implode(" ", array_slice($childparts, 0, $idxStartCallNum));
             $callNum = implode(" ", array_slice($childparts, $idxStartCallNum));
         } else {
@@ -220,7 +226,7 @@
                 $callNum = implode(" ", array_slice($words, 1));
             }
         }
-        print "$callNumRaw|$area|$location|$callNum\n";
+        print "$callNumRaw\t$area\t$location\t$callNum\n";
         return array($area, $location, $callNum);
     }
 
