@@ -84,7 +84,7 @@ table.print-friendly tr td, table.print-friendly tr th {
         }
     }
 ?>
-<font face="Verdana">
+<font face="sans-serif">
 <table width="100%" border="0" cellpadding="2" bordercolor="#FFFFFF">
 <tr class="tablenoborders">
 <td valign="top" align="left" colwidth="100.0%" colspan="6">
@@ -100,15 +100,9 @@ Status of Hold Items for SED Koha <?php echo date('m/d/Y'); showItemCount();?></
 <td valign="top" align="left">
 <b>Call Number</b></td>
 <td valign="top" align="left">
-<b>Copy</b></td>
-<td valign="top" align="left">
 <b>Title</b></td>
 <td valign="top" align="left">
-<b>Item ID</b></td>
-<td valign="top" align="left">
-<b>Item type</b></td>
-<td valign="top" align="left">
-<b>Location</b></td>
+<b>Barcode</b></td>
 </tr>
 <?php
 
@@ -123,12 +117,12 @@ Status of Hold Items for SED Koha <?php echo date('m/d/Y'); showItemCount();?></
             // Loop through each row of the result set
             while ($row = $result->fetch_assoc()) {
                 // Access the column values using the column names
-                $callNum = htmlspecialchars($row["callnum"]);
-                $copyNum = htmlspecialchars($row["copynum"]);
-                $title = htmlspecialchars($row["title"]);
+                $callNum = htmlspecialchars($row["callnumraw"]);
+                //$copyNum = htmlspecialchars($row["copynum"]);
+                $title = htmlspecialchars($row["titleraw"]);
                 $itemId = htmlspecialchars($row["barcode"]);
-                $itemType = htmlspecialchars($row["itemtype"]);
-                $curLoc = htmlspecialchars($row["location"]);
+                //$itemType = htmlspecialchars($row["itemtype"]);
+                //$curLoc = htmlspecialchars($row["location"]);
                 $status = htmlspecialchars($row["status"]);
                 $notes = htmlspecialchars($row["notes"]);
 
@@ -137,7 +131,7 @@ Status of Hold Items for SED Koha <?php echo date('m/d/Y'); showItemCount();?></
                     $classtop = " class='rownobotline'";
                 }
                 $itemIdSpecial = "<span class='idsmall'>" . substr($itemId, 0, strlen($itemId)-4) . "&nbsp;</span>" . substr($itemId, strlen($itemId)-4);
-                echo "<tr$classtop><td>$callNum</td><td>$copyNum</td><td>$title</td><td>$itemIdSpecial</td><td>$itemType</td><td>$curLoc</td></tr>\n";
+                echo "<tr$classtop><td>$callNum</td><td>$title</td><td>$itemIdSpecial</td></tr>\n";
                 if(strlen($notes)>0) {
                     echo "<tr class='rownotopline notes'><td></td><td colspan='5'>$notes</td></td>\n";
                 }
