@@ -576,9 +576,9 @@
         date_default_timezone_set('America/Phoenix');
         $currentDate = date('Y-m-d');
         $whereDate = " AND dateloaded='$currentDate'";
-        listRecsWhere($connection, "location not like 'Children%'" . $whereDate);
+        listRecsWhere($connection, "area <> 'C'" . $whereDate);
         echo "<hr class='thickline'/>";
-        listRecsWhere($connection, "location like 'Children%'". $whereDate);
+        listRecsWhere($connection, "area = 'C'". $whereDate);
         $connection->close();
     }
     doMain();
