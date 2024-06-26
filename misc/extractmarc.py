@@ -23,12 +23,14 @@ with open(infile, 'rb') as fh, open(outfile, 'wb') as out_fh:
     for record in reader:
         if '082' in record and record['082']['a']:
             dewey = record['082']['a']
+            if "Mao " in record.title:
+                print (dewey + " " + record.title)
             # if len(dewey) >= 2:
             #     dewey_prefix = dewey[:2]
             #     if dewey_prefix in dewey_counts:
             #         dewey_counts[dewey_prefix] += 1
             # Select random records to write to the output file.
-            if True or random.random() < 0.01:
+            if False and random.random() < 0.01:
                 writer.write(record)
                 nRecs += 1
             # print('Title:', record.title())
@@ -45,7 +47,6 @@ with open(infile, 'rb') as fh, open(outfile, 'wb') as out_fh:
             # print('Record Length:', len(record.as_marc()))
             #print('Record:', record)
             #print('---')
-            # print (dewey)
             # if nRecs > 7:
             #     break
 
@@ -56,4 +57,4 @@ with open(infile, 'rb') as fh, open(outfile, 'wb') as out_fh:
 # for prefix, count in dewey_counts.items():
 #     print(f'Dewey numbers starting with {prefix}: {count}')
 
-print('Number of records ' + condition + ':', nRecs)
+#print('Number of records ' + condition + ':', nRecs)
