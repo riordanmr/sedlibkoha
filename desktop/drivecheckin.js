@@ -10,7 +10,7 @@ const readline = require('readline').createInterface({
 });
 
 var kohaUrlStaffBase, kohaUsername, kohaPassword;
-
+var pageAwaitingPickup;
 
 function getUserInput(query) {
     return new Promise(resolve => readline.question(query, resolve));
@@ -37,31 +37,43 @@ async function getSettings() {
     }
 }
 
-async function run() {
-    //const browser = await puppeteer.launch();
+// Returns an array of the browser and the page.
+async function startBrowserAndLogin(url) {
     const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
 
+    await page.goto(url);
+
+    await page.type('#userid', kohaUsername);
+    await page.type('#password', kohaPassword);
+    await Promise.all([
+        page.click('#submit-button'),
+        page.waitForNavigation({ waitUntil: 'networkidle0' })
+    ]);
+    return [browser,page];
+}
+
+async function run() {
+    var browserMain;
+    var bConfirmedHold = false;
     try {
-        const page = await browser.newPage();
-
-        url = kohaUrlStaffBase + '/cgi-bin/koha/circ/returns.pl'
-        await page.goto(url);
-
-        await page.type('#userid', kohaUsername);
-        await page.type('#password', kohaPassword);
-        await Promise.all([
-            page.click('#submit-button'),
-            page.waitForNavigation({ waitUntil: 'networkidle0' })
-        ]);
-
+        url = kohaUrlStaffBase + '/cgi-bin/koha/circ/returns.pl';
         // Wait for debugging purposes
         // await new Promise(resolve => setTimeout(resolve, 1700));
 
+        // Login to the "Check in" page used to trap holds.
+        [browserMain, page] = await startBrowserAndLogin(url);
+        // Login to the "Holds awaiting pickup for your library" page.
+        var urlAwaitingPickup = kohaUrlStaffBase + '/cgi-bin/koha/circ/waitingreserves.pl';
+        [browserAwaitingPickup, pageAwaitingPickup] = await startBrowserAndLogin(urlAwaitingPickup);
+
         while (true) {
+            bConfirmedHold = false;
             // Get barcode from the user and send to the form.
             var barcode;
             var quit = false;
             do {
+                console.log('');
                 barcode = await getUserInput('Enter barcode: ');
                 console.log(`Barcode: "${barcode}"`);
                 if (barcode == 'quit' || barcode == 'exit' || barcode == 'q') {
@@ -95,6 +107,49 @@ async function run() {
                 if (h3Text.includes('(item is already waiting)')) {
                     console.log('Item is already waiting; no action taken.');
                 } else {
+                    // Get the patron name; it's in last, first format. 
+                    var patronLastFirst = await page.evaluate(() => {
+                    const h5Elements = [...document.querySelectorAll('h5')];
+                    const targetH5 = h5Elements.find(h5 => h5.textContent.includes('Hold for:'));
+                    if (!targetH5) return '';
+
+                    const ulElement = targetH5.nextElementSibling;
+                    if (!ulElement || ulElement.tagName !== 'UL') return '';
+
+                    const liElement = ulElement.querySelector('li');
+                    if (!liElement) return '';
+
+                    const aElement = liElement.querySelector('a');
+                    return aElement ? aElement.textContent.trim() : '';
+                    });
+                    // Strip the (barcode) from the patron name.
+                    patronLastFirst = patronLastFirst.replace(/\(\d+\)$/, '').trim();
+                    console.log('Patron name: ' + patronLastFirst);
+
+                    // The h3 element looks like this:
+                    // <h3>
+                    // Hold found:
+                    // <br>
+                    // <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=230">The early writings of Frederick Jackson Turner :</a>
+                    const title = await page.evaluate(() => {
+                        const h3Elements = document.querySelectorAll('h3');
+                        for (let h3 of h3Elements) {
+                          if (h3.textContent.includes('Hold found:')) {
+                            const aElement = h3.querySelector('a');
+                            return aElement ? aElement.textContent : '';
+                          }
+                        }
+                        return '';
+                      });
+                      
+                    console.log('Title: ' + title);
+                    const currentDate = new Date().toLocaleDateString('en-US', {
+                        month: '2-digit',
+                        day: '2-digit',
+                        year: 'numeric',
+                      });
+                    console.log('Current date: ' + currentDate);
+
                     h4element = await page.$('h4');
                     if (h4element) {
                         const h4text = await page.evaluate(h4element => h4element.textContent, h4element);
@@ -107,6 +162,7 @@ async function run() {
                                 await page.click('button[type="submit"].btn.btn-default.approve');
                                 console.log('Confirm hold button clicked.');
                                 await page.waitForNavigation({ waitUntil: 'networkidle0' });
+                                bConfirmedHold = true;
                             } else {
                                 console.log('No confirm button found.');
                             }
@@ -117,6 +173,7 @@ async function run() {
                                 console.log('A button of type "button" with classes "btn btn-default print" exists.');
                                 await page.click('button[type="button"].btn.btn-default.print');
                                 console.log('Print slip button clicked.');
+                                bConfirmedHold = true;
                                 //await page.waitForNavigation({ waitUntil: 'networkidle0' });
                             } else {
                                 console.log('No print button found.');
@@ -139,15 +196,96 @@ async function run() {
                     console.log('No paragraph with class "problem" found.');
                 }
             }
+            if (bConfirmedHold) {
+                // Find the call number and expiration date of the item.
+                [callNumber, expirationDate] = await findOtherFields(barcode);
+                console.log('Call number: ' + callNumber);
+                console.log('Expiration date: ' + expirationDate);
+            }
         }
     } catch (error) {
-        console.error("Caught: " + error);
+        console.error("Caught: " + error.message);
+        console.error("Stack: " + error.stack);
     }
 
     readline.question('Press Enter to close the browser', () => {
-        browser.close();
+        browserMain.close();
+        browserAwaitingPickup.close();
         readline.close();
     })
+}
+
+// Given a barcode, find certain fields of the held item with that barcode.
+// The fields are call number and expiration date, and are returned in an array.
+async function findOtherFields(barcode) {
+    var callNumber, expirationDate;
+
+    // Assuming that we are logged into the "Holds awaiting pickup for your library" page,
+    // refresh the page to pick up any items that we've just marked as waiting.
+    await pageAwaitingPickup.reload({ waitUntil: "domcontentloaded" });
+
+    // Find the table with class holds_table and loop through all the 
+    // columns of the first row.
+    console.log("Finding table");
+    const table = await pageAwaitingPickup.$('table.holds_table');
+    console.log("Finding rows");
+    const rows = await table.$$('tr');
+    console.log("Finding cells");
+    const cells = await rows[0].$$('th');
+    var callNumberCol, expirationDateCol, titleCol;
+    for (let icol = 0; icol < cells.length; icol++) {
+        const cell = cells[icol];
+        const text = await pageAwaitingPickup.evaluate(cell => cell.textContent, cell);
+        if (text.includes('Call number')) {
+            callNumberCol = icol;
+        } else if (text.includes('Expiration date')) {
+            expirationDateCol = icol;
+        } else if(text.includes('Title')) {
+            titleCol = icol;
+        }
+    }
+
+    console.log('Call number column: ' + callNumberCol);
+    console.log('Expiration date column: ' + expirationDateCol);
+    console.log('Title column: ' + titleCol);
+    if(null==callNumberCol || null==expirationDateCol || null==titleCol) {
+        console.error("Could not find one or more of the columns.");
+        readline.question('Press Enter to close the browser', () => {
+            browser.close();
+            readline.close();
+        });
+        return;
+    }
+
+    // Loop through the rows, looking for the one for this barcode.
+    var bFound = false;
+    for (let irow = 1; irow < rows.length; irow++) {
+        console.log(`Processing row ${irow} of ${rows.length - 1}`);
+        const cells = await rows[irow].$$('th, td'); // Select both header and data cells
+        var cellBarcodeText = await pageAwaitingPickup.evaluate(cell => cell.textContent, cells[titleCol]);
+        // The table cell for the title looks like this:
+        // <td>
+        // <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=479" class="title">  
+        //   <span class="biblio-title">They have a word for it :</span>  
+        //   <span class="subtitle">a lighthearted lexicon of untranslatable words &amp; phrases /</span>    </a>
+        // <br>Barcode: 43701001902378
+        // </td>
+        if(cellBarcodeText.includes(barcode)) {
+            console.log('Found barcode ' + barcode + ' in row ' + irow);
+            console.log('Title: ' + cellBarcodeText);
+            callNumber = await pageAwaitingPickup.evaluate(cell => cell.textContent, cells[callNumberCol]);
+            console.log('Call number: ' + callNumber);
+            expirationDate = await pageAwaitingPickup.evaluate(cell => cell.textContent, cells[expirationDateCol]);
+            console.log('Expiration date: ' + expirationDate);
+            bFound = true;
+            break;
+        }
+    }
+    if(!bFound) {
+        console.error('Barcode not found in the table.');
+    }
+    console.log("returning from findOtherFields");
+    return [callNumber, expirationDate];
 }
 
 async function main() {
