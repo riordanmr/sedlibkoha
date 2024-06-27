@@ -77,9 +77,42 @@ namespace PrintHold
 
         private void PrintPageHandler(object sender, PrintPageEventArgs e) {
             // Specify what to print. In this case, a simple text message.
-            Font font = new Font(settings.FontFamily, settings.FontSize, FontStyle.Regular);
-            e.Graphics.DrawString(holdSlip.Patron, font, Brushes.Black, 
-                settings.UpperLeftX, settings.UpperLeftY);
+            int x = settings.UpperLeftX;
+            int y = settings.UpperLeftY;
+            Font fontPatron = new Font(settings.FontFamilyPatron, settings.FontSizePatron, FontStyle.Bold);
+            e.Graphics.DrawString(holdSlip.Patron, fontPatron, Brushes.Black, 
+                x, y);
+            y += fontPatron.Height;
+            Font fontOther = new Font(settings.FontFamilyOther, settings.FontSizeOther);
+            Font fontOtherBold = new Font(settings.FontFamilyOther, settings.FontSizeOther, FontStyle.Bold);
+            string msg = $"Date: {holdSlip.Currentdatetime}";
+            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
+            y += fontOther.Height;
+            msg = $"Hold at {holdSlip.Library}";
+            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
+            y += 2*fontOther.Height;
+
+            msg = "ITEM ON HOLD";
+            e.Graphics.DrawString(msg, fontOtherBold, Brushes.Black, x, y);
+            y += fontOtherBold.Height;
+            msg = $"{holdSlip.Title}";
+            e.Graphics.DrawString(msg, fontOtherBold, Brushes.Black, x, y);
+            y += fontOtherBold.Height;
+            msg = $"{holdSlip.Author}";
+            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
+            y += fontOther.Height;
+            msg = $"{holdSlip.Barcode}";
+            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
+            y += fontOther.Height;
+            msg = $"{holdSlip.Callnumber}";
+            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
+            y += fontOther.Height;
+            msg = $"Expires: {holdSlip.Expdate}";
+            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
+            y += 2*fontOther.Height;
+
+
+
         }
 
     }

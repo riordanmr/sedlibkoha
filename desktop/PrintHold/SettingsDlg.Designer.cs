@@ -30,6 +30,7 @@
             this.textBoxX = new System.Windows.Forms.TextBox();
             this.textBoxY = new System.Windows.Forms.TextBox();
             this.buttonOK = new System.Windows.Forms.Button();
+            this.buttonFontOther = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonFontPatron
@@ -75,11 +76,22 @@
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
+            // buttonFontOther
+            // 
+            this.buttonFontOther.Location = new System.Drawing.Point(231, 12);
+            this.buttonFontOther.Name = "buttonFontOther";
+            this.buttonFontOther.Size = new System.Drawing.Size(157, 55);
+            this.buttonFontOther.TabIndex = 5;
+            this.buttonFontOther.Text = "Font - Other";
+            this.buttonFontOther.UseVisualStyleBackColor = true;
+            this.buttonFontOther.Click += new System.EventHandler(this.buttonFontOther_Click);
+            // 
             // SettingsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(728, 394);
+            this.Controls.Add(this.buttonFontOther);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.textBoxY);
             this.Controls.Add(this.textBoxX);
@@ -99,5 +111,6 @@
         private System.Windows.Forms.TextBox textBoxX;
         private System.Windows.Forms.TextBox textBoxY;
         private System.Windows.Forms.Button buttonOK;
+        private System.Windows.Forms.Button buttonFontOther;
     }
 }

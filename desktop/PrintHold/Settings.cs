@@ -10,9 +10,13 @@ namespace PrintHold
     {
         public Settings() { }
 
-        public string FontFamily { get; set; } = "Georgia";
+        public string FontFamilyPatron { get; set; } = "Georgia";
 
-        public float FontSize { get; set; } = 14.0F;
+        public float FontSizePatron { get; set; } = 18.0F;
+
+        public string FontFamilyOther { get; set; } = "Arial";
+
+        public float FontSizeOther { get; set; } = 12.0F;
 
         public int UpperLeftX { get; set; } = 15;
 
