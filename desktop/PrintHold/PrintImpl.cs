@@ -1,0 +1,86 @@
+﻿// PrintHold - program to print a library hold slip, for the Koha ILS.
+// Mark Riordan  2024-06-26
+
+using System;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.IO;
+using System.Windows.Forms;
+using Newtonsoft.Json;
+
+namespace PrintHold
+{
+    public class HoldSlip
+    {
+        public string Patron { get; set; }
+        public string Currentdatetime { get; set; }
+        public string Library { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public string Barcode { get; set; }
+        public string Callnumber { get; set; }
+        public string Expdate { get; set; }
+    }
+
+    public class PrintImpl
+    {
+        public Settings settings = new Settings();
+
+        public HoldSlip holdSlip;
+
+
+        void ShowMsg(string msg) {
+            string stamp = DateTime.Now.ToString("HH:mm:ss");
+            Program.FormMain.ShowMsg($"{stamp} {msg}");
+        }
+
+        public void Print() {
+            string filePath = "holdslip.json";
+            string jsonStr = null;
+            bool fileRead = false;
+            int itry = 0;
+            while (!fileRead && itry++ < 5) {
+                try {
+                    jsonStr = File.ReadAllText(filePath);
+                    fileRead = true; // If reading succeeds, set flag to true to exit the loop
+                } catch (FileNotFoundException) {
+                    filePath = "../" + filePath; // Prepend "../" to try the next path in the loop
+                    ShowMsg($"File not found. Trying {filePath}");
+                } catch (Exception ex) {
+                    ShowMsg($"Error reading file: {ex.Message}");
+                    break; // Exit the loop if an unexpected error occurs
+                }
+            }
+            holdSlip = JsonConvert.DeserializeObject<HoldSlip>(jsonStr);
+
+            PrintDocument printDocument = new PrintDocument();
+
+            // Set the printer name. Make sure the name matches exactly.
+            //string libraryReceiptPrinterName = "Epson TM-T88IV Receipt";
+            string printerName = "Microsoft Print to PDF";
+            printDocument.PrinterSettings.PrinterName = printerName;
+            printDocument.PrinterSettings.PrintToFile = true;
+            string pdfOutputFileName = "PrintHoldOut.pdf";
+            printDocument.PrinterSettings.PrintFileName = pdfOutputFileName;
+
+            // Handle the PrintPage event to specify what to print.
+            printDocument.PrintPage += new PrintPageEventHandler(PrintPageHandler);
+
+            try {
+                // Print the document.
+                printDocument.Print();
+                ShowMsg($"Printed OK to {printerName}");
+            } catch (Exception ex) {
+                ShowMsg("Error: " + ex.Message);
+            }
+        }
+
+        private void PrintPageHandler(object sender, PrintPageEventArgs e) {
+            // Specify what to print. In this case, a simple text message.
+            Font font = new Font(settings.FontFamily, settings.FontSize, FontStyle.Regular);
+            e.Graphics.DrawString(holdSlip.Patron, font, Brushes.Black, 
+                settings.UpperLeftX, settings.UpperLeftY);
+        }
+
+    }
+}
