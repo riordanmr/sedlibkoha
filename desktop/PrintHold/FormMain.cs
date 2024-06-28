@@ -32,5 +32,9 @@ namespace PrintHold
             SettingsDlg dlg = new SettingsDlg();
             dlg.ShowDialog();
         }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+            this.Close();
+        }
     }
 }
