@@ -76,6 +76,25 @@ namespace PrintHold
             }
         }
 
+        private void PrintLine(string msg, PrintPageEventArgs e, Font font, int x, ref int y) {
+            int printableWidth = e.MarginBounds.Width;
+            int maxPrintableWidth = printableWidth - x;
+            int msgWidth = (int)e.Graphics.MeasureString(msg, font).Width;
+            if (msgWidth > maxPrintableWidth) {
+                // The message is too wide to fit on one line. Split it into two lines.
+                int splitIndex = msg.Length / 2;
+                string firstLine = msg.Substring(0, splitIndex);
+                string secondLine = msg.Substring(splitIndex);
+                e.Graphics.DrawString(firstLine, font, Brushes.Black, x, y);
+                y += font.Height;
+                e.Graphics.DrawString(secondLine, font, Brushes.Black, x, y);
+            } else {
+                // The message fits on one line.
+                e.Graphics.DrawString(msg, font, Brushes.Black, x, y);
+            }
+            y += font.Height;
+        }   
+
         private void PrintPageHandler(object sender, PrintPageEventArgs e) {
             // Specify what to print. In this case, a simple text message.
             int x = settings.UpperLeftX;
