@@ -111,8 +111,10 @@ namespace PrintHold
             e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
             y += 2*fontOther.Height;
 
-
-
+            msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY}) {settings.FontFamilyPatron} {settings.FontSizePatron}; ";
+            msg += $"{settings.FontFamilyOther} {settings.FontSizeOther}";
+            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
+            y += fontOther.Height;
         }
 
     }
