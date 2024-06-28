@@ -58,10 +58,9 @@ namespace PrintHold
             PrintDocument printDocument = new PrintDocument();
 
             // Set the printer name. Make sure the name matches exactly.
-            //string libraryReceiptPrinterName = "Epson TM-T88IV Receipt";
-            string printerName = "Microsoft Print to PDF";
+            string printerName = settings.Printer;
             printDocument.PrinterSettings.PrinterName = printerName;
-            printDocument.PrinterSettings.PrintToFile = true;
+            printDocument.PrinterSettings.PrintToFile = settings.PrintToPDF;
             string pdfOutputFileName = "PrintHoldOut.pdf";
             printDocument.PrinterSettings.PrintFileName = pdfOutputFileName;
 

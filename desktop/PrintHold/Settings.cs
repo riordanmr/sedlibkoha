@@ -11,6 +11,10 @@ namespace PrintHold
         public Settings() { }
         public const string SettingsFilename = "PrintHold.json";
 
+        public string Printer = "Epson TM-T88IV Receipt";
+
+        public bool PrintToPDF = false;
+
         public string FontFamilyPatron { get; set; } = "Georgia";
 
         public float FontSizePatron { get; set; } = 18.0F;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace PrintHold
             InitializeComponent();
             this.textBoxX.Text = Program.FormMain.printImpl.settings.UpperLeftX.ToString();
             this.textBoxY.Text = Program.FormMain.printImpl.settings.UpperLeftY.ToString();
+            this.checkBoxPrintToPDF.Checked = Program.FormMain.printImpl.settings.PrintToPDF;
         }
 
         private void buttonFontPatron_Click(object sender, EventArgs e) {
@@ -32,6 +34,7 @@ namespace PrintHold
 
         private void buttonOK_Click(object sender, EventArgs e) {
             bool ok = true;
+            Program.FormMain.printImpl.settings.PrintToPDF = this.checkBoxPrintToPDF.Checked;
             if (Int32.TryParse(this.textBoxX.Text, out int xValue)) {
                 // Parsing successful, xValue contains the converted integer.
                 // You can now use xValue as needed, for example:
@@ -66,6 +69,32 @@ namespace PrintHold
                 Font fontPatron = dlg.Font;
                 Program.FormMain.printImpl.settings.FontFamilyOther = fontPatron.FontFamily.Name;
                 Program.FormMain.printImpl.settings.FontSizeOther = fontPatron.Size;
+            }
+
+        }
+
+        private void buttonPrinter_Click(object sender, EventArgs e) {
+            PrintDialog printDialog = new PrintDialog();
+            PrinterSettings printerSettings = new PrinterSettings();
+
+            // Attempt to preselect the configured printer if it exists.
+            try {
+                printerSettings.PrinterName = Program.FormMain.printImpl.settings.Printer;
+                if (printerSettings.IsValid) // Check if the printer name is valid
+                {
+                    printDialog.PrinterSettings = printerSettings;
+                }
+            } catch (Exception ex) {
+                MessageBox.Show($"An error occurred while selecting the printer: {ex.Message}");
+            }
+
+            // Show the dialog. This will still allow the user to choose another printer if they wish.
+            DialogResult result = printDialog.ShowDialog();
+            if (result == DialogResult.OK) {
+                // If the user clicks OK, you can access the selected printer like this:
+                string selectedPrinter = printDialog.PrinterSettings.PrinterName;
+                Program.FormMain.printImpl.settings.Printer = selectedPrinter;
+                //MessageBox.Show($"Selected Printer: {selectedPrinter}");
             }
 
         }
