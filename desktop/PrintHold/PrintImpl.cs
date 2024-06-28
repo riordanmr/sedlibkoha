@@ -110,43 +110,34 @@ namespace PrintHold
             int x = settings.UpperLeftX;
             int y = settings.UpperLeftY;
             Font fontPatron = new Font(settings.FontFamilyPatron, settings.FontSizePatron, FontStyle.Bold);
-            //e.Graphics.DrawString(holdSlip.Patron, fontPatron, Brushes.Black, 
-            //    x, y);
-            //y += fontPatron.Height;
             PrintLine(holdSlip.Patron, e, fontPatron, x, ref y);
             Font fontOther = new Font(settings.FontFamilyOther, settings.FontSizeOther);
             Font fontOtherBold = new Font(settings.FontFamilyOther, settings.FontSizeOther, FontStyle.Bold);
             string msg = $"Date: {holdSlip.Currentdatetime}";
-            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
-            y += fontOther.Height;
+            PrintLine(msg, e, fontOther, x, ref y);
             msg = $"Hold at {holdSlip.Library}";
-            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
-            y += 2*fontOther.Height;
+            PrintLine(msg, e, fontOther, x, ref y);
+            // Add a blank line.
+            y += fontOther.Height;
 
             msg = "ITEM ON HOLD";
-            e.Graphics.DrawString(msg, fontOtherBold, Brushes.Black, x, y);
-            y += fontOtherBold.Height;
+            PrintLine(msg, e, fontOtherBold, x, ref y);
             msg = $"{holdSlip.Title}";
-            e.Graphics.DrawString(msg, fontOtherBold, Brushes.Black, x, y);
-            y += fontOtherBold.Height;
+            PrintLine(msg, e, fontOtherBold, x, ref y);
             msg = $"{holdSlip.Author}";
-            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
-            y += fontOther.Height;
+            PrintLine(msg, e, fontOther, x, ref y);
             msg = $"{holdSlip.Barcode}";
-            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
-            y += fontOther.Height;
+            PrintLine(msg, e, fontOther, x, ref y);
             msg = $"{holdSlip.Callnumber}";
-            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
-            y += fontOther.Height;
+            PrintLine(msg, e, fontOther, x, ref y);
             msg = $"Expires: {holdSlip.Expdate}";
-            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
-            y += 2*fontOther.Height;
+            PrintLine(msg, e, fontOther, x, ref y);
+            y += fontOther.Height;
 
             msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY}); Width {settings.PageWidth}; {settings.FontFamilyPatron} {settings.FontSizePatron}; ";
             msg += $"{settings.FontFamilyOther} {settings.FontSizeOther}";
             ShowMsg(msg);
-            e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
-            y += fontOther.Height;
+            PrintLine(msg, e, fontOther, x, ref y);
         }
 
     }
