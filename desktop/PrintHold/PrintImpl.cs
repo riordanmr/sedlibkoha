@@ -5,7 +5,6 @@ using System;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
-using System.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace PrintHold
@@ -24,10 +23,13 @@ namespace PrintHold
 
     public class PrintImpl
     {
-        public Settings settings = new Settings();
+        public Settings settings;
 
         public HoldSlip holdSlip;
 
+        public PrintImpl() {
+            settings = Settings.Load();
+        }
 
         void ShowMsg(string msg) {
             string stamp = DateTime.Now.ToString("HH:mm:ss");
@@ -113,6 +115,7 @@ namespace PrintHold
 
             msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY}) {settings.FontFamilyPatron} {settings.FontSizePatron}; ";
             msg += $"{settings.FontFamilyOther} {settings.FontSizeOther}";
+            ShowMsg(msg);
             e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
             y += fontOther.Height;
         }

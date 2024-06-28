@@ -52,6 +52,7 @@ namespace PrintHold
                 ok = false;
             }
             if (ok) {
+                Program.FormMain.printImpl.settings.Save();
                 this.Close();
             }
         }
