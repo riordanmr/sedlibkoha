@@ -77,22 +77,32 @@ namespace PrintHold
         }
 
         private void PrintLine(string msg, PrintPageEventArgs e, Font font, int x, ref int y) {
-            int printableWidth = e.MarginBounds.Width;
-            int maxPrintableWidth = printableWidth - x;
-            int msgWidth = (int)e.Graphics.MeasureString(msg, font).Width;
-            if (msgWidth > maxPrintableWidth) {
-                // The message is too wide to fit on one line. Split it into two lines.
-                int splitIndex = msg.Length / 2;
-                string firstLine = msg.Substring(0, splitIndex);
-                string secondLine = msg.Substring(splitIndex);
-                e.Graphics.DrawString(firstLine, font, Brushes.Black, x, y);
-                y += font.Height;
-                e.Graphics.DrawString(secondLine, font, Brushes.Black, x, y);
+            int printableWidthInPixels;
+            if (settings.PageWidth > 0) {
+                // The user has specified a manual override for the page width.
+                printableWidthInPixels = settings.PageWidth;
             } else {
-                // The message fits on one line.
-                e.Graphics.DrawString(msg, font, Brushes.Black, x, y);
+                // Convert MarginBounds.Width from hundredths of an inch to pixels
+                // Note: this doesn't work well with certain values of Graphics.PageUnit.
+                float dpiX = e.Graphics.DpiX;
+                printableWidthInPixels = (int)((e.MarginBounds.Width / 100.0f) * dpiX);
             }
-            y += font.Height;
+            int maxPrintableWidth = printableWidthInPixels - x;
+            //ShowMsg($"MarginBounds.Width={e.MarginBounds.Width} dpiX={dpiX} printableWidthInPixels={printableWidthInPixels} maxPrintableWidth={maxPrintableWidth}");
+            //ShowMsg($"MeasureString={e.Graphics.MeasureString(msg, font).Width}");
+            string thisLine = msg;
+            bool bContinue;
+            do {
+                string thisPart = thisLine;
+                bContinue = false;
+                while ((int)e.Graphics.MeasureString(thisPart, font).Width > maxPrintableWidth) {
+                    thisPart = thisPart.Substring(0, thisPart.Length - 1);
+                    bContinue = true;
+                }
+                e.Graphics.DrawString(thisPart, font, Brushes.Black, x, y);
+                y += font.Height;
+                thisLine = thisLine.Substring(thisPart.Length);
+            } while (bContinue) ;
         }   
 
         private void PrintPageHandler(object sender, PrintPageEventArgs e) {
@@ -100,9 +110,10 @@ namespace PrintHold
             int x = settings.UpperLeftX;
             int y = settings.UpperLeftY;
             Font fontPatron = new Font(settings.FontFamilyPatron, settings.FontSizePatron, FontStyle.Bold);
-            e.Graphics.DrawString(holdSlip.Patron, fontPatron, Brushes.Black, 
-                x, y);
-            y += fontPatron.Height;
+            //e.Graphics.DrawString(holdSlip.Patron, fontPatron, Brushes.Black, 
+            //    x, y);
+            //y += fontPatron.Height;
+            PrintLine(holdSlip.Patron, e, fontPatron, x, ref y);
             Font fontOther = new Font(settings.FontFamilyOther, settings.FontSizeOther);
             Font fontOtherBold = new Font(settings.FontFamilyOther, settings.FontSizeOther, FontStyle.Bold);
             string msg = $"Date: {holdSlip.Currentdatetime}";
@@ -131,7 +142,7 @@ namespace PrintHold
             e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);
             y += 2*fontOther.Height;
 
-            msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY}) {settings.FontFamilyPatron} {settings.FontSizePatron}; ";
+            msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY}); Width {settings.PageWidth}; {settings.FontFamilyPatron} {settings.FontSizePatron}; ";
             msg += $"{settings.FontFamilyOther} {settings.FontSizeOther}";
             ShowMsg(msg);
             e.Graphics.DrawString(msg, fontOther, Brushes.Black, x, y);

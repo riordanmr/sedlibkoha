@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PrintHold
@@ -17,6 +11,7 @@ namespace PrintHold
             InitializeComponent();
             this.textBoxX.Text = Program.FormMain.printImpl.settings.UpperLeftX.ToString();
             this.textBoxY.Text = Program.FormMain.printImpl.settings.UpperLeftY.ToString();
+            this.textBoxPageWidth.Text = Program.FormMain.printImpl.settings.PageWidth.ToString();
             this.checkBoxPrintToPDF.Checked = Program.FormMain.printImpl.settings.PrintToPDF;
         }
 
@@ -54,6 +49,13 @@ namespace PrintHold
                 MessageBox.Show("Invalid input. Please enter a valid integer for Y.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ok = false;
             }
+            if(ok && Int32.TryParse(this.textBoxPageWidth.Text, out int pageWidthValue)) {
+                Program.FormMain.printImpl.settings.PageWidth = pageWidthValue;
+            } else {
+                MessageBox.Show("Invalid input. Please enter a valid integer for Page Width.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ok = false;
+            }
+
             if (ok) {
                 Program.FormMain.printImpl.settings.Save();
                 this.Close();
@@ -98,5 +100,6 @@ namespace PrintHold
             }
 
         }
+
     }
 }
