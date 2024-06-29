@@ -31,6 +31,10 @@ namespace PrintHold
 
         public void ShowMsg(string msg) {
             textBoxMsgs.Text += msg + "\r\n";
+            // Move the caret to the end of the text
+            textBoxMsgs.SelectionStart = textBoxMsgs.TextLength;
+            // Ensure no text is selected; this prevents ugly selected text.
+            textBoxMsgs.SelectionLength = 0;
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e) {

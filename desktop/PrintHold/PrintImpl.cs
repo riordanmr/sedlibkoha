@@ -15,7 +15,7 @@ namespace PrintHold
         public string Currentdatetime { get; set; }
         public string Library { get; set; }
         public string Title { get; set; }
-        public string Author { get; set; }
+        public string Author { get; set; } = string.Empty;
         public string Barcode { get; set; }
         public string Callnumber { get; set; }
         public string Expdate { get; set; }
@@ -118,10 +118,13 @@ namespace PrintHold
             int x = settings.UpperLeftX;
             int y = settings.UpperLeftY;
             Font fontPatron = new Font(settings.FontFamilyPatron, settings.FontSizePatron, FontStyle.Bold);
-            PrintLine(holdSlip.Patron, e, fontPatron, x, ref y);
             Font fontOther = new Font(settings.FontFamilyOther, settings.FontSizeOther);
             Font fontOtherBold = new Font(settings.FontFamilyOther, settings.FontSizeOther, FontStyle.Bold);
-            string msg = $"Date: {holdSlip.Currentdatetime}";
+
+            string msg = $"Pickup by: {holdSlip.Expdate}";
+            PrintLine(msg, e, fontOtherBold, x, ref y);
+            PrintLine(holdSlip.Patron, e, fontPatron, x, ref y);
+            msg = $"Date: {holdSlip.Currentdatetime}";
             PrintLine(msg, e, fontOther, x, ref y);
             msg = $"Hold at {holdSlip.Library}";
             PrintLine(msg, e, fontOther, x, ref y);
@@ -138,8 +141,7 @@ namespace PrintHold
             PrintLine(msg, e, fontOther, x, ref y);
             msg = $"{holdSlip.Callnumber}";
             PrintLine(msg, e, fontOther, x, ref y);
-            msg = $"Expires: {holdSlip.Expdate}";
-            PrintLine(msg, e, fontOther, x, ref y);
+
             y += fontOther.Height;
 
             msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY}); Width {settings.PageWidth}; {settings.FontFamilyPatron} {settings.FontSizePatron}; ";

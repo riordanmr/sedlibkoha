@@ -63,8 +63,11 @@ namespace PrintHold
                         allData = allData.Substring(idx + 1);
                         string reply = Program.FormMain.printImpl.PrintFromJson(data);
                         reply += EndOfData;
-                        byte[] msg = Encoding.UTF8.GetBytes(reply);
-                        stream.Write(msg, 0, msg.Length);
+                        // Enable this when the client is ready to read our reply.
+                        if (false) {
+                            byte[] msg = Encoding.UTF8.GetBytes(reply);
+                            stream.Write(msg, 0, msg.Length);
+                        }
                     }
                 }
             } catch (Exception e) {

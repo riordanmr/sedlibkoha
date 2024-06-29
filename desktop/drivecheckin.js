@@ -8,9 +8,11 @@ const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
 });
+const net = require('net');
 
 var kohaUrlStaffBase, kohaUsername, kohaPassword;
 var pageAwaitingPickup;
+var client;
 
 function getUserInput(query) {
     return new Promise(resolve => readline.question(query, resolve));
@@ -57,6 +59,13 @@ async function run() {
     var browserMain;
     var bConfirmedHold = false;
     try {
+        // Create a client socket
+        client = new net.Socket();
+        // Connect to the server on localhost:3250
+        client.connect(3250, 'localhost', () => {
+            console.log('Connected to server on localhost:3250');
+        });
+
         url = kohaUrlStaffBase + '/cgi-bin/koha/circ/returns.pl';
         // Wait for debugging purposes
         // await new Promise(resolve => setTimeout(resolve, 1700));
@@ -70,11 +79,13 @@ async function run() {
         while (true) {
             bConfirmedHold = false;
             // Get barcode from the user and send to the form.
-            var barcode;
+            var barcode, title, callNumber, expirationDate, patronLastFirst;
+            var currentDateTime, library;
             var quit = false;
             do {
                 console.log('');
                 barcode = await getUserInput('Enter barcode: ');
+                barcode = barcode.trim();
                 console.log(`Barcode: "${barcode}"`);
                 if (barcode == 'quit' || barcode == 'exit' || barcode == 'q') {
                     quit = true;
@@ -108,7 +119,7 @@ async function run() {
                     console.log('Item is already waiting; no action taken.');
                 } else {
                     // Get the patron name; it's in last, first format. 
-                    var patronLastFirst = await page.evaluate(() => {
+                    patronLastFirst = await page.evaluate(() => {
                     const h5Elements = [...document.querySelectorAll('h5')];
                     const targetH5 = h5Elements.find(h5 => h5.textContent.includes('Hold for:'));
                     if (!targetH5) return '';
@@ -131,7 +142,7 @@ async function run() {
                     // Hold found:
                     // <br>
                     // <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=230">The early writings of Frederick Jackson Turner :</a>
-                    const title = await page.evaluate(() => {
+                    title = await page.evaluate(() => {
                         const h3Elements = document.querySelectorAll('h3');
                         for (let h3 of h3Elements) {
                           if (h3.textContent.includes('Hold found:')) {
@@ -143,12 +154,16 @@ async function run() {
                       });
                       
                     console.log('Title: ' + title);
-                    const currentDate = new Date().toLocaleDateString('en-US', {
-                        month: '2-digit',
-                        day: '2-digit',
-                        year: 'numeric',
-                      });
-                    console.log('Current date: ' + currentDate);
+                    const now = new Date();
+                    // Get each part of the date and time
+                    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based, add 1 to get the correct month
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const year = now.getFullYear();
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+                    // Format the date and time in MM/DD/YYYY HH:mm format
+                    currentDateTime = `${month}/${day}/${year} ${hours}:${minutes}`;
 
                     h4element = await page.$('h4');
                     if (h4element) {
@@ -167,16 +182,27 @@ async function run() {
                                 console.log('No confirm button found.');
                             }
                         } else if (h4text.includes('Hold at')) {
+                            library = h4text.replace('Hold at ', '');
                             console.log('Hold found that does not need to be transferred.');
-                            const buttonElement = await page.$('button[type="button"].btn.btn-default.print');
+                            // The code below was from when we used the "Print slip" button;
+                            // now we just click the "Confirm hold" button and print the slip from 
+                            // a separate app.
+                            // const buttonElement = await page.$('button[type="button"].btn.btn-default.print');
+                            // if (buttonElement) {
+                            //     console.log('A button of type "button" with classes "btn btn-default print" exists.');
+                            //     await page.click('button[type="button"].btn.btn-default.print');
+                            //     console.log('Print slip button clicked.');
+                            //     bConfirmedHold = true;
+                            //     //await page.waitForNavigation({ waitUntil: 'networkidle0' });
+
+                            const buttonElement = await page.$('button[type="submit"].btn.btn-default.approve');
                             if (buttonElement) {
-                                console.log('A button of type "button" with classes "btn btn-default print" exists.');
-                                await page.click('button[type="button"].btn.btn-default.print');
-                                console.log('Print slip button clicked.');
+                                console.log('A button of type "submit" with classes "btn btn-default approve" exists.');
+                                await page.click('button[type="submit"].btn.btn-default.approve');
+                                console.log("Confirm hold button clicked even though it's local; we'll print separately.");
                                 bConfirmedHold = true;
-                                //await page.waitForNavigation({ waitUntil: 'networkidle0' });
                             } else {
-                                console.log('No print button found.');
+                                console.log('No Confirm hold button found (local hold).');
                             }
                         } else {
                             console.log('Unknown hold type: ' + h4text);
@@ -201,6 +227,18 @@ async function run() {
                 [callNumber, expirationDate] = await findOtherFields(barcode);
                 console.log('Call number: ' + callNumber);
                 console.log('Expiration date: ' + expirationDate);
+
+                // Send the info necessary to print the slip to the server.
+                client.write(JSON.stringify({
+                    barcode: barcode,
+                    title: title,
+                    patron: patronLastFirst,
+                    library: library,
+                    callnumber: callNumber,
+                    expdate: expirationDate,
+                    currentdatetime: currentDateTime
+                }));
+                client.write('\x17');
             }
         }
     } catch (error) {
