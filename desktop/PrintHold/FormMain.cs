@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace PrintHold
@@ -10,6 +12,17 @@ namespace PrintHold
 
         public FormMain() {
             InitializeComponent();
+            this.Load += FormMain_Load;
+        }
+
+        // Event handler for Form.Load
+        private void FormMain_Load(object sender, EventArgs e) {
+            // Place your code here that you want to run after the GUI is fully initialized
+            ShowMsg("GUI is fully initialized and ready.");
+            Listener listener = new PrintHold.Listener();
+            Thread clientThread = new Thread(new ThreadStart(listener.StartListening));
+            clientThread.IsBackground = true;
+            clientThread.Start();
         }
 
         private void printToolStripMenuItem_Click(object sender, EventArgs e) {

@@ -31,9 +31,37 @@ namespace PrintHold
             settings = Settings.Load();
         }
 
-        void ShowMsg(string msg) {
+        public void ShowMsg(string msg) {
             string stamp = DateTime.Now.ToString("HH:mm:ss");
             Program.FormMain.ShowMsg($"{stamp} {msg}");
+        }
+
+        public string PrintFromJson(string jsonStr) {
+            string reply = "";
+            holdSlip = JsonConvert.DeserializeObject<HoldSlip>(jsonStr);
+
+            PrintDocument printDocument = new PrintDocument();
+
+            // Set the printer name. Make sure the name matches exactly.
+            string printerName = settings.Printer;
+            printDocument.PrinterSettings.PrinterName = printerName;
+            printDocument.PrinterSettings.PrintToFile = settings.PrintToPDF;
+            string pdfOutputFileName = "PrintHoldOut.pdf";
+            printDocument.PrinterSettings.PrintFileName = pdfOutputFileName;
+
+            // Handle the PrintPage event to specify what to print.
+            printDocument.PrintPage += new PrintPageEventHandler(PrintPageHandler);
+
+            try {
+                // Print the document.
+                printDocument.Print();
+                reply = $"Printed OK to {printerName}";
+                ShowMsg(reply);
+            } catch (Exception ex) {
+                reply = "Error: " + ex.Message;
+                ShowMsg(reply);
+            }
+            return reply;
         }
 
         public void Print() {
@@ -53,27 +81,7 @@ namespace PrintHold
                     break; // Exit the loop if an unexpected error occurs
                 }
             }
-            holdSlip = JsonConvert.DeserializeObject<HoldSlip>(jsonStr);
-
-            PrintDocument printDocument = new PrintDocument();
-
-            // Set the printer name. Make sure the name matches exactly.
-            string printerName = settings.Printer;
-            printDocument.PrinterSettings.PrinterName = printerName;
-            printDocument.PrinterSettings.PrintToFile = settings.PrintToPDF;
-            string pdfOutputFileName = "PrintHoldOut.pdf";
-            printDocument.PrinterSettings.PrintFileName = pdfOutputFileName;
-
-            // Handle the PrintPage event to specify what to print.
-            printDocument.PrintPage += new PrintPageEventHandler(PrintPageHandler);
-
-            try {
-                // Print the document.
-                printDocument.Print();
-                ShowMsg($"Printed OK to {printerName}");
-            } catch (Exception ex) {
-                ShowMsg("Error: " + ex.Message);
-            }
+            PrintFromJson(jsonStr);
         }
 
         private void PrintLine(string msg, PrintPageEventArgs e, Font font, int x, ref int y) {

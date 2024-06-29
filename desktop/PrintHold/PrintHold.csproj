@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Listener.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsDlg.cs">
       <SubType>Form</SubType>
