@@ -84,7 +84,7 @@ namespace PrintHold
             PrintFromJson(jsonStr);
         }
 
-        private void PrintLine(string msg, PrintPageEventArgs e, Font font, int x, ref int y) {
+        private void PrintLine(string msg, PrintPageEventArgs e, Font font, float lineSpacing, int x, ref int y) {
             int printableWidthInPixels;
             if (settings.PageWidth > 0) {
                 // The user has specified a manual override for the page width.
@@ -108,7 +108,7 @@ namespace PrintHold
                     bContinue = true;
                 }
                 e.Graphics.DrawString(thisPart, font, Brushes.Black, x, y);
-                y += font.Height;
+                y += (int) (lineSpacing * font.Height);
                 thisLine = thisLine.Substring(thisPart.Length);
             } while (bContinue) ;
         }   
@@ -122,32 +122,32 @@ namespace PrintHold
             Font fontOtherBold = new Font(settings.FontFamilyOther, settings.FontSizeOther, FontStyle.Bold);
 
             string msg = $"Pickup by: {holdSlip.Expdate}";
-            PrintLine(msg, e, fontOtherBold, x, ref y);
-            PrintLine(holdSlip.Patron, e, fontPatron, x, ref y);
+            PrintLine(msg, e, fontOtherBold, settings.LineSpacingOther, x, ref y);
+            PrintLine(holdSlip.Patron, e, fontPatron, settings.LineSpacingPatron, x, ref y);
             msg = $"Date: {holdSlip.Currentdatetime}";
-            PrintLine(msg, e, fontOther, x, ref y);
+            PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
             msg = $"Hold at {holdSlip.Library}";
-            PrintLine(msg, e, fontOther, x, ref y);
+            PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
             // Add a blank line.
             y += fontOther.Height;
 
             msg = "ITEM ON HOLD";
-            PrintLine(msg, e, fontOtherBold, x, ref y);
+            PrintLine(msg, e, fontOtherBold, settings.LineSpacingOther, x, ref y);
             msg = $"{holdSlip.Title}";
-            PrintLine(msg, e, fontOtherBold, x, ref y);
+            PrintLine(msg, e, fontOtherBold, settings.LineSpacingOther, x, ref y);
             msg = $"{holdSlip.Author}";
-            PrintLine(msg, e, fontOther, x, ref y);
+            PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
             msg = $"{holdSlip.Barcode}";
-            PrintLine(msg, e, fontOther, x, ref y);
+            PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
             msg = $"{holdSlip.Callnumber}";
-            PrintLine(msg, e, fontOther, x, ref y);
+            PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
 
             y += fontOther.Height;
 
             msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY}); Width {settings.PageWidth}; {settings.FontFamilyPatron} {settings.FontSizePatron}; ";
             msg += $"{settings.FontFamilyOther} {settings.FontSizeOther}";
             ShowMsg(msg);
-            PrintLine(msg, e, fontOther, x, ref y);
+            PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
         }
 
     }

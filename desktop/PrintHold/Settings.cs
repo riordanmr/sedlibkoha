@@ -15,9 +15,13 @@ namespace PrintHold
 
         public float FontSizePatron { get; set; } = 18.0F;
 
+        public float LineSpacingPatron { get; set; } = 0.92F;
+
         public string FontFamilyOther { get; set; } = "Arial";
 
         public float FontSizeOther { get; set; } = 12.0F;
+
+        public float LineSpacingOther { get; set; } = 1.0F;
 
         public int UpperLeftX { get; set; } = 15;
 
