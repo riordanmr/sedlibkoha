@@ -61,10 +61,14 @@ async function run() {
     try {
         // Create a client socket
         client = new net.Socket();
-        // Connect to the server on localhost:3250
-        client.connect(3250, 'localhost', () => {
-            console.log('Connected to server on localhost:3250');
-        });
+        // Connect to PrintHold.
+        var port = 3250;
+        client.connect(port, 'localhost', () => {
+            console.log('Connected to server on localhost:' + port);
+        }).on('error', (error) => { 
+            console.log("Cannot connect to PrintHold on local port " + port);
+            process.exit(2);
+		});
 
         url = kohaUrlStaffBase + '/cgi-bin/koha/circ/returns.pl';
         // Wait for debugging purposes
