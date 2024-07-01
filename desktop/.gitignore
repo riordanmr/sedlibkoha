@@ -1,0 +1,16 @@
+PrintHold0
+*.ide*
+*.suo
+*.vsidx
+*.exe
+*.exe.config
+*.cache
+*.pdf
+*.dll
+*.pdb
+*.nupkg
+PrintHold/obj
+PrintHold/bin
+PrintHold/packages
+db.lock
+.vs
