@@ -224,6 +224,10 @@ async function findOtherFields(barcode) {
     // refresh the page to pick up any items that we've just marked as waiting.
     await pageAwaitingPickup.reload({ waitUntil: "domcontentloaded" });
 
+    // Type the barcode into the search box. This sets a filter that immediately
+    // kicks in.
+    await pageAwaitingPickup.type('input[type="search"][aria-controls="holdst"]', barcode);
+
     // Find the table with class holds_table and loop through all the 
     // columns of the first row.
     console.log("Finding table");

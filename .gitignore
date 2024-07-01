@@ -172,3 +172,10 @@ misc/barcodecheck*.py
 *.mrc
 misc/dewey_counts.py
 misc/genbarcodes.py
+misc/j
+misc/j.tsv
+misc/*-output.json
+misc/testauth.js
+misc/biblio1.json
+misc/nextbarcode.txt
+
