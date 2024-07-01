@@ -120,7 +120,8 @@ async function run() {
             if (h3Text != null) {
                 console.log('h3 found: ' + h3Text);
                 if (h3Text.includes('(item is already waiting)')) {
-                    console.log('Item is already waiting; no action taken.');
+                    console.log('Item is already waiting; will choose Ignore button.');
+                    await page.click('button[data-dismiss="modal"][aria-hidden="true"][type="submit"].btn.btn-default[accesskey="I"]');
                 } else {
                     // Get the patron name; it's in last, first format. 
                     patronLastFirst = await page.evaluate(() => {
@@ -228,15 +229,17 @@ async function run() {
             }
             if (bConfirmedHold) {
                 // Find the call number and expiration date of the item.
-                [callNumber, expirationDate] = await findOtherFields(barcode);
+                [found, callNumber, expirationDate, patronName] = await findOtherFields(barcode);
                 console.log('Call number: ' + callNumber);
                 console.log('Expiration date: ' + expirationDate);
-
+                console.log('Patron name: ' + patronName);
                 // Send the info necessary to print the slip to the server.
+                // There are two copies of the patron name; the one from the page
+                // of waiting holds seems to be more reliable.
                 client.write(JSON.stringify({
                     barcode: barcode,
                     title: title,
-                    patron: patronLastFirst,
+                    patron: patronName,
                     library: library,
                     callnumber: callNumber,
                     expdate: expirationDate,
@@ -254,13 +257,18 @@ async function run() {
         browserMain.close();
         browserAwaitingPickup.close();
         readline.close();
+        process.exit(0);
     })
 }
 
 // Given a barcode, find certain fields of the held item with that barcode.
-// The fields are call number and expiration date, and are returned in an array.
+// Returns an array of:
+// - found (true if barcode found)
+// - callNumber
+// - expirationDate
+// - patronName
 async function findOtherFields(barcode) {
-    var callNumber, expirationDate;
+    var found=false, callNumber, expirationDate, patronName;
 
     // Assuming that we are logged into the "Holds awaiting pickup for your library" page,
     // refresh the page to pick up any items that we've just marked as waiting.
@@ -278,7 +286,7 @@ async function findOtherFields(barcode) {
     const rows = await table.$$('tr');
     console.log("Finding cells");
     const cells = await rows[0].$$('th');
-    var callNumberCol, expirationDateCol, titleCol;
+    var callNumberCol, expirationDateCol, titleCol, patronCol;
     for (let icol = 0; icol < cells.length; icol++) {
         const cell = cells[icol];
         const text = await pageAwaitingPickup.evaluate(cell => cell.textContent, cell);
@@ -288,13 +296,16 @@ async function findOtherFields(barcode) {
             expirationDateCol = icol;
         } else if(text.includes('Title')) {
             titleCol = icol;
-        }
+        } else if(text.includes('Patron')) {
+            patronCol = icol;
+		}
     }
 
     console.log('Call number column: ' + callNumberCol);
     console.log('Expiration date column: ' + expirationDateCol);
     console.log('Title column: ' + titleCol);
-    if(null==callNumberCol || null==expirationDateCol || null==titleCol) {
+    console.log('Patron column: ' + patronCol);
+    if(null==callNumberCol || null==expirationDateCol || null==titleCol || null==patronCol) {
         console.error("Could not find one or more of the columns.");
         readline.question('Press Enter to close the browser', () => {
             browser.close();
@@ -304,7 +315,6 @@ async function findOtherFields(barcode) {
     }
 
     // Loop through the rows, looking for the one for this barcode.
-    var bFound = false;
     for (let irow = 1; irow < rows.length; irow++) {
         console.log(`Processing row ${irow} of ${rows.length - 1}`);
         const cells = await rows[irow].$$('th, td'); // Select both header and data cells
@@ -323,15 +333,24 @@ async function findOtherFields(barcode) {
             console.log('Call number: ' + callNumber);
             expirationDate = await pageAwaitingPickup.evaluate(cell => cell.textContent, cells[expirationDateCol]);
             console.log('Expiration date: ' + expirationDate);
-            bFound = true;
+            patronName = await pageAwaitingPickup.evaluate(cell => cell.textContent, cells[patronCol]);
+            // Remove (barcode) from patron name, if present.
+            if (patronName.includes('(')) {
+                patronName = patronName.substring(0, patronName.indexOf('(')).trim();
+            }
+            console.log('Patron name: ' + patronName);
+            // Do a reality check on certain fields. 
+            if(patronName.length > 5) {
+                found = true;
+            }
             break;
         }
     }
-    if(!bFound) {
+    if(!found) {
         console.error('Barcode not found in the table.');
     }
     console.log("returning from findOtherFields");
-    return [callNumber, expirationDate];
+    return [found, callNumber, expirationDate, patronName];
 }
 
 async function main() {
