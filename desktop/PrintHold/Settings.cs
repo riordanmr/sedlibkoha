@@ -32,6 +32,8 @@ namespace PrintHold
         // manual override.  If 0, we use my calculations.
         public int PageWidth { get; set; } = 0;
 
+        public bool PrintConfig { get; set; } = true;
+
         // Serializes the current instance to a JSON string
         public string ToJson() {
             return JsonConvert.SerializeObject(this);

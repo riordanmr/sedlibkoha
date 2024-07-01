@@ -41,9 +41,10 @@
             this.labelLineSpacingPatron = new System.Windows.Forms.Label();
             this.labelComma = new System.Windows.Forms.Label();
             this.groupBoxFontOther = new System.Windows.Forms.GroupBox();
-            this.labelFontInfoOther = new System.Windows.Forms.Label();
-            this.labelLineSpacingOther = new System.Windows.Forms.Label();
             this.textBoxLineSpacingOther = new System.Windows.Forms.TextBox();
+            this.labelLineSpacingOther = new System.Windows.Forms.Label();
+            this.labelFontInfoOther = new System.Windows.Forms.Label();
+            this.checkBoxPrintConfig = new System.Windows.Forms.CheckBox();
             this.groupBoxFontPatron.SuspendLayout();
             this.groupBoxFontOther.SuspendLayout();
             this.SuspendLayout();
@@ -84,10 +85,10 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(329, 532);
+            this.buttonOK.Location = new System.Drawing.Point(329, 578);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 41);
-            this.buttonOK.TabIndex = 9;
+            this.buttonOK.TabIndex = 10;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
@@ -139,11 +140,11 @@
             this.textBoxPageWidth.Size = new System.Drawing.Size(65, 31);
             this.textBoxPageWidth.TabIndex = 6;
             // 
-            // labelFontPatron
+            // labelFontInfoPatron
             // 
             this.labelFontInfoPatron.AutoSize = true;
             this.labelFontInfoPatron.Location = new System.Drawing.Point(154, 52);
-            this.labelFontInfoPatron.Name = "labelFontPatron";
+            this.labelFontInfoPatron.Name = "labelFontInfoPatron";
             this.labelFontInfoPatron.Size = new System.Drawing.Size(229, 25);
             this.labelFontInfoPatron.TabIndex = 1;
             this.labelFontInfoPatron.Text = "Patron font information";
@@ -199,14 +200,12 @@
             this.groupBoxFontOther.TabStop = false;
             this.groupBoxFontOther.Text = "Other font";
             // 
-            // labelOtherFontInfo
+            // textBoxLineSpacingOther
             // 
-            this.labelFontInfoOther.AutoSize = true;
-            this.labelFontInfoOther.Location = new System.Drawing.Point(154, 54);
-            this.labelFontInfoOther.Name = "labelOtherFontInfo";
-            this.labelFontInfoOther.Size = new System.Drawing.Size(219, 25);
-            this.labelFontInfoOther.TabIndex = 1;
-            this.labelFontInfoOther.Text = "Other font information";
+            this.textBoxLineSpacingOther.Location = new System.Drawing.Point(174, 108);
+            this.textBoxLineSpacingOther.Name = "textBoxLineSpacingOther";
+            this.textBoxLineSpacingOther.Size = new System.Drawing.Size(65, 31);
+            this.textBoxLineSpacingOther.TabIndex = 3;
             // 
             // labelLineSpacingOther
             // 
@@ -217,18 +216,31 @@
             this.labelLineSpacingOther.TabIndex = 2;
             this.labelLineSpacingOther.Text = "Line Spacing:";
             // 
-            // textBoxLineSpacingOther
+            // labelFontInfoOther
             // 
-            this.textBoxLineSpacingOther.Location = new System.Drawing.Point(174, 108);
-            this.textBoxLineSpacingOther.Name = "textBoxLineSpacingOther";
-            this.textBoxLineSpacingOther.Size = new System.Drawing.Size(65, 31);
-            this.textBoxLineSpacingOther.TabIndex = 3;
+            this.labelFontInfoOther.AutoSize = true;
+            this.labelFontInfoOther.Location = new System.Drawing.Point(154, 54);
+            this.labelFontInfoOther.Name = "labelFontInfoOther";
+            this.labelFontInfoOther.Size = new System.Drawing.Size(219, 25);
+            this.labelFontInfoOther.TabIndex = 1;
+            this.labelFontInfoOther.Text = "Other font information";
+            // 
+            // checkBoxPrintConfig
+            // 
+            this.checkBoxPrintConfig.AutoSize = true;
+            this.checkBoxPrintConfig.Location = new System.Drawing.Point(39, 532);
+            this.checkBoxPrintConfig.Name = "checkBoxPrintConfig";
+            this.checkBoxPrintConfig.Size = new System.Drawing.Size(156, 29);
+            this.checkBoxPrintConfig.TabIndex = 9;
+            this.checkBoxPrintConfig.Text = "Print Config";
+            this.checkBoxPrintConfig.UseVisualStyleBackColor = true;
             // 
             // SettingsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(708, 592);
+            this.ClientSize = new System.Drawing.Size(708, 644);
+            this.Controls.Add(this.checkBoxPrintConfig);
             this.Controls.Add(this.labelComma);
             this.Controls.Add(this.textBoxPageWidth);
             this.Controls.Add(this.labelPageWidth);
@@ -272,5 +284,6 @@
         private System.Windows.Forms.Label labelLineSpacingOther;
         private System.Windows.Forms.Label labelFontInfoOther;
         private System.Windows.Forms.TextBox textBoxLineSpacingOther;
+        private System.Windows.Forms.CheckBox checkBoxPrintConfig;
     }
 }

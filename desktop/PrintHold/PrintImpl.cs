@@ -144,10 +144,14 @@ namespace PrintHold
 
             y += fontOther.Height;
 
-            msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY}); Width {settings.PageWidth}; {settings.FontFamilyPatron} {settings.FontSizePatron}; ";
-            msg += $"{settings.FontFamilyOther} {settings.FontSizeOther}";
+            msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY});" +
+                $" Width {settings.PageWidth};" +
+                $" {settings.FontFamilyPatron} {settings.FontSizePatron} {settings.LineSpacingPatron.ToString()};";
+            msg += $" {settings.FontFamilyOther} {settings.FontSizeOther} {settings.LineSpacingOther.ToString()}";
             ShowMsg(msg);
-            PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
+            if (settings.PrintConfig) {
+                PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
+            }
         }
 
     }

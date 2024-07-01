@@ -19,6 +19,7 @@ namespace PrintHold
                 Program.FormMain.printImpl.settings.FontSizePatron.ToString();
             this.labelFontInfoOther.Text = Program.FormMain.printImpl.settings.FontFamilyOther + " " +
                 Program.FormMain.printImpl.settings.FontSizeOther.ToString();
+            this.checkBoxPrintConfig.Checked = Program.FormMain.printImpl.settings.PrintConfig;
         }
 
 
@@ -118,6 +119,8 @@ namespace PrintHold
                 MessageBox.Show("Invalid input. Please enter a valid number for Line Spacing Other.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ok = false;
             }
+
+            Program.FormMain.printImpl.settings.PrintConfig = this.checkBoxPrintConfig.Checked;
 
             if (ok) {
                 Program.FormMain.printImpl.settings.Save();
