@@ -58,6 +58,7 @@ async function startBrowserAndLogin(url) {
 async function run() {
     var browserMain;
     var bConfirmedHold = false;
+    var bConnectedToPrintHold = false;
     try {
         // Create a client socket
         client = new net.Socket();
@@ -65,9 +66,11 @@ async function run() {
         var port = 3250;
         client.connect(port, 'localhost', () => {
             console.log('Connected to server on localhost:' + port);
+            bConnectedToPrintHold = true;
         }).on('error', (error) => { 
             console.log("Cannot connect to PrintHold on local port " + port);
-            process.exit(2);
+            console.log("Continuing without printing slips.");
+            //process.exit(2);
 		});
 
         url = kohaUrlStaffBase + '/cgi-bin/koha/circ/returns.pl';
@@ -236,16 +239,35 @@ async function run() {
                 // Send the info necessary to print the slip to the server.
                 // There are two copies of the patron name; the one from the page
                 // of waiting holds seems to be more reliable.
-                client.write(JSON.stringify({
-                    barcode: barcode,
-                    title: title,
-                    patron: patronName,
-                    library: library,
-                    callnumber: callNumber,
-                    expdate: expirationDate,
-                    currentdatetime: currentDateTime
-                }));
-                client.write('\x17');
+
+                client.on('error', (error) => {
+                    console.error('An error occurred:', error);
+                    // Handle the error as needed, e.g., retry the operation, log the error, notify the user, etc.
+                });
+                
+                if(bConnectedToPrintHold) {
+                    client.write(JSON.stringify({
+                        barcode: barcode,
+                        title: title,
+                        patron: patronName,
+                        library: library,
+                        callnumber: callNumber,
+                        expdate: expirationDate,
+                        currentdatetime: currentDateTime
+                    }), (error) => {
+                        // This callback function is for handling errors specifically 
+                        // related to the write operation.
+                        if (error) {
+                            console.error('Failed to write to PrintHold:', error);
+                            console.log("You'll have to print the hold slip manually.");
+                        } else {
+                            console.log('Data successfully written to PrintHold.');
+                        }
+                    });
+                    client.write('\x17');
+                } else {
+                    console.log('Cannot print hold slip; not connected to PrintHold.');
+                }
             }
         }
     } catch (error) {
