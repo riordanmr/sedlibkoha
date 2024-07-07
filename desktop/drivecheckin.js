@@ -57,7 +57,6 @@ async function startBrowserAndLogin(url) {
 
 async function run() {
     var browserMain;
-    var bConfirmedHold = false;
     var bConnectedToPrintHold = false;
     try {
         // Create a client socket
@@ -84,7 +83,8 @@ async function run() {
         [browserAwaitingPickup, pageAwaitingPickup] = await startBrowserAndLogin(urlAwaitingPickup);
 
         while (true) {
-            bConfirmedHold = false;
+            var bConfirmedHold = false;
+            var bPrintSlip = false;
             // Get barcode from the user and send to the form.
             var barcode, title, callNumber, expirationDate, patronLastFirst;
             var currentDateTime, library;
@@ -192,6 +192,7 @@ async function run() {
                         } else if (h4text.includes('Hold at')) {
                             library = h4text.replace('Hold at ', '');
                             console.log('Hold found that does not need to be transferred.');
+                            bPrintSlip = true;
                             // The code below was from when we used the "Print slip" button;
                             // now we just click the "Confirm hold" button and print the slip from 
                             // a separate app.
@@ -230,7 +231,7 @@ async function run() {
                     console.log('No paragraph with class "problem" found.');
                 }
             }
-            if (bConfirmedHold) {
+            if (bConfirmedHold && bPrintSlip) {
                 // Find the call number and expiration date of the item.
                 [found, callNumber, expirationDate, patronName] = await findOtherFields(barcode);
                 console.log('Call number: ' + callNumber);
