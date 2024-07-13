@@ -152,6 +152,10 @@ namespace PrintHold
             if (settings.PrintConfig) {
                 PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
             }
+            // Print a few blank lines at the end.
+            for(int i = 0; i < 3; i++) {
+                PrintLine("", e, fontOther, settings.LineSpacingOther, x, ref y);
+            }
         }
 
     }
