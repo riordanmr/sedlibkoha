@@ -20,6 +20,9 @@ def save_next_barcode(next_barcode):
     with open("nextbarcode.txt", "w") as file:
         file.write(str(next_barcode))
 
+# We use a text file to store the next barcode to use. This is a simple way to
+# ensure that we don't reuse barcodes, and it allows us to restart the program
+# and pick up where we left off.  The barcodes are simply incrementing integers.
 def read_next_barcode():
     with open("nextbarcode.txt", "r") as file:
         next_barcode = int(file.read())
@@ -120,6 +123,8 @@ def main():
     global nextBarcode
     start_time = time.perf_counter()
     nextBarcode = read_next_barcode()
+    # We identify the biblio records to which we are adding items 
+    # simply by their record number. 
     # The biblio record numbers start at 1 and go up to the number of records.
     start_recNum = 365
     num_to_process = 200
