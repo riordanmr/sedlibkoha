@@ -358,7 +358,14 @@ async function findOtherFields(barcode) {
         for (let irow = 1; irow < rows.length; irow++) {
             console.log(`Processing row ${irow} of ${rows.length - 1}`);
             const cells = await rows[irow].$$('th, td'); // Select both header and data cells
-            var cellBarcodeText = await pageAwaitingPickup.evaluate(cell => cell.textContent, cells[titleCol]);
+            var cellBarcodeText;
+            try {
+                cellBarcodeText = await pageAwaitingPickup.evaluate(cell => cell.textContent, cells[titleCol]);
+            } catch (error) {
+                console.error("Error getting text from cell: " + error.message);
+                console.error("Will refresh the page and try again.");
+                break;
+            }
             // The table cell for the title looks like this:
             // <td>
             // <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=479" class="title">  

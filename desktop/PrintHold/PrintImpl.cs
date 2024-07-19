@@ -156,6 +156,9 @@ namespace PrintHold
             for(int i = 0; i < 3; i++) {
                 PrintLine("", e, fontOther, settings.LineSpacingOther, x, ref y);
             }
+            // The print driver seems to ignore blank lines unless we print 
+            // something below them, so do so.
+            e.Graphics.DrawString(".", fontOther, Brushes.White, x, y);
         }
 
     }
