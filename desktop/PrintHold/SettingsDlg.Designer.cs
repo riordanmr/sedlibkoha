@@ -45,6 +45,7 @@
             this.labelLineSpacingOther = new System.Windows.Forms.Label();
             this.labelFontInfoOther = new System.Windows.Forms.Label();
             this.checkBoxPrintConfig = new System.Windows.Forms.CheckBox();
+            this.labelPrinter = new System.Windows.Forms.Label();
             this.groupBoxFontPatron.SuspendLayout();
             this.groupBoxFontOther.SuspendLayout();
             this.SuspendLayout();
@@ -62,33 +63,33 @@
             // labelUpperLeft
             // 
             this.labelUpperLeft.AutoSize = true;
-            this.labelUpperLeft.Location = new System.Drawing.Point(71, 73);
+            this.labelUpperLeft.Location = new System.Drawing.Point(71, 119);
             this.labelUpperLeft.Name = "labelUpperLeft";
             this.labelUpperLeft.Size = new System.Drawing.Size(118, 25);
-            this.labelUpperLeft.TabIndex = 5;
+            this.labelUpperLeft.TabIndex = 3;
             this.labelUpperLeft.Text = "Upper Left:";
             this.labelUpperLeft.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBoxX
             // 
-            this.textBoxX.Location = new System.Drawing.Point(205, 70);
+            this.textBoxX.Location = new System.Drawing.Point(205, 116);
             this.textBoxX.Name = "textBoxX";
             this.textBoxX.Size = new System.Drawing.Size(50, 31);
-            this.textBoxX.TabIndex = 2;
+            this.textBoxX.TabIndex = 4;
             // 
             // textBoxY
             // 
-            this.textBoxY.Location = new System.Drawing.Point(279, 70);
+            this.textBoxY.Location = new System.Drawing.Point(279, 116);
             this.textBoxY.Name = "textBoxY";
             this.textBoxY.Size = new System.Drawing.Size(50, 31);
-            this.textBoxY.TabIndex = 4;
+            this.textBoxY.TabIndex = 6;
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(329, 578);
+            this.buttonOK.Location = new System.Drawing.Point(329, 644);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 41);
-            this.buttonOK.TabIndex = 10;
+            this.buttonOK.TabIndex = 12;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
@@ -116,29 +117,29 @@
             // checkBoxPrintToPDF
             // 
             this.checkBoxPrintToPDF.AutoSize = true;
-            this.checkBoxPrintToPDF.Location = new System.Drawing.Point(208, 22);
+            this.checkBoxPrintToPDF.Location = new System.Drawing.Point(67, 81);
             this.checkBoxPrintToPDF.Name = "checkBoxPrintToPDF";
             this.checkBoxPrintToPDF.Size = new System.Drawing.Size(160, 29);
-            this.checkBoxPrintToPDF.TabIndex = 1;
+            this.checkBoxPrintToPDF.TabIndex = 2;
             this.checkBoxPrintToPDF.Text = "Print to PDF";
             this.checkBoxPrintToPDF.UseVisualStyleBackColor = true;
             // 
             // labelPageWidth
             // 
             this.labelPageWidth.AutoSize = true;
-            this.labelPageWidth.Location = new System.Drawing.Point(62, 114);
+            this.labelPageWidth.Location = new System.Drawing.Point(62, 160);
             this.labelPageWidth.Name = "labelPageWidth";
             this.labelPageWidth.Size = new System.Drawing.Size(129, 25);
-            this.labelPageWidth.TabIndex = 5;
+            this.labelPageWidth.TabIndex = 7;
             this.labelPageWidth.Text = "Page Width:";
             this.labelPageWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBoxPageWidth
             // 
-            this.textBoxPageWidth.Location = new System.Drawing.Point(205, 111);
+            this.textBoxPageWidth.Location = new System.Drawing.Point(205, 157);
             this.textBoxPageWidth.Name = "textBoxPageWidth";
             this.textBoxPageWidth.Size = new System.Drawing.Size(65, 31);
-            this.textBoxPageWidth.TabIndex = 6;
+            this.textBoxPageWidth.TabIndex = 8;
             // 
             // labelFontInfoPatron
             // 
@@ -155,10 +156,10 @@
             this.groupBoxFontPatron.Controls.Add(this.labelLineSpacingPatron);
             this.groupBoxFontPatron.Controls.Add(this.labelFontInfoPatron);
             this.groupBoxFontPatron.Controls.Add(this.buttonFontPatron);
-            this.groupBoxFontPatron.Location = new System.Drawing.Point(31, 171);
+            this.groupBoxFontPatron.Location = new System.Drawing.Point(31, 217);
             this.groupBoxFontPatron.Name = "groupBoxFontPatron";
             this.groupBoxFontPatron.Size = new System.Drawing.Size(630, 155);
-            this.groupBoxFontPatron.TabIndex = 7;
+            this.groupBoxFontPatron.TabIndex = 9;
             this.groupBoxFontPatron.TabStop = false;
             this.groupBoxFontPatron.Text = "Patron font";
             // 
@@ -181,10 +182,10 @@
             // labelComma
             // 
             this.labelComma.AutoSize = true;
-            this.labelComma.Location = new System.Drawing.Point(258, 76);
+            this.labelComma.Location = new System.Drawing.Point(258, 122);
             this.labelComma.Name = "labelComma";
             this.labelComma.Size = new System.Drawing.Size(18, 25);
-            this.labelComma.TabIndex = 3;
+            this.labelComma.TabIndex = 5;
             this.labelComma.Text = ",";
             // 
             // groupBoxFontOther
@@ -193,10 +194,10 @@
             this.groupBoxFontOther.Controls.Add(this.labelLineSpacingOther);
             this.groupBoxFontOther.Controls.Add(this.labelFontInfoOther);
             this.groupBoxFontOther.Controls.Add(this.buttonFontOther);
-            this.groupBoxFontOther.Location = new System.Drawing.Point(31, 358);
+            this.groupBoxFontOther.Location = new System.Drawing.Point(31, 404);
             this.groupBoxFontOther.Name = "groupBoxFontOther";
             this.groupBoxFontOther.Size = new System.Drawing.Size(630, 155);
-            this.groupBoxFontOther.TabIndex = 8;
+            this.groupBoxFontOther.TabIndex = 10;
             this.groupBoxFontOther.TabStop = false;
             this.groupBoxFontOther.Text = "Other font";
             // 
@@ -228,18 +229,26 @@
             // checkBoxPrintConfig
             // 
             this.checkBoxPrintConfig.AutoSize = true;
-            this.checkBoxPrintConfig.Location = new System.Drawing.Point(39, 532);
+            this.checkBoxPrintConfig.Location = new System.Drawing.Point(39, 578);
             this.checkBoxPrintConfig.Name = "checkBoxPrintConfig";
             this.checkBoxPrintConfig.Size = new System.Drawing.Size(156, 29);
-            this.checkBoxPrintConfig.TabIndex = 9;
+            this.checkBoxPrintConfig.TabIndex = 11;
             this.checkBoxPrintConfig.Text = "Print Config";
             this.checkBoxPrintConfig.UseVisualStyleBackColor = true;
+            // 
+            // labelPrinter
+            // 
+            this.labelPrinter.Location = new System.Drawing.Point(185, 23);
+            this.labelPrinter.Name = "labelPrinter";
+            this.labelPrinter.Size = new System.Drawing.Size(450, 25);
+            this.labelPrinter.TabIndex = 1;
             // 
             // SettingsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(708, 644);
+            this.ClientSize = new System.Drawing.Size(708, 706);
+            this.Controls.Add(this.labelPrinter);
             this.Controls.Add(this.checkBoxPrintConfig);
             this.Controls.Add(this.labelComma);
             this.Controls.Add(this.textBoxPageWidth);
@@ -285,5 +294,6 @@
         private System.Windows.Forms.Label labelFontInfoOther;
         private System.Windows.Forms.TextBox textBoxLineSpacingOther;
         private System.Windows.Forms.CheckBox checkBoxPrintConfig;
+        private System.Windows.Forms.Label labelPrinter;
     }
 }

@@ -9,6 +9,7 @@ namespace PrintHold
     {
         public SettingsDlg() {
             InitializeComponent();
+            this.labelPrinter.Text = Program.FormMain.printImpl.settings.Printer;
             this.textBoxX.Text = Program.FormMain.printImpl.settings.UpperLeftX.ToString();
             this.textBoxY.Text = Program.FormMain.printImpl.settings.UpperLeftY.ToString();
             this.textBoxPageWidth.Text = Program.FormMain.printImpl.settings.PageWidth.ToString();
@@ -44,6 +45,7 @@ namespace PrintHold
                 // If the user clicks OK, you can access the selected printer like this:
                 string selectedPrinter = printDialog.PrinterSettings.PrinterName;
                 Program.FormMain.printImpl.settings.Printer = selectedPrinter;
+                this.labelPrinter.Text = selectedPrinter;
                 //MessageBox.Show($"Selected Printer: {selectedPrinter}");
             }
         }
