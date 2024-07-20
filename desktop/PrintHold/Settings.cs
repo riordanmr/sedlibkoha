@@ -5,7 +5,7 @@ namespace PrintHold
     public class Settings
     {
         public Settings() { }
-        public const string SettingsFilename = "PrintHold.json";
+        public const string SettingsFilename = "PrintHold-config.json";
 
         public string Printer = "Epson TM-T88IV Receipt";
 
@@ -15,7 +15,7 @@ namespace PrintHold
 
         public float FontSizePatron { get; set; } = 18.0F;
 
-        public float LineSpacingPatron { get; set; } = 0.92F;
+        public float LineSpacingPatron { get; set; } = 0.97F;
 
         public string FontFamilyOther { get; set; } = "Arial";
 
@@ -23,9 +23,15 @@ namespace PrintHold
 
         public float LineSpacingOther { get; set; } = 1.0F;
 
-        public int UpperLeftX { get; set; } = 15;
+        public int UpperLeftX { get; set; } = 5;
 
-        public int UpperLeftY { get; set; } = 15;
+        public int UpperLeftY { get; set; } = 5;
+
+        public string[] Fields = new string[] { PrintImpl.FIELD_EXPDATE, PrintImpl.FIELD_PATRON, 
+            PrintImpl.FIELD_CURRENTDATETIME, PrintImpl.FIELD_LIBRARY, PrintImpl.FIELD_BLANKLINE,
+            PrintImpl.FIELD_TITLE, PrintImpl.FIELD_AUTHOR, PrintImpl.FIELD_BARCODE, 
+            PrintImpl.FIELD_CALLNUMBER, PrintImpl.FIELD_BLANKLINE, PrintImpl.FIELD_BLANKLINE
+            };
 
         // Page width in pixels. On some printers, my calculation for page width
         // don't work, probably due to unit conversion problems.  So I allow this

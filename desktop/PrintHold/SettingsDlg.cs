@@ -21,6 +21,9 @@ namespace PrintHold
             this.labelFontInfoOther.Text = Program.FormMain.printImpl.settings.FontFamilyOther + " " +
                 Program.FormMain.printImpl.settings.FontSizeOther.ToString();
             this.checkBoxPrintConfig.Checked = Program.FormMain.printImpl.settings.PrintConfig;
+
+            this.listBoxFieldsAvailable.Items.AddRange(Program.FormMain.printImpl.GetFieldsAvailable());
+            this.listBoxFieldsActual.Items.AddRange(Program.FormMain.printImpl.settings.Fields);
         }
 
 
@@ -124,9 +127,63 @@ namespace PrintHold
 
             Program.FormMain.printImpl.settings.PrintConfig = this.checkBoxPrintConfig.Checked;
 
+            // Save the configured print slip fields.
+            string[] fields = new string[this.listBoxFieldsActual.Items.Count];
+            for (int i = 0; i < this.listBoxFieldsActual.Items.Count; i++) {
+                fields[i] = this.listBoxFieldsActual.Items[i].ToString();
+            }
+            Program.FormMain.printImpl.settings.Fields = fields;
+
             if (ok) {
                 Program.FormMain.printImpl.settings.Save();
                 this.Close();
+            }
+        }
+
+        private void buttonFieldAdd_Click(object sender, EventArgs e) {
+            // Add the selected item from the Available list to the Actual list.
+            if (this.listBoxFieldsAvailable.SelectedItem != null) {
+                object itemToAdd = this.listBoxFieldsAvailable.SelectedItem;
+                int insertIndex = this.listBoxFieldsActual.SelectedIndex;
+
+                // Check if there is a selected item in listBoxFieldsActual to insert after
+                if (insertIndex != -1) {
+                    // Insert right after the selected item
+                    this.listBoxFieldsActual.Items.Insert(insertIndex + 1, itemToAdd);
+                } else {
+                    // No selection, add to the end of the list
+                    this.listBoxFieldsActual.Items.Add(itemToAdd);
+                }
+            }
+        }
+
+        private void buttonFieldRemove_Click(object sender, EventArgs e) {
+            // Remove the selected item from the Actual list.
+            if (this.listBoxFieldsActual.SelectedIndex != -1) { // Check if an item is actually selected
+                this.listBoxFieldsActual.Items.RemoveAt(this.listBoxFieldsActual.SelectedIndex);
+            }
+        }
+
+        private void buttonFieldUp_Click(object sender, EventArgs e) {
+            // Move the selected field up in the list.
+            if (this.listBoxFieldsActual.SelectedIndex > 0) {
+                int index = this.listBoxFieldsActual.SelectedIndex;
+                object item = this.listBoxFieldsActual.SelectedItem;
+                this.listBoxFieldsActual.Items.RemoveAt(index);
+                this.listBoxFieldsActual.Items.Insert(index - 1, item);
+                this.listBoxFieldsActual.SelectedIndex = index - 1;
+            }
+        }
+
+        private void buttonFieldDown_Click(object sender, EventArgs e) {
+            // Move the selected field down in the list.
+            if (this.listBoxFieldsActual.SelectedIndex != -1 && 
+                this.listBoxFieldsActual.SelectedIndex < this.listBoxFieldsActual.Items.Count - 1) {
+                int index = this.listBoxFieldsActual.SelectedIndex;
+                object item = this.listBoxFieldsActual.SelectedItem;
+                this.listBoxFieldsActual.Items.RemoveAt(index);
+                this.listBoxFieldsActual.Items.Insert(index + 1, item);
+                this.listBoxFieldsActual.SelectedIndex = index + 1;
             }
         }
     }
