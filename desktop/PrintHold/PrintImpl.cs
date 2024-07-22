@@ -143,8 +143,11 @@ namespace PrintHold
             Font fontOtherBold = new Font(settings.FontFamilyOther, settings.FontSizeOther, FontStyle.Bold);
 
             string msg;
+            bool bLastIsBlank = false;
             foreach (string field in settings.Fields) {
+                bLastIsBlank = false;
                 if (field == FIELD_BLANKLINE) {
+                    bLastIsBlank = true;
                     y += fontOther.Height;
                     continue;
                 } else if (field == FIELD_EXPDATE) {
@@ -193,8 +196,12 @@ namespace PrintHold
                 PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
             }
             // The print driver seems to ignore blank lines unless we print 
-            // something below them, so do so.
-            e.Graphics.DrawString(".", fontOther, Brushes.White, x, y);
+            // something below them, so do so.  Note: printing with a white
+            // brush doesn't work; the paper isn't advanced to this point.
+            // So we print a black ".".
+            if (bLastIsBlank) {
+                PrintLine(".", e, fontOther, settings.LineSpacingOther, x, ref y);
+            }
         }
 
     }
