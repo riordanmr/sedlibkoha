@@ -14,3 +14,5 @@ PrintHold/bin
 PrintHold/packages
 db.lock
 .vs
+Debug
+Release
