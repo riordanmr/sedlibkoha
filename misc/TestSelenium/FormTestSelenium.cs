@@ -32,7 +32,7 @@ namespace TestSelenium
         private void OnFormShown(object sender, EventArgs e) {
             // Add your code here
             settings = Settings.Load();
-            //driver1 = CreateWebDriver();
+            driver1 = CreateWebDriver();
         }
 
         IWebDriver CreateWebDriver() {
@@ -44,7 +44,8 @@ namespace TestSelenium
             return new ChromeDriver(service, options);
         }
 
-        void Login(string url) {
+        bool Login(string url) {
+            bool bOK = false;
             driver1.Navigate().GoToUrl(url);
             // Initialize WebDriverWait with a timeout (e.g., 10 seconds)
             WebDriverWait wait1 = new WebDriverWait(driver1, TimeSpan.FromSeconds(10));
@@ -62,6 +63,15 @@ namespace TestSelenium
             // Wait for the page to load completely by checking the document's ready state
             wait1.Until((driver) =>
                 ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Check if the page contains the text "Invalid username or password"
+            if (driver1.PageSource.Contains("Invalid username or password")) {
+                MessageBox.Show("Invalid username or password. Please correct and try again.",
+                    "Login failure", MessageBoxButtons.OK);
+            } else {
+                bOK = true; // Login successful
+            }
+            return bOK;
         }
 
         private void buttonLaunch_Click(object sender, EventArgs e) {
