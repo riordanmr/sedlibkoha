@@ -1,0 +1,14 @@
+*.dll
+*.exe
+*.pdb
+*.nupkg
+*.p7s
+*.cache
+*.FileListAbsolute.txt
+packages
+*.Up2Date
+*.xml
+Debug
+copilot-chat
+*.vsidx
+.vs
