@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mark Riordan")]
 [assembly: AssemblyProduct("KohaQuick")]
-[assembly: AssemblyCopyright("Copyright © 2024 - MIT License")]
+[assembly: AssemblyCopyright("Copyright © 2024 Mark Riordan - MIT License")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -8,6 +8,13 @@ namespace KohaQuick
 {
     internal static class Program
     {
+        static FormMain formMain;
+
+        public static FormMain FormMain
+        {
+            get { return formMain; }
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -15,7 +22,8 @@ namespace KohaQuick
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            formMain = new FormMain();
+            Application.Run(formMain);
         }
     }
 }
