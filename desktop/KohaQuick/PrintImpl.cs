@@ -48,8 +48,7 @@ namespace KohaQuick
         }
 
         public void ShowMsg(string msg) {
-            string stamp = DateTime.Now.ToString("HH:mm:ss");
-            Program.FormMain.ShowMsg($"{stamp} {msg}");
+            Program.FormDebug.AddDebugLine(msg);
         }
 
         public string PrintFromJson(string jsonStr) {
@@ -58,6 +57,7 @@ namespace KohaQuick
             if (null != jsonStr && "" != jsonStr) {
                 holdSlip = JsonConvert.DeserializeObject<HoldSlip>(jsonStr);
             } else {
+                Program.FormDebug.AddDebugLine("Using default values for sample slip.");
                 holdSlip = new HoldSlip();
             }
 
@@ -67,7 +67,7 @@ namespace KohaQuick
             string printerName = settings.Printer;
             printDocument.PrinterSettings.PrinterName = printerName;
             printDocument.PrinterSettings.PrintToFile = settings.PrintToPDF;
-            string pdfOutputFileName = "PrintHoldOut.pdf";
+            string pdfOutputFileName = "KohaQuickOut.pdf";
             printDocument.PrinterSettings.PrintFileName = pdfOutputFileName;
 
             // Handle the PrintPage event to specify what to print.
@@ -77,6 +77,9 @@ namespace KohaQuick
                 // Print the document.
                 printDocument.Print();
                 reply = $"Printed OK to {printerName}";
+                if(settings.PrintToPDF) {
+                    reply += $" on {pdfOutputFileName}";
+                }
                 ShowMsg(reply);
             } catch (Exception ex) {
                 reply = "Error: " + ex.Message;
@@ -85,8 +88,9 @@ namespace KohaQuick
             return reply;
         }
 
-        public void Print() {
+        public void PrintSample() {
             string filePath = "holdslip.json";
+            ShowMsg("Printing sample slip. Looking for " + filePath);
             string jsonStr = null;
             bool fileRead = false;
             int itry = 0;

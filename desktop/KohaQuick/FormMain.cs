@@ -20,11 +20,11 @@ namespace KohaQuick
             InitializeComponent();
             settings = Settings.Load();
             printImpl = new PrintImpl(settings);
+            Program.FormDebug.Show();
         }
 
         public void ShowMsg(string msg) {
-            string stamp = DateTime.Now.ToString("HH:mm:ss");
-            //Program.FormMain.ShowMsg($"{stamp} {msg}");
+            Program.FormDebug.AddDebugLine(msg);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -34,6 +34,10 @@ namespace KohaQuick
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
             this.Close();
+        }
+
+        private void printSampleToolStripMenuItem_Click(object sender, EventArgs e) {
+            printImpl.PrintSample();
         }
     }
 }

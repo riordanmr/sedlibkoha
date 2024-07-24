@@ -15,6 +15,12 @@ namespace KohaQuick
             get { return formMain; }
         }
 
+        static FormDebug formDebug;
+        public static FormDebug FormDebug
+        {
+            get { return formDebug; }
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -22,6 +28,7 @@ namespace KohaQuick
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            formDebug = new FormDebug();
             formMain = new FormMain();
             Application.Run(formMain);
         }
