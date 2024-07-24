@@ -11,7 +11,7 @@ namespace KohaQuick {
         public static string SettingsFilename {
             get {
                 string localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                string configFilePath = Path.Combine(localAppDataPath, "KohaQuick", SettingsFilenameOnly);
+                string configFilePath = Path.Combine(localAppDataPath, ApplicationName, SettingsFilenameOnly);
                 return configFilePath;
             }
         }
