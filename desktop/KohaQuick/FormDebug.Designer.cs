@@ -29,12 +29,13 @@
             // 
             // textBoxMsgs
             // 
+            this.textBoxMsgs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxMsgs.Location = new System.Drawing.Point(0, 0);
             this.textBoxMsgs.Multiline = true;
             this.textBoxMsgs.Name = "textBoxMsgs";
             this.textBoxMsgs.ReadOnly = true;
             this.textBoxMsgs.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxMsgs.Size = new System.Drawing.Size(1130, 683);
+            this.textBoxMsgs.Size = new System.Drawing.Size(1130, 684);
             this.textBoxMsgs.TabIndex = 0;
             // 
             // FormDebug

@@ -20,6 +20,11 @@ namespace KohaQuick
             InitializeComponent();
             settings = Settings.Load();
             printImpl = new PrintImpl(settings);
+            this.Shown += FormMain_Shown;
+        }
+
+        private void FormMain_Shown(object sender, EventArgs e) {
+            Program.FormDebug.WindowState = FormWindowState.Minimized;
             Program.FormDebug.Show();
         }
 
