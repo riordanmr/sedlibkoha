@@ -31,7 +31,7 @@ namespace KohaQuick {
         public KohaSession() {
             driver1 = CreateWebDriver();
             // Initialize WebDriverWait with a timeout.
-            wait1 = new WebDriverWait(driver1, TimeSpan.FromSeconds(6));
+            wait1 = new WebDriverWait(driver1, TimeSpan.FromSeconds(7));
 
         }
 
@@ -61,28 +61,33 @@ namespace KohaQuick {
 
         public bool Login(string url) {
             bool bOK = false;
-            driver1.Navigate().GoToUrl(url);
+            try {
+                driver1.Navigate().GoToUrl(url);
 
-            // Wait until the input element with name 'userid' is visible
-            IWebElement userIdInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Name("userid")));
-            // Enter the username into the input element
-            userIdInput.SendKeys(Program.FormMain.creds.KohaUsername);
+                // Wait until the input element with name 'userid' is visible
+                IWebElement userIdInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Name("userid")));
+                // Enter the username into the input element
+                userIdInput.SendKeys(Program.FormMain.creds.KohaUsername);
 
-            IWebElement passwordInput = driver1.FindElement(By.Name("password"));
-            passwordInput.SendKeys(Program.FormMain.creds.KohaPassword);
-            IWebElement submitButton = driver1.FindElement(By.Id("submit-button"));
-            submitButton.Click();
+                IWebElement passwordInput = driver1.FindElement(By.Name("password"));
+                passwordInput.SendKeys(Program.FormMain.creds.KohaPassword);
+                IWebElement submitButton = driver1.FindElement(By.Id("submit-button"));
+                submitButton.Click();
 
-            // Wait for the page to load completely by checking the document's ready state
-            wait1.Until((driver) =>
-                ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+                // Wait for the page to load completely by checking the document's ready state
+                wait1.Until((driver) =>
+                    ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
 
-            // Check if the page contains the text "Invalid username or password"
-            if (driver1.PageSource.Contains("Invalid username or password")) {
-                MessageBox.Show("Invalid username or password. Please correct and try again.",
-                    "Login failure", MessageBoxButtons.OK);
-            } else {
-                bOK = true; // Login successful
+                // Check if the page contains the text "Invalid username or password"
+                if (driver1.PageSource.Contains("Invalid username or password")) {
+                    MessageBox.Show("Invalid username or password. Please correct and try again.",
+                        "Login failure", MessageBoxButtons.OK);
+                } else {
+                    bOK = true; // Login successful
+                }
+            } catch (Exception ex) {
+                ShowMsg(ex.Message);
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return bOK;
         }
@@ -206,7 +211,8 @@ namespace KohaQuick {
                 }
 
             } catch (Exception ex) {
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK);
+                ShowMsg(ex.Message);
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             statusOut = status;
         }
