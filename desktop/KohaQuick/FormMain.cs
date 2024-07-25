@@ -29,12 +29,17 @@ namespace KohaQuick
             textBoxItemBarcode.KeyDown += TextBoxItemBarcode_KeyDown;
         }
 
+        private void ShowLoginDialog() {
+            FormLogin formLogin = new FormLogin();
+            formLogin.Load += (s, e) => formLogin.Activate(); // Ensure the dialog is activated when loaded
+            formLogin.ShowDialog();
+        }
+
         private void FormMain_Shown(object sender, EventArgs e) {
             session1 = new KohaSession();
-            FormLogin formLogin = new FormLogin();
-            formLogin.ShowDialog();
             Program.FormDebug.WindowState = FormWindowState.Minimized;
             Program.FormDebug.Show();
+            ShowLoginDialog();
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e) {
@@ -84,8 +89,7 @@ namespace KohaQuick
         }
 
         private void loginToolStripMenuItem_Click(object sender, EventArgs e) {
-            FormLogin formLogin = new FormLogin();
-            formLogin.ShowDialog();
+            ShowLoginDialog();
         }
 
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e) {
