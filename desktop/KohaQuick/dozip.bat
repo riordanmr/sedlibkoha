@@ -1,0 +1,1 @@
+zip KohaQuick *.sln *.csproj *.cs *.resx *.ico *.config
