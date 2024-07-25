@@ -59,7 +59,7 @@ namespace KohaQuick {
             return new ChromeDriver(service, options);
         }
 
-        public bool Login(string url) {
+        public bool Login(string url, string username, string password) {
             bool bOK = false;
             try {
                 driver1.Navigate().GoToUrl(url);
@@ -67,10 +67,10 @@ namespace KohaQuick {
                 // Wait until the input element with name 'userid' is visible
                 IWebElement userIdInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Name("userid")));
                 // Enter the username into the input element
-                userIdInput.SendKeys(Program.FormMain.creds.KohaUsername);
+                userIdInput.SendKeys(username);
 
                 IWebElement passwordInput = driver1.FindElement(By.Name("password"));
-                passwordInput.SendKeys(Program.FormMain.creds.KohaPassword);
+                passwordInput.SendKeys(password);
                 IWebElement submitButton = driver1.FindElement(By.Id("submit-button"));
                 submitButton.Click();
 
@@ -90,6 +90,11 @@ namespace KohaQuick {
                 MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return bOK;
+        }
+
+        public void Logout() {
+            string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/mainpage.pl?logout.x=1";
+            driver1.Navigate().GoToUrl(url);
         }
 
         public bool AtUrl(string url) {

@@ -25,14 +25,14 @@ namespace KohaQuick
             printImpl = new PrintImpl(settings);
             this.Shown += FormMain_Shown;
             this.FormClosing += FormMain_FormClosing;
+            // Subscribe to the KeyDown event of the TextBox
+            textBoxItemBarcode.KeyDown += TextBoxItemBarcode_KeyDown;
         }
 
         private void FormMain_Shown(object sender, EventArgs e) {
             session1 = new KohaSession();
-            //if (creds.KohaUsername == "" || creds.KohaPassword == "") {
             FormLogin formLogin = new FormLogin();
-                formLogin.ShowDialog();
-            //}
+            formLogin.ShowDialog();
             Program.FormDebug.WindowState = FormWindowState.Minimized;
             Program.FormDebug.Show();
         }
@@ -58,10 +58,21 @@ namespace KohaQuick
             printImpl.PrintSample();
         }
 
+        // Event handler for KeyDown event of the TextBox
+        private void TextBoxItemBarcode_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                // Enter key was pressed, trigger the button click event
+                buttonTrapHold_Click(sender, e);
+                // Optionally, suppress the default beep sound
+                e.SuppressKeyPress = true;
+            }
+        }
+
         private void buttonTrapHold_Click(object sender, EventArgs e) {
             textBoxTrapMsg.Text = "";
             TrapHoldItemStatus status = TrapHoldItemStatus.Error;
             string barcode = textBoxItemBarcode.Text.Trim();
+            textBoxItemBarcode.Text = string.Empty;
             if (barcode.Length == 0) {
                 textBoxTrapMsg.Text = "You must enter a barcode";
             } else {
@@ -70,6 +81,15 @@ namespace KohaQuick
                 session1.TrapHold(barcode, out status, out message);
                 textBoxTrapMsg.Text = status.ToString();
             }
+        }
+
+        private void loginToolStripMenuItem_Click(object sender, EventArgs e) {
+            FormLogin formLogin = new FormLogin();
+            formLogin.ShowDialog();
+        }
+
+        private void logoutToolStripMenuItem_Click(object sender, EventArgs e) {
+            session1.Logout();
         }
     }
 }

@@ -18,7 +18,8 @@ namespace KohaQuick {
 
         private void buttonLogin_Click(object sender, EventArgs e) {
             this.labelLoginResult.Text = "Logging in...";
-            bool bLoggedIn = Program.FormMain.session1.Login(Program.FormMain.settings.KohaUrlStaff);
+            bool bLoggedIn = Program.FormMain.session1.Login(Program.FormMain.settings.KohaUrlStaff,
+                this.textBoxUsername.Text, this.textBoxPassword.Text);
             if (bLoggedIn) {
                 labelLoginResult.Text = "Login successful!";
                 this.Close();
@@ -26,7 +27,5 @@ namespace KohaQuick {
                 labelLoginResult.Text = "Login failed. Please try again.";
             }
         }
-
-
     }
 }
