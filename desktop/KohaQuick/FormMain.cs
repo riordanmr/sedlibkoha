@@ -66,7 +66,8 @@ namespace KohaQuick
                 textBoxTrapMsg.Text = "You must enter a barcode";
             } else {
                 textBoxTrapMsg.Text = $"Looking up {barcode}";
-                session1.TrapHold(barcode, out status);
+                string message;
+                session1.TrapHold(barcode, out status, out message);
                 textBoxTrapMsg.Text = status.ToString();
             }
         }

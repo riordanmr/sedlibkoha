@@ -31,7 +31,7 @@ namespace KohaQuick {
         public KohaSession() {
             driver1 = CreateWebDriver();
             // Initialize WebDriverWait with a timeout.
-            wait1 = new WebDriverWait(driver1, TimeSpan.FromSeconds(666));
+            wait1 = new WebDriverWait(driver1, TimeSpan.FromSeconds(6));
 
         }
 
@@ -91,9 +91,10 @@ namespace KohaQuick {
             return url == driver1.Url;
         }
 
-        public void TrapHold(string barcode, out TrapHoldItemStatus statusOut) {
-            string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/circ/returns.pl";
+        public void TrapHold(string barcode, out TrapHoldItemStatus statusOut, out string message) {
             statusOut = TrapHoldItemStatus.None;
+            message = string.Empty;
+            string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/circ/returns.pl";
             TrapHoldItemStatus status = TrapHoldItemStatus.None;
             try {
                 if (!AtUrl(url)) {
@@ -121,17 +122,9 @@ namespace KohaQuick {
                 wait1.Until((driver) => ((IJavaScriptExecutor)driver).
                     ExecuteScript("return document.readyState").Equals("complete"));
 
-                string pageSource = driver1.PageSource;
-                ShowMsg($"Before loop, page source length: {pageSource.Length}");
-                if (pageSource.Contains("Transfer to:")) {
-                    ShowMsg("Dbg: Transfer to found");
-                } else if (pageSource.Contains("Hold at")) {
-                    ShowMsg("Dbg: Hold at found");
-                } else {
-                    ShowMsg("Dbg: No hold found");
-                }
-
                 IWebElement webElement;
+
+                // Now that the page is displaying the status of the item, figure out what to do.
 
                 // Look for a hold that needs to be transferred to another branch.
                 try {
@@ -141,7 +134,7 @@ namespace KohaQuick {
                     ShowMsg("Found Transfer to:, one time");
                     status = TrapHoldItemStatus.HoldFoundTransfer;
 
-                    ShowMsg("Looking for Ignore (I)");
+                    ShowMsg("Looking for Confirm hold and transfer button");
                     try {
                         // None of these worked. I don't understand why the XPath selector
                         // for the text on the button doesn't work.
@@ -152,14 +145,14 @@ namespace KohaQuick {
                         //IWebElement ignoreButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.XPath(
                         //    "//button[contains(text(), 'Ignore (I)')]")));
                         //ShowMsg("Transfer Ignore button found and is visible");
-                        IWebElement ignoreButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(
-                            "button.btn.btn-default.deny")));
+                        IWebElement confirmButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(
+                            "button.btn.btn-default.approve")));
 
                         // Click the button
-                        ignoreButton.Click();
+                        confirmButton.Click();
                         ShowMsg("Clicked on Ignore for Transfer");
                     } catch (NoSuchElementException) {
-                        ShowMsg("Didn't find Ignore (I)");
+                        ShowMsg("Didn't find Ignore button");
                     }
                 } catch (NoSuchElementException) {
                     ShowMsg("Didn't find Transfer to: one time");
@@ -173,17 +166,22 @@ namespace KohaQuick {
                         status = TrapHoldItemStatus.HoldFoundLocal;
                         ShowMsg("Found Hold at");
 
-                        ShowMsg("Looking for Ignore (I)");
-                        IWebElement ignoreButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(
-                           "button.btn.btn-default.deny")));
+                        // At this point, a human would click the "Print slip and confirm (P)"
+                        // button. But we don't, because we don't want to use the cumbersome
+                        // browser print dialog to print the slip. Plus, we can print a 
+                        // more attractive slip ourselves anyway.
+                        // So we just click the Confirm button.
+                        ShowMsg("Looking for Confirm hold button");
+                        IWebElement confirmButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(
+                           "button.btn.btn-default.approve")));
 
                         ShowMsg("Local hold Ignore button found and is visible");
 
-                        ShowMsg($"Found Ignore button; Displayed={ignoreButton.Displayed} Enabled={ignoreButton.Enabled}");
-                        ShowMsg($"About to click on Ignore button for local hold: {ignoreButton}");
+                        ShowMsg($"Found Ignore button; Displayed={confirmButton.Displayed} Enabled={confirmButton.Enabled}");
+                        ShowMsg($"About to click on Ignore button for local hold: {confirmButton}");
                         // Click the button
-                        ignoreButton.Click();
-                        ShowMsg("Clicked on Ignore for Hold at");
+                        confirmButton.Click();
+                        ShowMsg("Clicked on Confirm hold (Y) for Hold at");
 
                     } catch (NoSuchElementException) {
                         ShowMsg("Didn't find Hold at");
@@ -206,57 +204,6 @@ namespace KohaQuick {
                     // Unfortunately, the web page doesn't have any direct indication of this.
                     status = TrapHoldItemStatus.NoHold;
                 }
-
-
-                //if (false) {
-                //    // Wait we find one of several elements that indicate the status of the item.
-                //    IWebElement element = wait1.Until(driver => {
-                //        ShowMsg($"In loop, page source length: {driver.PageSource.Length}");
-                //        try {
-                //            webElement = driver.FindElement(By.XPath(
-                //                "//h4[contains(text(), 'Hold at')]"));
-                //            status = TrapHoldItemStatus.HoldFoundLocal;
-                //            IWebElement ignoreButton = driver.FindElement(By.XPath(
-                //                "//button[contains(text(), 'Ignore (I)')]"));
-                //            // Click the button
-                //            ignoreButton.Click();
-                //            ShowMsg("Clicked on Ignore for Hold at");
-                //            return webElement;
-                //        } catch (NoSuchElementException) {
-                //            ShowMsg("Didn't find Hold at");
-                //        }
-                //        try {
-                //            webElement = driver.FindElement(By.XPath(
-                //                "//h4[strong[contains(text(), 'Transfer to:')]]"));
-                //            status = TrapHoldItemStatus.HoldFoundTransfer;
-                //            IWebElement ignoreButton = driver.FindElement(By.XPath(
-                //                "//button[contains(text(), 'Ignore (I)')]"));
-                //            // Click the button
-                //            ignoreButton.Click();
-                //            ShowMsg("Clicked on Ignore for Transfer");
-                //            return webElement;
-                //        } catch (NoSuchElementException) {
-                //            ShowMsg("Didn't find Transfer to:");
-                //        }
-                //        try {
-                //            webElement = driver.FindElement(By.XPath(
-                //                "//p[contains(@class, 'problem ret_badbarcode') and contains(text(), 'No item with barcode:')]"));
-                //            status = TrapHoldItemStatus.NoSuchItem;
-                //            return webElement;
-                //        } catch (NoSuchElementException) {
-                //            ShowMsg("Didn't find No item with barcode:");
-                //        }
-                //        try {
-                //            //webElement = driver.FindElement(By.XPath(
-                //            //    "//p[contains(@class, 'problem ret_notissued') and contains(text(), 'Not checked out.')]"));
-                //            //status = TrapHoldItemStatus.NoHold;
-                //            //return webElement;
-                //        } catch (NoSuchElementException) {
-                //            ShowMsg("Didn't find Not checked out.");
-                //            return null;
-                //        }
-                //    });
-                //}
 
             } catch (Exception ex) {
                 MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK);
