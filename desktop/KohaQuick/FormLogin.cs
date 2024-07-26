@@ -21,6 +21,14 @@ namespace KohaQuick {
             bool bLoggedIn = Program.FormMain.session1.Login(Program.FormMain.settings.KohaUrlStaff,
                 this.textBoxUsername.Text, this.textBoxPassword.Text);
             if (bLoggedIn) {
+                labelLoginResult.Text = "First session logged in; logging in second session...";
+            } else {
+                labelLoginResult.Text = "Login failed. Please try again.";
+            }
+
+            bLoggedIn = Program.FormMain.session2.Login(Program.FormMain.settings.KohaUrlStaff,
+    this.textBoxUsername.Text, this.textBoxPassword.Text);
+            if (bLoggedIn) {
                 labelLoginResult.Text = "Login successful!";
                 this.Close();
             } else {

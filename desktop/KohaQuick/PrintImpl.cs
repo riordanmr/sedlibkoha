@@ -7,22 +7,31 @@ using System.Drawing.Printing;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace KohaQuick
-{
-    public class HoldSlip
-    {
-        public string Patron { get; set; } = "BRUNGARIA, THEODORE REINHOLD";
-        public string Currentdatetime { get; set; } = "06/26/2024 10:26";
-        public string Library { get; set; } = "Sedona Public Library";
-        public string Title { get; set; } = "The reign of George III, 1760-1815";
-        public string Author { get; set; } = "Watson, Steven J.";
-        public string Barcode { get; set; } = "12345678901234";
-        public string Callnumber { get; set; } = "941.073";
-        public string Expdate { get; set; } = "07/03/2024";
+namespace KohaQuick {
+    public class HoldSlip {
+        public string Patron { get; set; } = "";
+        public string Currentdatetime { get; set; } = "";
+        public string Library { get; set; } = "";
+        public string Title { get; set; } = "";
+        public string Author { get; set; } = "";
+        public string Barcode { get; set; } = "";
+        public string Callnumber { get; set; } = "";
+        public string Expdate { get; set; } = "";
+
+        public void InitSample() {
+            Patron = "BRUNGARIA, THEODORE REINHOLD";
+            Currentdatetime = "06/26/2024 10:26";
+            Library = "Sedona Public Library";
+            Title = "The reign of George III, 1760-1815";
+            Author = "Watson, Steven J.";
+            Barcode = "12345678901234";
+            Callnumber = "941.073";
+            Expdate = "07/03/2024";
+        }
+
     }
 
-    public class PrintImpl
-    {
+    public class PrintImpl {
         public Settings settings;
 
         public HoldSlip holdSlip;
@@ -43,7 +52,7 @@ namespace KohaQuick
 
         public string[] GetFieldsAvailable() {
             return new string[] { FIELD_EXPDATE, FIELD_PATRON, FIELD_CURRENTDATETIME,
-            FIELD_LIBRARY, FIELD_TITLE, FIELD_AUTHOR, FIELD_BARCODE, FIELD_CALLNUMBER, 
+            FIELD_LIBRARY, FIELD_TITLE, FIELD_AUTHOR, FIELD_BARCODE, FIELD_CALLNUMBER,
             FIELD_BLANKLINE};
         }
 
@@ -51,15 +60,8 @@ namespace KohaQuick
             Program.FormDebug.AddDebugLine(msg);
         }
 
-        public string PrintFromJson(string jsonStr) {
+        public string PrintSlip() {
             string reply = "";
-            // If passed a null or empty string, use the default values.
-            if (null != jsonStr && "" != jsonStr) {
-                holdSlip = JsonConvert.DeserializeObject<HoldSlip>(jsonStr);
-            } else {
-                Program.FormDebug.AddDebugLine("Using default values for sample slip.");
-                holdSlip = new HoldSlip();
-            }
 
             PrintDocument printDocument = new PrintDocument();
 
@@ -72,12 +74,14 @@ namespace KohaQuick
 
             // Handle the PrintPage event to specify what to print.
             printDocument.PrintPage += new PrintPageEventHandler(PrintPageHandler);
+            // Handle the EndPrint event to determine when the print job has completed.
+            printDocument.EndPrint += new PrintEventHandler(PrintEndHandler);
 
             try {
                 // Print the document.
                 printDocument.Print();
                 reply = $"Printed OK to {printerName}";
-                if(settings.PrintToPDF) {
+                if (settings.PrintToPDF) {
                     reply += $" on {pdfOutputFileName}";
                 }
                 ShowMsg(reply);
@@ -106,7 +110,14 @@ namespace KohaQuick
                     break; // Exit the loop if an unexpected error occurs
                 }
             }
-            PrintFromJson(jsonStr);
+            if (null != jsonStr && "" != jsonStr) {
+                holdSlip = JsonConvert.DeserializeObject<HoldSlip>(jsonStr);
+            } else {
+                Program.FormDebug.AddDebugLine("Using default values for sample slip.");
+                holdSlip = new HoldSlip();
+                holdSlip.InitSample();
+            }
+            PrintSlip();
         }
 
         private void PrintLine(string msg, PrintPageEventArgs e, Font font, float lineSpacing, int x, ref int y) {
@@ -133,10 +144,10 @@ namespace KohaQuick
                     bContinue = true;
                 }
                 e.Graphics.DrawString(thisPart, font, Brushes.Black, x, y);
-                y += (int) (lineSpacing * font.Height);
+                y += (int)(lineSpacing * font.Height);
                 thisLine = thisLine.Substring(thisPart.Length);
-            } while (bContinue) ;
-        }   
+            } while (bContinue);
+        }
 
         private void PrintPageHandler(object sender, PrintPageEventArgs e) {
             // Specify what to print. In this case, a simple text message.
@@ -189,7 +200,7 @@ namespace KohaQuick
             msg += $" Fields: ";
             string strFields = "";
             foreach (string field in settings.Fields) {
-                if(strFields.Length > 0) {
+                if (strFields.Length > 0) {
                     strFields += ", ";
                 }
                 strFields += field;
@@ -206,6 +217,12 @@ namespace KohaQuick
             if (bLastIsBlank) {
                 PrintLine(".", e, fontOther, settings.LineSpacingOther, x, ref y);
             }
+        }
+
+        private void PrintEndHandler(object sender, PrintEventArgs e) {
+            // This method is called when the print job has completed.
+            ShowMsg("Print job completed.");
+            Program.FormMain.OnPrintJobComplete();
         }
 
     }

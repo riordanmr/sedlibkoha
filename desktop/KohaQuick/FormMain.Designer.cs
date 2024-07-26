@@ -28,6 +28,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.tabControlHolds = new System.Windows.Forms.TabControl();
             this.tabPageTrapHolds = new System.Windows.Forms.TabPage();
+            this.textBoxBarcodeMsg = new System.Windows.Forms.TextBox();
             this.textBoxTrapMsg = new System.Windows.Forms.TextBox();
             this.buttonTrapHold = new System.Windows.Forms.Button();
             this.textBoxItemBarcode = new System.Windows.Forms.TextBox();
@@ -36,9 +37,9 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printSampleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlHolds.SuspendLayout();
             this.tabPageTrapHolds.SuspendLayout();
             this.menuStrip2.SuspendLayout();
@@ -55,6 +56,7 @@
             // 
             // tabPageTrapHolds
             // 
+            this.tabPageTrapHolds.Controls.Add(this.textBoxBarcodeMsg);
             this.tabPageTrapHolds.Controls.Add(this.textBoxTrapMsg);
             this.tabPageTrapHolds.Controls.Add(this.buttonTrapHold);
             this.tabPageTrapHolds.Controls.Add(this.textBoxItemBarcode);
@@ -67,12 +69,24 @@
             this.tabPageTrapHolds.Text = "Trap Holds";
             this.tabPageTrapHolds.UseVisualStyleBackColor = true;
             // 
+            // textBoxBarcodeMsg
+            // 
+            this.textBoxBarcodeMsg.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBoxBarcodeMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxBarcodeMsg.Font = new System.Drawing.Font("Arial", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxBarcodeMsg.Location = new System.Drawing.Point(40, 103);
+            this.textBoxBarcodeMsg.Multiline = true;
+            this.textBoxBarcodeMsg.Name = "textBoxBarcodeMsg";
+            this.textBoxBarcodeMsg.ReadOnly = true;
+            this.textBoxBarcodeMsg.Size = new System.Drawing.Size(877, 42);
+            this.textBoxBarcodeMsg.TabIndex = 4;
+            // 
             // textBoxTrapMsg
             // 
             this.textBoxTrapMsg.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBoxTrapMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTrapMsg.Font = new System.Drawing.Font("Arial", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTrapMsg.Location = new System.Drawing.Point(40, 118);
+            this.textBoxTrapMsg.Font = new System.Drawing.Font("Arial", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTrapMsg.Location = new System.Drawing.Point(40, 166);
             this.textBoxTrapMsg.Multiline = true;
             this.textBoxTrapMsg.Name = "textBoxTrapMsg";
             this.textBoxTrapMsg.ReadOnly = true;
@@ -133,37 +147,37 @@
             // printSampleToolStripMenuItem
             // 
             this.printSampleToolStripMenuItem.Name = "printSampleToolStripMenuItem";
-            this.printSampleToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.printSampleToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
             this.printSampleToolStripMenuItem.Text = "&Print Sample";
             this.printSampleToolStripMenuItem.Click += new System.EventHandler(this.printSampleToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
             this.settingsToolStripMenuItem.Text = "&Settings...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // logoutToolStripMenuItem
-            // 
-            this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
-            this.logoutToolStripMenuItem.Text = "Log&out";
-            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
             // 
             // loginToolStripMenuItem
             // 
             this.loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            this.loginToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.loginToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
             this.loginToolStripMenuItem.Text = "&Login...";
             this.loginToolStripMenuItem.Click += new System.EventHandler(this.loginToolStripMenuItem_Click);
+            // 
+            // logoutToolStripMenuItem
+            // 
+            this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
+            this.logoutToolStripMenuItem.Text = "Log&out";
+            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -200,6 +214,7 @@
         private System.Windows.Forms.TextBox textBoxTrapMsg;
         private System.Windows.Forms.ToolStripMenuItem logoutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loginToolStripMenuItem;
+        private System.Windows.Forms.TextBox textBoxBarcodeMsg;
     }
 }
 

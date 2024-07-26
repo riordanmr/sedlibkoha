@@ -14,7 +14,7 @@ namespace KohaQuick
     {
         public Settings settings;
         public Creds creds;
-        public KohaSession session1;
+        public KohaSession session1, session2;
 
         public PrintImpl printImpl;
 
@@ -36,7 +36,8 @@ namespace KohaQuick
         }
 
         private void FormMain_Shown(object sender, EventArgs e) {
-            session1 = new KohaSession();
+            session1 = new KohaSession(1);
+            session2 = new KohaSession(2);
             Program.FormDebug.WindowState = FormWindowState.Minimized;
             Program.FormDebug.Show();
             ShowLoginDialog();
@@ -44,6 +45,7 @@ namespace KohaQuick
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e) {
             session1.Close();
+            session2.Close();
         }
 
         public void ShowMsg(string msg) {
@@ -77,15 +79,41 @@ namespace KohaQuick
             textBoxTrapMsg.Text = "";
             TrapHoldItemStatus status = TrapHoldItemStatus.Error;
             string barcode = textBoxItemBarcode.Text.Trim();
+            textBoxBarcodeMsg.Text = $"Barcode scanned: {barcode}";
             textBoxItemBarcode.Text = string.Empty;
             if (barcode.Length == 0) {
                 textBoxTrapMsg.Text = "You must enter a barcode";
             } else {
                 textBoxTrapMsg.Text = $"Looking up {barcode}";
                 string message;
-                session1.TrapHold(barcode, out status, out message);
+                HoldSlip holdSlip = new HoldSlip();
+                session1.TrapHold(barcode, ref holdSlip, out status, out message);
                 textBoxTrapMsg.Text = status.ToString();
+
+                if (status == TrapHoldItemStatus.HoldFoundLocal) {
+                    textBoxTrapMsg.Text = "Local hold found; gathering info for hold slip";
+                    holdSlip.Barcode = barcode;
+                    if (session2.GetInfoOnTrappedItem(barcode, ref holdSlip)) {
+                        textBoxTrapMsg.Text = "Printing hold slip";
+                        printImpl.holdSlip = holdSlip;
+                        printImpl.PrintSlip();
+                    } else {
+                        textBoxTrapMsg.Text = "Error getting hold slip info";
+                    }
+                } else if (status == TrapHoldItemStatus.HoldFoundTransfer) {
+                    string msg = $"Transfer to {holdSlip.Library}";
+                    if(holdSlip.Library == "SPL in the Village") {
+                        msg += " (DOWNWIND)";
+                    } else {
+                        msg += " (TRANSFER)";
+                    }
+                    textBoxTrapMsg.Text = msg;
+                }
             }
+        }
+
+        public void OnPrintJobComplete() {
+            textBoxTrapMsg.Text = "Hold slip printed.";
         }
 
         private void loginToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -94,6 +122,7 @@ namespace KohaQuick
 
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e) {
             session1.Logout();
+            session2.Logout();
         }
     }
 }
