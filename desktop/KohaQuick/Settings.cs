@@ -23,7 +23,7 @@ namespace KohaQuick {
 
         public bool PrintToPDF = false;
 
-        public string FontFamilyPatron { get; set; } = "Georgia";
+        public string FontFamilyPatron { get; set; } = "Calibri";
 
         public float FontSizePatron { get; set; } = 18.0F;
 

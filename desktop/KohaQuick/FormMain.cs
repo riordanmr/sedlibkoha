@@ -32,7 +32,14 @@ namespace KohaQuick
         private void ShowLoginDialog() {
             FormLogin formLogin = new FormLogin();
             formLogin.Load += (s, e) => formLogin.Activate(); // Ensure the dialog is activated when loaded
+            formLogin.FormClosed += LoginForm_FormClosed;
             formLogin.ShowDialog();
+        }
+
+        private void LoginForm_FormClosed(object sender, FormClosedEventArgs e) {
+            // Bring focus back to FormMain when FormLogin closes
+            this.Activate();
+            this.BringToFront();
         }
 
         private void FormMain_Shown(object sender, EventArgs e) {
