@@ -189,8 +189,14 @@ namespace KohaQuick {
                     ShowMsg("Looking for Transfer to:, one time");
                     webElement = driver1.FindElement(By.XPath(
                         "//h4[strong[contains(text(), 'Transfer to:')]]"));
+                    // If we get here, the element exists, but it might not be visible yet.
+                    // We don't do the wait Until first, because the element might not exist
+                    // at all on the page, and we'd wait until we timeout.
+                    webElement = wait1.Until(ExpectedConditions.ElementIsVisible(By.XPath(
+                        "//h4[strong[contains(text(), 'Transfer to:')]]")));
                     ShowMsg("Found Transfer to:, one time");
                     string library = webElement.Text;
+                    ShowMsg($"Found a transfer; Text={webElement.Text} Size={webElement.Size} Displayed={webElement.Displayed}");
                     library = library.Replace("Transfer to: ", "");
                     holdSlip.Library = library;
                     holdSlip.Title = GetTitle();
