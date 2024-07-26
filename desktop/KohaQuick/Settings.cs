@@ -41,7 +41,7 @@ namespace KohaQuick {
 
         public string[] Fields = new string[] { PrintImpl.FIELD_EXPDATE, PrintImpl.FIELD_PATRON,
             PrintImpl.FIELD_CURRENTDATETIME, PrintImpl.FIELD_LIBRARY, PrintImpl.FIELD_BLANKLINE,
-            PrintImpl.FIELD_TITLE, PrintImpl.FIELD_AUTHOR, PrintImpl.FIELD_BARCODE,
+            PrintImpl.FIELD_TITLE, PrintImpl.FIELD_BARCODE,
             PrintImpl.FIELD_CALLNUMBER, PrintImpl.FIELD_BLANKLINE, PrintImpl.FIELD_BLANKLINE
             };
 
@@ -51,6 +51,10 @@ namespace KohaQuick {
         public int PageWidth { get; set; } = 300;
 
         public bool PrintConfig { get; set; } = true;
+
+        public int BrowserWidth { get; set; } = 600;
+        public int BrowserHeight { get; set; } = 600;
+        public int BrowserX { get; set; } = -1;
 
         // Serializes the current instance to a JSON string
         public string ToJson() {

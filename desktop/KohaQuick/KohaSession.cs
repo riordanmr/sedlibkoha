@@ -5,14 +5,8 @@ using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KohaQuick.Properties;
 using System.Windows.Forms;
-using System.Diagnostics.Eventing.Reader;
-using System.Threading;
-using System.Linq.Expressions;
-using System.Data;
+
 
 namespace KohaQuick {
     public enum TrapHoldItemStatus {
@@ -58,12 +52,15 @@ namespace KohaQuick {
 
             ChromeOptions options = new ChromeOptions();
             // Set the window size (width, height)
-            int desiredChromeWidth = 600;
-            int desiredChromeHeight = 600;
+            int desiredChromeWidth = Program.FormMain.settings.BrowserWidth;
+            int desiredChromeHeight = Program.FormMain.settings.BrowserHeight;
             options.AddArgument($"window-size={desiredChromeWidth},{desiredChromeHeight}");
             // Set the window position (x, y)
             int screenWidth = Screen.PrimaryScreen.Bounds.Width;
             int xPos = screenWidth - desiredChromeWidth - 56;
+            if(Program.FormMain.settings.BrowserX >= 0) {
+                xPos = Program.FormMain.settings.BrowserX;
+            }
             int yPos = 500 * (sessionNum - 1);
             string optionsStr = $"window-position={xPos},{yPos}";
             options.AddArgument(optionsStr);
@@ -276,8 +273,34 @@ namespace KohaQuick {
                     // Apparently if we get here, there was no hold on the item.
                     // Unfortunately, the web page doesn't have any direct indication of this.
                     status = TrapHoldItemStatus.NoHold;
-                }
 
+                    // Find the title of the item.
+                    // Find the h3 element containing the text "Check in message"
+                    var h3Element = driver1.FindElement(By.XPath("//h3[contains(text(), 'Check in message')]"));
+
+                    if (h3Element != null) {
+                        // Find the first p element following the h3 element
+                        var pElement = h3Element.FindElement(By.XPath("following-sibling::p"));
+
+                        if (pElement != null) {
+                            // Find the first a element under the p element
+                            var aElement = pElement.FindElement(By.XPath(".//a"));
+
+                            if (aElement != null) {
+                                // Get the text of the a element
+                                string linkText = aElement.Text;
+                                ShowMsg("Item apparently not on hold. Link Text: " + linkText);
+                                message = linkText;
+                            } else {
+                                ShowMsg("No a element found under the p element.");
+                            }
+                        } else {
+                            ShowMsg("No p element found following the h3 element.");
+                        }
+                    } else {
+                        ShowMsg("No h3 element containing 'Check in message' found.");
+                    }
+                }
             } catch (Exception ex) {
                 ShowMsg(ex.Message);
                 MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -397,6 +420,7 @@ namespace KohaQuick {
         public void Close() {
             try {
                 driver1.Close();
+                driver1.Quit();
             } catch (Exception) {
                 // Ignore
             }

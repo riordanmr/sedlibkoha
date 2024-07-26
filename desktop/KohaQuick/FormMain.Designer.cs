@@ -40,6 +40,7 @@
             this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textBoxTitleMsg = new System.Windows.Forms.TextBox();
             this.tabControlHolds.SuspendLayout();
             this.tabPageTrapHolds.SuspendLayout();
             this.menuStrip2.SuspendLayout();
@@ -56,6 +57,7 @@
             // 
             // tabPageTrapHolds
             // 
+            this.tabPageTrapHolds.Controls.Add(this.textBoxTitleMsg);
             this.tabPageTrapHolds.Controls.Add(this.textBoxBarcodeMsg);
             this.tabPageTrapHolds.Controls.Add(this.textBoxTrapMsg);
             this.tabPageTrapHolds.Controls.Add(this.buttonTrapHold);
@@ -78,15 +80,15 @@
             this.textBoxBarcodeMsg.Multiline = true;
             this.textBoxBarcodeMsg.Name = "textBoxBarcodeMsg";
             this.textBoxBarcodeMsg.ReadOnly = true;
-            this.textBoxBarcodeMsg.Size = new System.Drawing.Size(877, 42);
+            this.textBoxBarcodeMsg.Size = new System.Drawing.Size(877, 37);
             this.textBoxBarcodeMsg.TabIndex = 4;
             // 
             // textBoxTrapMsg
             // 
             this.textBoxTrapMsg.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBoxTrapMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTrapMsg.Font = new System.Drawing.Font("Arial", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTrapMsg.Location = new System.Drawing.Point(40, 166);
+            this.textBoxTrapMsg.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTrapMsg.Location = new System.Drawing.Point(40, 199);
             this.textBoxTrapMsg.Multiline = true;
             this.textBoxTrapMsg.Name = "textBoxTrapMsg";
             this.textBoxTrapMsg.ReadOnly = true;
@@ -179,6 +181,18 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // textBoxTitleMsg
+            // 
+            this.textBoxTitleMsg.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBoxTitleMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxTitleMsg.Font = new System.Drawing.Font("Arial", 10.875F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTitleMsg.Location = new System.Drawing.Point(40, 146);
+            this.textBoxTitleMsg.Multiline = true;
+            this.textBoxTitleMsg.Name = "textBoxTitleMsg";
+            this.textBoxTitleMsg.ReadOnly = true;
+            this.textBoxTitleMsg.Size = new System.Drawing.Size(877, 48);
+            this.textBoxTitleMsg.TabIndex = 5;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -215,6 +229,7 @@
         private System.Windows.Forms.ToolStripMenuItem logoutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loginToolStripMenuItem;
         private System.Windows.Forms.TextBox textBoxBarcodeMsg;
+        private System.Windows.Forms.TextBox textBoxTitleMsg;
     }
 }
 

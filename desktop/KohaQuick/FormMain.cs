@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace KohaQuick
@@ -88,16 +81,18 @@ namespace KohaQuick
             string barcode = textBoxItemBarcode.Text.Trim();
             textBoxBarcodeMsg.Text = $"Barcode scanned: {barcode}";
             textBoxItemBarcode.Text = string.Empty;
+            textBoxTitleMsg.Text = string.Empty;
             if (barcode.Length == 0) {
                 textBoxTrapMsg.Text = "You must enter a barcode";
             } else {
                 textBoxTrapMsg.Text = $"Looking up {barcode}";
-                string message;
+                string message = String.Empty;
                 HoldSlip holdSlip = new HoldSlip();
                 session1.TrapHold(barcode, ref holdSlip, out status, out message);
                 textBoxTrapMsg.Text = status.ToString();
 
                 if (status == TrapHoldItemStatus.HoldFoundLocal) {
+                    textBoxTitleMsg.Text = holdSlip.Title;
                     textBoxTrapMsg.Text = "Local hold found; gathering info for hold slip";
                     holdSlip.Barcode = barcode;
                     if (session2.GetInfoOnTrappedItem(barcode, ref holdSlip)) {
@@ -108,13 +103,21 @@ namespace KohaQuick
                         textBoxTrapMsg.Text = "Error getting hold slip info";
                     }
                 } else if (status == TrapHoldItemStatus.HoldFoundTransfer) {
+                    textBoxTitleMsg.Text = holdSlip.Title;
                     string msg = $"Transfer to {holdSlip.Library}";
-                    if(holdSlip.Library == "SPL in the Village") {
+                    if (holdSlip.Library == "SPL in the Village") {
                         msg += " (DOWNWIND)";
                     } else {
                         msg += " (TRANSFER)";
                     }
                     textBoxTrapMsg.Text = msg;
+                } else if (status == TrapHoldItemStatus.NoSuchItem) {
+                    textBoxTrapMsg.Text = "No such item found.";
+                } else if (status == TrapHoldItemStatus.NoHold) {
+                    textBoxTitleMsg.Text = message;
+                    textBoxTrapMsg.Text = "No holds found for " + message;
+                } else {
+                    textBoxTrapMsg.Text = "Error. See debug log or Chrome windows for more info.";
                 }
             }
         }

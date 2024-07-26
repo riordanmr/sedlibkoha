@@ -60,19 +60,29 @@
             this.listBoxFieldsAvailable = new System.Windows.Forms.ListBox();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageURLs = new System.Windows.Forms.TabPage();
-            this.tabPagePrint = new System.Windows.Forms.TabPage();
             this.groupBoxURLs = new System.Windows.Forms.GroupBox();
-            this.labelStaffURL = new System.Windows.Forms.Label();
-            this.labelPatronURL = new System.Windows.Forms.Label();
-            this.textBoxStaffURL = new System.Windows.Forms.TextBox();
             this.textBoxPatronURL = new System.Windows.Forms.TextBox();
+            this.textBoxStaffURL = new System.Windows.Forms.TextBox();
+            this.labelPatronURL = new System.Windows.Forms.Label();
+            this.labelStaffURL = new System.Windows.Forms.Label();
+            this.tabPagePrint = new System.Windows.Forms.TabPage();
+            this.tabPageBrowser = new System.Windows.Forms.TabPage();
+            this.groupBoxBrowser = new System.Windows.Forms.GroupBox();
+            this.labelBrowserWidth = new System.Windows.Forms.Label();
+            this.labelBrowserX = new System.Windows.Forms.Label();
+            this.labelBrowserHeight = new System.Windows.Forms.Label();
+            this.textBoxBrowserWidth = new System.Windows.Forms.TextBox();
+            this.textBoxBrowserHeight = new System.Windows.Forms.TextBox();
+            this.textBoxBrowserX = new System.Windows.Forms.TextBox();
             this.groupBoxFontPatron.SuspendLayout();
             this.groupBoxFontOther.SuspendLayout();
             this.groupBoxFields.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
             this.tabPageURLs.SuspendLayout();
-            this.tabPagePrint.SuspendLayout();
             this.groupBoxURLs.SuspendLayout();
+            this.tabPagePrint.SuspendLayout();
+            this.tabPageBrowser.SuspendLayout();
+            this.groupBoxBrowser.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonFontPatron
@@ -367,6 +377,7 @@
             // 
             this.tabControlSettings.Controls.Add(this.tabPageURLs);
             this.tabControlSettings.Controls.Add(this.tabPagePrint);
+            this.tabControlSettings.Controls.Add(this.tabPageBrowser);
             this.tabControlSettings.Location = new System.Drawing.Point(12, 1);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
@@ -383,6 +394,53 @@
             this.tabPageURLs.TabIndex = 0;
             this.tabPageURLs.Text = "URLs";
             this.tabPageURLs.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxURLs
+            // 
+            this.groupBoxURLs.Controls.Add(this.textBoxPatronURL);
+            this.groupBoxURLs.Controls.Add(this.textBoxStaffURL);
+            this.groupBoxURLs.Controls.Add(this.labelPatronURL);
+            this.groupBoxURLs.Controls.Add(this.labelStaffURL);
+            this.groupBoxURLs.Location = new System.Drawing.Point(17, 20);
+            this.groupBoxURLs.Name = "groupBoxURLs";
+            this.groupBoxURLs.Size = new System.Drawing.Size(1157, 169);
+            this.groupBoxURLs.TabIndex = 0;
+            this.groupBoxURLs.TabStop = false;
+            this.groupBoxURLs.Text = "Koha URLs";
+            // 
+            // textBoxPatronURL
+            // 
+            this.textBoxPatronURL.Location = new System.Drawing.Point(170, 87);
+            this.textBoxPatronURL.Name = "textBoxPatronURL";
+            this.textBoxPatronURL.Size = new System.Drawing.Size(710, 31);
+            this.textBoxPatronURL.TabIndex = 3;
+            // 
+            // textBoxStaffURL
+            // 
+            this.textBoxStaffURL.Location = new System.Drawing.Point(170, 34);
+            this.textBoxStaffURL.Name = "textBoxStaffURL";
+            this.textBoxStaffURL.Size = new System.Drawing.Size(710, 31);
+            this.textBoxStaffURL.TabIndex = 1;
+            // 
+            // labelPatronURL
+            // 
+            this.labelPatronURL.AutoSize = true;
+            this.labelPatronURL.Location = new System.Drawing.Point(20, 87);
+            this.labelPatronURL.Name = "labelPatronURL";
+            this.labelPatronURL.Size = new System.Drawing.Size(129, 25);
+            this.labelPatronURL.TabIndex = 2;
+            this.labelPatronURL.Text = "Patron URL:";
+            this.labelPatronURL.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelStaffURL
+            // 
+            this.labelStaffURL.AutoSize = true;
+            this.labelStaffURL.Location = new System.Drawing.Point(39, 37);
+            this.labelStaffURL.Name = "labelStaffURL";
+            this.labelStaffURL.Size = new System.Drawing.Size(110, 25);
+            this.labelStaffURL.TabIndex = 0;
+            this.labelStaffURL.Text = "Staff URL:";
+            this.labelStaffURL.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // tabPagePrint
             // 
@@ -407,52 +465,79 @@
             this.tabPagePrint.Text = "Print";
             this.tabPagePrint.UseVisualStyleBackColor = true;
             // 
-            // groupBoxURLs
+            // tabPageBrowser
             // 
-            this.groupBoxURLs.Controls.Add(this.textBoxPatronURL);
-            this.groupBoxURLs.Controls.Add(this.textBoxStaffURL);
-            this.groupBoxURLs.Controls.Add(this.labelPatronURL);
-            this.groupBoxURLs.Controls.Add(this.labelStaffURL);
-            this.groupBoxURLs.Location = new System.Drawing.Point(17, 20);
-            this.groupBoxURLs.Name = "groupBoxURLs";
-            this.groupBoxURLs.Size = new System.Drawing.Size(1157, 169);
-            this.groupBoxURLs.TabIndex = 0;
-            this.groupBoxURLs.TabStop = false;
-            this.groupBoxURLs.Text = "Koha URLs";
+            this.tabPageBrowser.Controls.Add(this.groupBoxBrowser);
+            this.tabPageBrowser.Location = new System.Drawing.Point(8, 39);
+            this.tabPageBrowser.Name = "tabPageBrowser";
+            this.tabPageBrowser.Size = new System.Drawing.Size(1194, 707);
+            this.tabPageBrowser.TabIndex = 2;
+            this.tabPageBrowser.Text = "Browser";
+            this.tabPageBrowser.UseVisualStyleBackColor = true;
             // 
-            // labelStaffURL
+            // groupBoxBrowser
             // 
-            this.labelStaffURL.AutoSize = true;
-            this.labelStaffURL.Location = new System.Drawing.Point(39, 37);
-            this.labelStaffURL.Name = "labelStaffURL";
-            this.labelStaffURL.Size = new System.Drawing.Size(110, 25);
-            this.labelStaffURL.TabIndex = 0;
-            this.labelStaffURL.Text = "Staff URL:";
-            this.labelStaffURL.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.groupBoxBrowser.Controls.Add(this.textBoxBrowserX);
+            this.groupBoxBrowser.Controls.Add(this.textBoxBrowserHeight);
+            this.groupBoxBrowser.Controls.Add(this.textBoxBrowserWidth);
+            this.groupBoxBrowser.Controls.Add(this.labelBrowserHeight);
+            this.groupBoxBrowser.Controls.Add(this.labelBrowserX);
+            this.groupBoxBrowser.Controls.Add(this.labelBrowserWidth);
+            this.groupBoxBrowser.Location = new System.Drawing.Point(17, 24);
+            this.groupBoxBrowser.Name = "groupBoxBrowser";
+            this.groupBoxBrowser.Size = new System.Drawing.Size(1152, 365);
+            this.groupBoxBrowser.TabIndex = 0;
+            this.groupBoxBrowser.TabStop = false;
+            this.groupBoxBrowser.Text = "Size and Position of Automated Browsers";
             // 
-            // labelPatronURL
+            // labelBrowserWidth
             // 
-            this.labelPatronURL.AutoSize = true;
-            this.labelPatronURL.Location = new System.Drawing.Point(20, 87);
-            this.labelPatronURL.Name = "labelPatronURL";
-            this.labelPatronURL.Size = new System.Drawing.Size(129, 25);
-            this.labelPatronURL.TabIndex = 2;
-            this.labelPatronURL.Text = "Patron URL:";
-            this.labelPatronURL.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelBrowserWidth.Location = new System.Drawing.Point(27, 39);
+            this.labelBrowserWidth.Name = "labelBrowserWidth";
+            this.labelBrowserWidth.Size = new System.Drawing.Size(104, 31);
+            this.labelBrowserWidth.TabIndex = 0;
+            this.labelBrowserWidth.Text = "Width:";
+            this.labelBrowserWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBoxStaffURL
+            // labelBrowserX
             // 
-            this.textBoxStaffURL.Location = new System.Drawing.Point(170, 34);
-            this.textBoxStaffURL.Name = "textBoxStaffURL";
-            this.textBoxStaffURL.Size = new System.Drawing.Size(710, 31);
-            this.textBoxStaffURL.TabIndex = 1;
+            this.labelBrowserX.AutoSize = true;
+            this.labelBrowserX.Location = new System.Drawing.Point(16, 122);
+            this.labelBrowserX.Name = "labelBrowserX";
+            this.labelBrowserX.Size = new System.Drawing.Size(115, 25);
+            this.labelBrowserX.TabIndex = 4;
+            this.labelBrowserX.Text = "X Position:";
+            this.labelBrowserX.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBoxPatronURL
+            // labelBrowserHeight
             // 
-            this.textBoxPatronURL.Location = new System.Drawing.Point(170, 87);
-            this.textBoxPatronURL.Name = "textBoxPatronURL";
-            this.textBoxPatronURL.Size = new System.Drawing.Size(710, 31);
-            this.textBoxPatronURL.TabIndex = 3;
+            this.labelBrowserHeight.Location = new System.Drawing.Point(16, 82);
+            this.labelBrowserHeight.Name = "labelBrowserHeight";
+            this.labelBrowserHeight.Size = new System.Drawing.Size(115, 25);
+            this.labelBrowserHeight.TabIndex = 2;
+            this.labelBrowserHeight.Text = "Height:";
+            this.labelBrowserHeight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textBoxBrowserWidth
+            // 
+            this.textBoxBrowserWidth.Location = new System.Drawing.Point(146, 39);
+            this.textBoxBrowserWidth.Name = "textBoxBrowserWidth";
+            this.textBoxBrowserWidth.Size = new System.Drawing.Size(81, 31);
+            this.textBoxBrowserWidth.TabIndex = 1;
+            // 
+            // textBoxBrowserHeight
+            // 
+            this.textBoxBrowserHeight.Location = new System.Drawing.Point(146, 79);
+            this.textBoxBrowserHeight.Name = "textBoxBrowserHeight";
+            this.textBoxBrowserHeight.Size = new System.Drawing.Size(81, 31);
+            this.textBoxBrowserHeight.TabIndex = 3;
+            // 
+            // textBoxBrowserX
+            // 
+            this.textBoxBrowserX.Location = new System.Drawing.Point(146, 119);
+            this.textBoxBrowserX.Name = "textBoxBrowserX";
+            this.textBoxBrowserX.Size = new System.Drawing.Size(81, 31);
+            this.textBoxBrowserX.TabIndex = 5;
             // 
             // SettingsDlg
             // 
@@ -471,10 +556,13 @@
             this.groupBoxFields.PerformLayout();
             this.tabControlSettings.ResumeLayout(false);
             this.tabPageURLs.ResumeLayout(false);
-            this.tabPagePrint.ResumeLayout(false);
-            this.tabPagePrint.PerformLayout();
             this.groupBoxURLs.ResumeLayout(false);
             this.groupBoxURLs.PerformLayout();
+            this.tabPagePrint.ResumeLayout(false);
+            this.tabPagePrint.PerformLayout();
+            this.tabPageBrowser.ResumeLayout(false);
+            this.groupBoxBrowser.ResumeLayout(false);
+            this.groupBoxBrowser.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -519,5 +607,13 @@
         private System.Windows.Forms.TextBox textBoxStaffURL;
         private System.Windows.Forms.Label labelPatronURL;
         private System.Windows.Forms.Label labelStaffURL;
+        private System.Windows.Forms.TabPage tabPageBrowser;
+        private System.Windows.Forms.GroupBox groupBoxBrowser;
+        private System.Windows.Forms.Label labelBrowserWidth;
+        private System.Windows.Forms.TextBox textBoxBrowserX;
+        private System.Windows.Forms.TextBox textBoxBrowserHeight;
+        private System.Windows.Forms.TextBox textBoxBrowserWidth;
+        private System.Windows.Forms.Label labelBrowserHeight;
+        private System.Windows.Forms.Label labelBrowserX;
     }
 }

@@ -14,6 +14,13 @@ namespace KohaQuick {
             InitializeComponent();
             this.textBoxUsername.Text = Program.FormMain.creds.KohaUsername;
             this.textBoxPassword.Text = Program.FormMain.creds.KohaPassword;
+            this.Shown += FormLogin_Shown;
+        }
+
+        private void FormLogin_Shown(object sender, EventArgs e) {
+            if (textBoxUsername.Text.Length > 0 && textBoxPassword.Text.Length > 0) {
+                buttonLogin_Click(sender, e);
+            }
         }
 
         private void buttonLogin_Click(object sender, EventArgs e) {
@@ -27,7 +34,7 @@ namespace KohaQuick {
             }
 
             bLoggedIn = Program.FormMain.session2.Login(Program.FormMain.settings.KohaUrlStaff,
-    this.textBoxUsername.Text, this.textBoxPassword.Text);
+                this.textBoxUsername.Text, this.textBoxPassword.Text);
             if (bLoggedIn) {
                 labelLoginResult.Text = "Login successful!";
                 this.Close();

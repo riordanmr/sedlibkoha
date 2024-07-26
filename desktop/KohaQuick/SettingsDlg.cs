@@ -3,10 +3,8 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
 
-namespace KohaQuick
-{
-    public partial class SettingsDlg : Form
-    {
+namespace KohaQuick {
+    public partial class SettingsDlg : Form {
         public SettingsDlg() {
             InitializeComponent();
             this.textBoxStaffURL.Text = Program.FormMain.settings.KohaUrlStaff;
@@ -27,6 +25,10 @@ namespace KohaQuick
 
             this.listBoxFieldsAvailable.Items.AddRange(Program.FormMain.printImpl.GetFieldsAvailable());
             this.listBoxFieldsActual.Items.AddRange(Program.FormMain.printImpl.settings.Fields);
+
+            this.textBoxBrowserWidth.Text = Program.FormMain.settings.BrowserWidth.ToString();
+            this.textBoxBrowserHeight.Text = Program.FormMain.settings.BrowserHeight.ToString();
+            this.textBoxBrowserX.Text = Program.FormMain.settings.BrowserX.ToString();
         }
 
 
@@ -130,6 +132,27 @@ namespace KohaQuick
                 ok = false;
             }
 
+            if (ok && Int32.TryParse(this.textBoxBrowserWidth.Text, out int browserWidthValue)) {
+                Program.FormMain.settings.BrowserWidth = browserWidthValue;
+            } else {
+                MessageBox.Show("Invalid input. Please enter a valid integer for Browser Width.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ok = false;
+            }
+
+            if (ok && Int32.TryParse(this.textBoxBrowserHeight.Text, out int browserHeightValue)) {
+                Program.FormMain.settings.BrowserHeight = browserHeightValue;
+            } else {
+                MessageBox.Show("Invalid input. Please enter a valid integer for Browser Height.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ok = false;
+            }
+
+            if (ok && Int32.TryParse(this.textBoxBrowserX.Text, out int browserXValue)) {
+                Program.FormMain.settings.BrowserX = browserXValue;
+            } else {
+                MessageBox.Show("Invalid input. Please enter a valid integer for Browser X.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ok = false;
+            }
+
             Program.FormMain.printImpl.settings.PrintConfig = this.checkBoxPrintConfig.Checked;
 
             // Save the configured print slip fields.
@@ -182,7 +205,7 @@ namespace KohaQuick
 
         private void buttonFieldDown_Click(object sender, EventArgs e) {
             // Move the selected field down in the list.
-            if (this.listBoxFieldsActual.SelectedIndex != -1 && 
+            if (this.listBoxFieldsActual.SelectedIndex != -1 &&
                 this.listBoxFieldsActual.SelectedIndex < this.listBoxFieldsActual.Items.Count - 1) {
                 int index = this.listBoxFieldsActual.SelectedIndex;
                 object item = this.listBoxFieldsActual.SelectedItem;
