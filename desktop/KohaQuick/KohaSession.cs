@@ -231,8 +231,8 @@ namespace KohaQuick {
                     try {
                         // Look for an element like:  <h4><strong>Hold at</strong> Franklin</h4>
                         // This didn't work; apparently the element existed but wasn't yet visible.
-                        //webElement = driver1.FindElement(By.XPath(
-                        //    "//h4[strong[contains(text(), 'Hold at')]]"));
+                        webElement = driver1.FindElement(By.XPath(
+                            "//h4[strong[contains(text(), 'Hold at')]]"));
                         webElement = wait1.Until(ExpectedConditions.ElementIsVisible(By.XPath(
                             "//h4[strong[contains(text(), 'Hold at')]]")));
                         status = TrapHoldItemStatus.HoldFoundLocal;
