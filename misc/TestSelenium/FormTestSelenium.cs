@@ -144,18 +144,19 @@ namespace TestSelenium
         }
 
         private void buttonGenerateRandom_Click(object sender, EventArgs e) {
+            string PIN = GetRandomDigits(4);
             this.textBoxFirstName.Text = $"Fred{GetRandomString(3)}";
             this.textBoxLastName.Text = $"Smith{GetRandomString(3)}";
             this.textBoxDateOfBirth.Text = $"2000-07-21";
-            this.textBoxEmail.Text = $"fred.smith{GetRandomString(3)}@gmail.com";
+            this.textBoxEmail.Text = $"fred.smith{GetRandomString(5)}@gmail.com";
             this.textBoxPhone.Text = $"555-555-{GetRandomDigits(4)}";
-            this.textBoxAddress1.Text = $"123 Main St";
+            this.textBoxAddress1.Text = $"{PIN} Main St";
             this.textBoxAddress2.Text = $"Apt {GetRandomString(3)}";
             this.textBoxCity.Text = $"Springfield";
             this.comboBoxState.Text = $"IL";
             this.textBoxZipcode.Text = $"{GetRandomDigits(5)}";
             this.textBoxLibraryCardBarcode.Text = $"432{GetRandomDigits(11)}";
-            this.textBoxPIN.Text = $"GetRandomDigits(4)";
+            this.textBoxPIN.Text = PIN;
             this.textBoxPIN2.Text = this.textBoxPIN.Text;
         }
 
