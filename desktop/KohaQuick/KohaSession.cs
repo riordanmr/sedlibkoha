@@ -64,8 +64,17 @@ namespace KohaQuick {
             int yPos = 500 * (sessionNum - 1);
             string optionsStr = $"window-position={xPos},{yPos}";
             options.AddArgument(optionsStr);
-            //options.AddArgument("--headless");
-            return new ChromeDriver(service, options);
+
+            if (Program.FormMain.settings.BrowserWindowState == Settings.BROWSER_WINDOW_STATE_HIDDEN) {
+                ShowMsg($"Setting browser position to hidden");
+                options.AddArgument("--headless");
+            }
+            IWebDriver driver = new ChromeDriver(service, options);
+            if (Program.FormMain.settings.BrowserWindowState == Settings.BROWSER_WINDOW_STATE_MINIMIZED) {
+                driver.Manage().Window.Minimize();
+                ShowMsg($"Setting browser position to minimized");
+            }
+            return driver;
         }
 
         void WaitForPageToLoad() {

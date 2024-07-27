@@ -7,6 +7,9 @@ namespace KohaQuick {
         public Settings() { }
         public const string ApplicationName = "KohaQuick";
         public const string SettingsFilenameOnly = ApplicationName + "-config.json";
+        public const string BROWSER_WINDOW_STATE_NORMAL = "Normal";
+        public const string BROWSER_WINDOW_STATE_MINIMIZED = "Minimized";
+        public const string BROWSER_WINDOW_STATE_HIDDEN = "Hidden";
 
         public static string SettingsFilename {
             get {
@@ -55,6 +58,8 @@ namespace KohaQuick {
         public int BrowserWidth { get; set; } = 600;
         public int BrowserHeight { get; set; } = 600;
         public int BrowserX { get; set; } = -1;
+
+        public string BrowserWindowState { get; set; } = BROWSER_WINDOW_STATE_NORMAL;
 
         // Serializes the current instance to a JSON string
         public string ToJson() {

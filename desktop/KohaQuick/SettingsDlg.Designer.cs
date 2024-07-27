@@ -74,6 +74,10 @@
             this.textBoxBrowserWidth = new System.Windows.Forms.TextBox();
             this.textBoxBrowserHeight = new System.Windows.Forms.TextBox();
             this.textBoxBrowserX = new System.Windows.Forms.TextBox();
+            this.groupBoxInitialBrowserState = new System.Windows.Forms.GroupBox();
+            this.radioButtonBrowserNormal = new System.Windows.Forms.RadioButton();
+            this.radioButtonBrowserHidden = new System.Windows.Forms.RadioButton();
+            this.radioButtonBrowserMinimized = new System.Windows.Forms.RadioButton();
             this.groupBoxFontPatron.SuspendLayout();
             this.groupBoxFontOther.SuspendLayout();
             this.groupBoxFields.SuspendLayout();
@@ -83,6 +87,7 @@
             this.tabPagePrint.SuspendLayout();
             this.tabPageBrowser.SuspendLayout();
             this.groupBoxBrowser.SuspendLayout();
+            this.groupBoxInitialBrowserState.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonFontPatron
@@ -467,6 +472,7 @@
             // 
             // tabPageBrowser
             // 
+            this.tabPageBrowser.Controls.Add(this.groupBoxInitialBrowserState);
             this.tabPageBrowser.Controls.Add(this.groupBoxBrowser);
             this.tabPageBrowser.Location = new System.Drawing.Point(8, 39);
             this.tabPageBrowser.Name = "tabPageBrowser";
@@ -485,7 +491,7 @@
             this.groupBoxBrowser.Controls.Add(this.labelBrowserWidth);
             this.groupBoxBrowser.Location = new System.Drawing.Point(17, 24);
             this.groupBoxBrowser.Name = "groupBoxBrowser";
-            this.groupBoxBrowser.Size = new System.Drawing.Size(1152, 365);
+            this.groupBoxBrowser.Size = new System.Drawing.Size(1152, 163);
             this.groupBoxBrowser.TabIndex = 0;
             this.groupBoxBrowser.TabStop = false;
             this.groupBoxBrowser.Text = "Size and Position of Automated Browsers";
@@ -539,6 +545,51 @@
             this.textBoxBrowserX.Size = new System.Drawing.Size(81, 31);
             this.textBoxBrowserX.TabIndex = 5;
             // 
+            // groupBoxInitialBrowserState
+            // 
+            this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserMinimized);
+            this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserHidden);
+            this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserNormal);
+            this.groupBoxInitialBrowserState.Location = new System.Drawing.Point(17, 211);
+            this.groupBoxInitialBrowserState.Name = "groupBoxInitialBrowserState";
+            this.groupBoxInitialBrowserState.Size = new System.Drawing.Size(1152, 160);
+            this.groupBoxInitialBrowserState.TabIndex = 1;
+            this.groupBoxInitialBrowserState.TabStop = false;
+            this.groupBoxInitialBrowserState.Text = "Initial Browser State";
+            // 
+            // radioButtonBrowserNormal
+            // 
+            this.radioButtonBrowserNormal.AutoSize = true;
+            this.radioButtonBrowserNormal.Location = new System.Drawing.Point(32, 39);
+            this.radioButtonBrowserNormal.Name = "radioButtonBrowserNormal";
+            this.radioButtonBrowserNormal.Size = new System.Drawing.Size(111, 29);
+            this.radioButtonBrowserNormal.TabIndex = 0;
+            this.radioButtonBrowserNormal.TabStop = true;
+            this.radioButtonBrowserNormal.Text = "Normal";
+            this.radioButtonBrowserNormal.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonBrowserHidden
+            // 
+            this.radioButtonBrowserHidden.AutoSize = true;
+            this.radioButtonBrowserHidden.Location = new System.Drawing.Point(32, 113);
+            this.radioButtonBrowserHidden.Name = "radioButtonBrowserHidden";
+            this.radioButtonBrowserHidden.Size = new System.Drawing.Size(111, 29);
+            this.radioButtonBrowserHidden.TabIndex = 2;
+            this.radioButtonBrowserHidden.TabStop = true;
+            this.radioButtonBrowserHidden.Text = "Hidden";
+            this.radioButtonBrowserHidden.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonBrowserMinimized
+            // 
+            this.radioButtonBrowserMinimized.AutoSize = true;
+            this.radioButtonBrowserMinimized.Location = new System.Drawing.Point(32, 76);
+            this.radioButtonBrowserMinimized.Name = "radioButtonBrowserMinimized";
+            this.radioButtonBrowserMinimized.Size = new System.Drawing.Size(457, 29);
+            this.radioButtonBrowserMinimized.TabIndex = 1;
+            this.radioButtonBrowserMinimized.TabStop = true;
+            this.radioButtonBrowserMinimized.Text = "Minimized (do not use; under development)";
+            this.radioButtonBrowserMinimized.UseVisualStyleBackColor = true;
+            // 
             // SettingsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -563,6 +614,8 @@
             this.tabPageBrowser.ResumeLayout(false);
             this.groupBoxBrowser.ResumeLayout(false);
             this.groupBoxBrowser.PerformLayout();
+            this.groupBoxInitialBrowserState.ResumeLayout(false);
+            this.groupBoxInitialBrowserState.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -615,5 +668,9 @@
         private System.Windows.Forms.TextBox textBoxBrowserWidth;
         private System.Windows.Forms.Label labelBrowserHeight;
         private System.Windows.Forms.Label labelBrowserX;
+        private System.Windows.Forms.GroupBox groupBoxInitialBrowserState;
+        private System.Windows.Forms.RadioButton radioButtonBrowserMinimized;
+        private System.Windows.Forms.RadioButton radioButtonBrowserHidden;
+        private System.Windows.Forms.RadioButton radioButtonBrowserNormal;
     }
 }

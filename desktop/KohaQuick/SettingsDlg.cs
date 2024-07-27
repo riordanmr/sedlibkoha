@@ -29,6 +29,10 @@ namespace KohaQuick {
             this.textBoxBrowserWidth.Text = Program.FormMain.settings.BrowserWidth.ToString();
             this.textBoxBrowserHeight.Text = Program.FormMain.settings.BrowserHeight.ToString();
             this.textBoxBrowserX.Text = Program.FormMain.settings.BrowserX.ToString();
+
+            this.radioButtonBrowserNormal.Checked = Program.FormMain.settings.BrowserWindowState == Settings.BROWSER_WINDOW_STATE_NORMAL;
+            this.radioButtonBrowserMinimized.Checked = Program.FormMain.settings.BrowserWindowState == Settings.BROWSER_WINDOW_STATE_MINIMIZED;
+            this.radioButtonBrowserHidden.Checked = Program.FormMain.settings.BrowserWindowState == Settings.BROWSER_WINDOW_STATE_HIDDEN;   
         }
 
 
@@ -154,6 +158,14 @@ namespace KohaQuick {
             }
 
             Program.FormMain.printImpl.settings.PrintConfig = this.checkBoxPrintConfig.Checked;
+
+            if (this.radioButtonBrowserNormal.Checked) {
+                Program.FormMain.settings.BrowserWindowState = Settings.BROWSER_WINDOW_STATE_NORMAL;
+            } else if (this.radioButtonBrowserMinimized.Checked) {
+                Program.FormMain.settings.BrowserWindowState = Settings.BROWSER_WINDOW_STATE_MINIMIZED;
+            } else if (this.radioButtonBrowserHidden.Checked) {
+                Program.FormMain.settings.BrowserWindowState = Settings.BROWSER_WINDOW_STATE_HIDDEN;
+            }
 
             // Save the configured print slip fields.
             string[] fields = new string[this.listBoxFieldsActual.Items.Count];
