@@ -115,8 +115,9 @@ namespace KohaQuick {
             return string.Empty;
         }
 
-        public bool Login(string url, string username, string password) {
+        public bool Login(string url, string username, string password, out string errmsg) {
             bool bOK = false;
+            errmsg = string.Empty;
             try {
                 driver1.Navigate().GoToUrl(url);
 
@@ -134,14 +135,18 @@ namespace KohaQuick {
 
                 // Check if the page contains the text "Invalid username or password"
                 if (driver1.PageSource.Contains("Invalid username or password")) {
-                    MessageBox.Show("Invalid username or password. Please correct and try again.",
-                        "Login failure", MessageBoxButtons.OK);
+                    //MessageBox.Show("Invalid username or password. Please correct and try again.",
+                    //    "Login failure", MessageBoxButtons.OK);
+                    errmsg = "Invalid username or password";
+                } else if(driver1.PageSource.Contains("You do not have permission")) {
+                    errmsg = "You do not have permission to access this page";
                 } else {
                     bOK = true; // Login successful
                 }
             } catch (Exception ex) {
                 ShowMsg(ex.Message);
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                errmsg = ex.Message;
+                //MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return bOK;
         }

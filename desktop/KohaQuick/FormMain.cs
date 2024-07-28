@@ -8,6 +8,7 @@ namespace KohaQuick
         public Settings settings;
         public Creds creds;
         public KohaSession session1, session2;
+        public bool InitialLogin { get; set; } = true;
 
         public PrintImpl printImpl;
 
