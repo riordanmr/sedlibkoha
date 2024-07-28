@@ -20,6 +20,7 @@ namespace KohaQuick
             this.FormClosing += FormMain_FormClosing;
             // Subscribe to the KeyDown event of the TextBox
             textBoxItemBarcode.KeyDown += TextBoxItemBarcode_KeyDown;
+            this.Activated += FormMain_Activated;
         }
 
         private void ShowLoginDialog() {
@@ -46,6 +47,17 @@ namespace KohaQuick
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e) {
             session1.Close();
             session2.Close();
+        }
+
+        private void FormMain_Activated(object sender, EventArgs e) {
+            ShowMsg($"FormMain_Activated here. tabControlHolds.SelectedTab.Name={tabControlHolds.SelectedTab.Name}");
+            // Check if tabControlHolds is the active tab
+            if (tabControlHolds.SelectedTab != null && tabControlHolds.SelectedTab.Name == "tabPageTrapHolds") {
+                // Set focus to textBoxItemBarcode
+                this.BeginInvoke((Action)(() => {
+                    textBoxItemBarcode.Focus();
+                }));
+            }
         }
 
         public void ShowMsg(string msg) {
