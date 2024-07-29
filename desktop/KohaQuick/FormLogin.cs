@@ -28,11 +28,11 @@ namespace KohaQuick {
             Program.FormMain.InitialLogin = false;
             this.labelLoginResult.Text = "Logging in...";
             string errmsg = "";
-            bool bLoggedIn = Program.FormMain.session1.Login(Program.FormMain.settings.KohaUrlStaff,
+            bool bLoggedIn = Program.FormMain.session1.LoginStaff(Program.FormMain.settings.KohaUrlStaff,
                 this.textBoxUsername.Text, this.textBoxPassword.Text, out errmsg);
             if (bLoggedIn) {
                 labelLoginResult.Text = "First session logged in; logging in second session...";
-                bLoggedIn = Program.FormMain.session2.Login(Program.FormMain.settings.KohaUrlStaff,
+                bLoggedIn = Program.FormMain.session2.LoginStaff(Program.FormMain.settings.KohaUrlStaff,
                     this.textBoxUsername.Text, this.textBoxPassword.Text, out errmsg);
                 if (bLoggedIn) {
                     labelLoginResult.Text = "Login successful!";

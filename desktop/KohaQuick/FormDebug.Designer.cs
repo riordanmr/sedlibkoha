@@ -31,6 +31,7 @@
             // 
             this.textBoxMsgs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxMsgs.Location = new System.Drawing.Point(0, 0);
+            this.textBoxMsgs.MaxLength = 65535;
             this.textBoxMsgs.Multiline = true;
             this.textBoxMsgs.Name = "textBoxMsgs";
             this.textBoxMsgs.ReadOnly = true;

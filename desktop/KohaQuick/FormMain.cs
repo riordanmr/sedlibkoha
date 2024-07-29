@@ -7,7 +7,7 @@ namespace KohaQuick
     {
         public Settings settings;
         public Creds creds;
-        public KohaSession session1, session2;
+        public KohaSession session1, session2, sessionPIN;
         public bool InitialLogin { get; set; } = true;
 
         public PrintImpl printImpl;
@@ -48,6 +48,9 @@ namespace KohaQuick
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e) {
             session1.Close();
             session2.Close();
+            if(null != sessionPIN) {
+                sessionPIN.Close();
+            }
         }
 
         private void FormMain_Activated(object sender, EventArgs e) {
@@ -143,9 +146,34 @@ namespace KohaQuick
             ShowLoginDialog();
         }
 
+        private void buttonCheckPatronPIN_Click(object sender, EventArgs e) {
+            if (null == sessionPIN) {
+                sessionPIN = new KohaSession(3);
+            } else {
+                sessionPIN.LogoutStaff();
+            }
+            string errmsg = "";
+            textBoxPatronPINMsg.Text = errmsg;
+            LoginStatus loginStatus = sessionPIN.LoginPatron(settings.KohaUrlPatron, textBoxPatronBarcode.Text, 
+                textBoxPatronPIN.Text, out errmsg);
+            if (loginStatus == LoginStatus.Success) {
+                textBoxPatronPINMsg.Text = "PIN is correct.";
+            } else if(loginStatus == LoginStatus.Failure) {
+                textBoxPatronPINMsg.Text = "Incorrect PIN!\r\n" + errmsg;
+            } else if(loginStatus == LoginStatus.Unknown) {
+                textBoxPatronPINMsg.Text = "Unknown error logging in!\r\n" + errmsg;
+            } else {
+                textBoxPatronPINMsg.Text = "Internal error logging in!\r\n" + errmsg;
+            }
+            sessionPIN.LogoutPatron();
+        }
+
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e) {
-            session1.Logout();
-            session2.Logout();
+            session1.LogoutStaff();
+            session2.LogoutStaff();
+            if(null != sessionPIN) {
+                sessionPIN.LogoutPatron();
+            }
         }
     }
 }

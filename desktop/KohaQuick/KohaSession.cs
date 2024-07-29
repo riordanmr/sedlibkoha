@@ -5,6 +5,7 @@ using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 
@@ -16,6 +17,13 @@ namespace KohaQuick {
         NoHold,
         HoldFoundLocal,
         HoldFoundTransfer
+    };
+
+    public enum LoginStatus {
+        None,
+        Success,
+        Failure,
+        Unknown
     };
 
     // Represents a browser session to Koha.
@@ -30,7 +38,6 @@ namespace KohaQuick {
             driver1 = CreateWebDriver();
             // Initialize WebDriverWait with a timeout.
             wait1 = new WebDriverWait(driver1, TimeSpan.FromSeconds(MAX_PAGE_WAIT_SECS));
-
         }
 
         void ShowMsg(string msg) {
@@ -61,7 +68,15 @@ namespace KohaQuick {
             if(Program.FormMain.settings.BrowserX >= 0) {
                 xPos = Program.FormMain.settings.BrowserX;
             }
-            int yPos = 500 * (sessionNum - 1);
+            int yPos;
+            if (sessionNum == 1) {
+                yPos = 0;
+            } else if(sessionNum == 2) {
+                yPos = (int)(desiredChromeHeight * 0.8);
+            } else {
+                yPos = (int)(desiredChromeHeight * 0.8) + (30*(sessionNum-1));
+            }
+            
             string optionsStr = $"window-position={xPos},{yPos}";
             options.AddArgument(optionsStr);
 
@@ -115,19 +130,20 @@ namespace KohaQuick {
             return string.Empty;
         }
 
-        public bool Login(string url, string username, string password, out string errmsg) {
+        public bool LoginStaff(string url, string username, string password, out string errmsg) {
             bool bOK = false;
             errmsg = string.Empty;
             try {
                 driver1.Navigate().GoToUrl(url);
+                WaitForPageToLoad();
 
-                // Wait until the input element with name 'userid' is visible
-                IWebElement userIdInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Name("userid")));
+                IWebElement userIdInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Id("userid")));
                 // Enter the username into the input element
                 userIdInput.SendKeys(username);
 
-                IWebElement passwordInput = driver1.FindElement(By.Name("password"));
+                IWebElement passwordInput = driver1.FindElement(By.Id("password"));
                 passwordInput.SendKeys(password);
+
                 IWebElement submitButton = driver1.FindElement(By.Id("submit-button"));
                 submitButton.Click();
 
@@ -148,12 +164,93 @@ namespace KohaQuick {
                 errmsg = ex.Message;
                 //MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            ShowMsg($"Login returning {bOK}. {errmsg}");
             return bOK;
         }
 
-        public void Logout() {
+        // Login a patron. The patron login page is different from the staff login page.
+        public LoginStatus LoginPatron(string url, string username, string password, out string errmsg) {
+            LoginStatus loginStatus = LoginStatus.None;
+            errmsg = string.Empty;
+            try {
+                LogoutPatron();
+
+                driver1.Navigate().GoToUrl(url);
+                WaitForPageToLoad();
+
+                // Bizarrely, the patron login page has two similar login forms, one
+                // of which is hidden.  
+                IWebElement userIdInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Id("userid")));
+                // Enter the username into the input element
+                userIdInput.SendKeys(username);
+
+                IWebElement passwordInput = driver1.FindElement(By.Id("password"));
+                passwordInput.SendKeys(password);
+
+                // Find the correct Log in button. This was difficult to figure out!
+                IWebElement submitButton = driver1.FindElement(By.CssSelector(
+                    ".local-login:nth-child(2) .btn"));
+                submitButton.Click();
+
+                WaitForPageToLoad();
+                Thread.Sleep(1000);
+
+                ShowMsg($"After click on Log in : {driver1.PageSource}");
+
+                // Check if the page contains the text "Invalid username or password"
+                if (driver1.PageSource.Contains("Invalid username or password") ||
+                    driver1.PageSource.Contains("incorrect username or password")) {
+                    //MessageBox.Show("Invalid username or password. Please correct and try again.",
+                    //    "Login failure", MessageBoxButtons.OK);
+                    errmsg = "Incorrect user barcode or PIN";
+                    loginStatus = LoginStatus.Failure;
+                } else if (driver1.PageSource.Contains("You do not have permission")) {
+                    errmsg = "You do not have permission to access this page";
+                    loginStatus = LoginStatus.Failure;
+                } else if (driver1.PageSource.Contains("Your summary") ||
+                    driver1.PageSource.Contains("Welcome, ")) {
+                    // Check for text confirming that we logged in OK.
+                    //ShowMsg($"Looking for successful login");
+                    //IWebElement summaryHeader = wait1.Until(ExpectedConditions.ElementIsVisible(
+                    //    By.XPath("//h1[text()='Your summary']")));
+                    loginStatus = LoginStatus.Success;
+                } else {
+                    errmsg = "I don't recognize this page. See debug log.";
+                    ShowMsg($"LoginPatron doesn't recognize this page: {driver1.PageSource}");
+                    loginStatus = LoginStatus.Unknown;
+                }
+            } catch (Exception ex) {
+                ShowMsg(ex.Message);
+                errmsg = ex.Message;
+                loginStatus = LoginStatus.Unknown;
+                //MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            ShowMsg($"Login returning {loginStatus}. {errmsg}");
+            return loginStatus;
+        }
+
+        public void LogoutStaff() {
             string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/mainpage.pl?logout.x=1";
             driver1.Navigate().GoToUrl(url);
+            try {
+                WaitForPageToLoad();
+                wait1.Until((driver) => ((IJavaScriptExecutor)driver).
+                    ExecuteScript("return document.readyState").Equals("complete"));
+            } catch (Exception ex) {
+                ShowMsg($"Logout staff: {ex.Message}");
+            }
+        }
+
+        public void LogoutPatron() {
+            string url = Program.FormMain.settings.KohaUrlPatron + "/cgi-bin/koha/opac-main.pl?logout.x=1";
+            driver1.Navigate().GoToUrl(url);
+            try {
+                WaitForPageToLoad();
+                wait1.Until((driver) => ((IJavaScriptExecutor)driver).
+                    ExecuteScript("return document.readyState").Equals("complete"));
+            } catch (Exception ex) {
+                ShowMsg($"Logout patron: {ex.Message}");
+            }
         }
 
         public bool AtUrl(string url) {
