@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace KohaQuick
@@ -9,8 +10,10 @@ namespace KohaQuick
         public Creds creds;
         public KohaSession session1, session2, sessionPIN;
         public bool InitialLogin { get; set; } = true;
+        private readonly Random random = new Random();
 
         public PrintImpl printImpl;
+        public KohaRESTAPI kohaRESTAPI = new KohaRESTAPI();
 
         public FormMain() {
             InitializeComponent();
@@ -22,6 +25,14 @@ namespace KohaQuick
             // Subscribe to the KeyDown event of the TextBox
             textBoxItemBarcode.KeyDown += TextBoxItemBarcode_KeyDown;
             this.Activated += FormMain_Activated;
+            this.tabControlHolds.SelectedIndexChanged += new System.EventHandler(this.tabControlHolds_SelectedIndexChanged);
+        }
+
+        private void tabControlHolds_SelectedIndexChanged(object sender, EventArgs e) {
+            // Check if the selected tab is the one containing textBoxFirstName
+            if (tabControlHolds.SelectedTab == tabPageAddPatron) {
+                textBoxFirstName.Focus();
+            }
         }
 
         private void ShowLoginDialog() {
@@ -144,6 +155,92 @@ namespace KohaQuick
 
         private void loginToolStripMenuItem_Click(object sender, EventArgs e) {
             ShowLoginDialog();
+        }
+
+        private void label1_Click(object sender, EventArgs e) {
+
+        }
+
+        private void comboBoxState_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
+
+        public string GetRandomString(int length) {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public string GetRandomDigits(int length) {
+            const string chars = "0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private void buttonGenerateRandom_Click(object sender, EventArgs e) {
+            string PIN = GetRandomDigits(4);
+            this.textBoxFirstName.Text = $"Xerxes";
+            this.textBoxLastName.Text = $"Smith{GetRandomString(3)}";
+            this.textBoxDateOfBirth.Text = $"2000-07-21";
+            this.textBoxEmail.Text = $"xerxex.smith{GetRandomString(5)}@gmail.com";
+            this.textBoxPhone.Text = $"555-555-{GetRandomDigits(4)}";
+            this.textBoxAddress1.Text = $"{PIN} Main St";
+            this.textBoxAddress2.Text = $"Apt {GetRandomString(3)}";
+            this.textBoxCity.Text = $"Springfield";
+            this.comboBoxState.Text = $"IL";
+            this.textBoxZipcode.Text = $"{GetRandomDigits(5)}";
+            this.textBoxLibraryCardBarcode.Text = $"432{GetRandomDigits(11)}";
+            this.textBoxPIN.Text = PIN;
+            this.textBoxPIN2.Text = this.textBoxPIN.Text;
+        }
+
+        private void buttonAddPatron_Click(object sender, EventArgs e) {
+            Patron patron = new Patron();
+            patron.firstname = this.textBoxFirstName.Text;
+            patron.surname = this.textBoxLastName.Text;
+            patron.email = this.textBoxEmail.Text;
+            patron.phone = this.textBoxPhone.Text;
+            patron.address = this.textBoxAddress1.Text;
+            patron.address2 = this.textBoxAddress2.Text;
+            patron.city = this.textBoxCity.Text;
+            patron.state = this.comboBoxState.Text;
+            patron.postal_code = this.textBoxZipcode.Text;
+            patron.country = "US";
+            patron.userid = this.textBoxLibraryCardBarcode.Text;
+            patron.cardnumber = this.textBoxLibraryCardBarcode.Text;
+            patron.date_of_birth = this.textBoxDateOfBirth.Text;
+            patron.password = this.textBoxPIN.Text;
+            patron.category_id = "AD";
+
+            if(textBoxPIN.Text != textBoxPIN2.Text) {
+                MessageBox.Show("PINs do not match!");
+                return;
+            }
+            string errmsg = "";
+            bool bOK = kohaRESTAPI.AddPatron(patron, out errmsg);
+            if(bOK) {
+                textBoxAddPatronMsg.Text = "Patron added successfully.";
+            } else {
+                textBoxAddPatronMsg.Text = "Error adding patron:\r\n" + errmsg;
+            }
+        }
+
+        private void buttonClearInfo_Click(object sender, EventArgs e) {
+            this.textBoxFirstName.Text = "";
+            this.textBoxMiddleName.Text = "";
+            this.textBoxLastName.Text = "";
+            this.textBoxDateOfBirth.Text = "";
+            this.textBoxEmail.Text = "";
+            this.textBoxPhone.Text = "";
+            this.textBoxAddress1.Text = "";
+            this.textBoxAddress2.Text = "";
+            this.textBoxCity.Text = "";
+            this.comboBoxState.Text = "";
+            this.textBoxZipcode.Text = "";
+            this.textBoxLibraryCardBarcode.Text = "";
+            this.textBoxPIN.Text = "";
+            this.textBoxPIN2.Text = "";
+            this.textBoxAddPatronMsg.Text = "";
         }
 
         private void buttonCheckPatronPIN_Click(object sender, EventArgs e) {
