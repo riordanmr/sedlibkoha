@@ -33,6 +33,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageTrapHolds = new System.Windows.Forms.TabPage();
             this.tabPageAddPatron = new System.Windows.Forms.TabPage();
+            this.buttonGenerateRandom = new System.Windows.Forms.Button();
             this.buttonAddPatron = new System.Windows.Forms.Button();
             this.groupBoxLibraryCard = new System.Windows.Forms.GroupBox();
             this.textBoxPIN2 = new System.Windows.Forms.TextBox();
@@ -45,16 +46,11 @@
             this.textBoxPhone = new System.Windows.Forms.TextBox();
             this.textBoxDateOfBirth = new System.Windows.Forms.TextBox();
             this.comboBoxState = new System.Windows.Forms.ComboBox();
-            this.textBoxZipcode = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBoxAddress1 = new System.Windows.Forms.TextBox();
             this.textBoxCity = new System.Windows.Forms.TextBox();
-            this.textBoxAddress2 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxMiddleName = new System.Windows.Forms.TextBox();
@@ -65,8 +61,12 @@
             this.labelMiddleName = new System.Windows.Forms.Label();
             this.Identity = new System.Windows.Forms.GroupBox();
             this.groupBoxAddress = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBoxAddress1 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBoxAddress2 = new System.Windows.Forms.TextBox();
+            this.textBoxZipcode = new System.Windows.Forms.TextBox();
             this.groupBoxContactInfo = new System.Windows.Forms.GroupBox();
-            this.buttonGenerateRandom = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -175,12 +175,22 @@
             this.tabPageAddPatron.Text = "Add Patron";
             this.tabPageAddPatron.UseVisualStyleBackColor = true;
             // 
+            // buttonGenerateRandom
+            // 
+            this.buttonGenerateRandom.Location = new System.Drawing.Point(281, 786);
+            this.buttonGenerateRandom.Name = "buttonGenerateRandom";
+            this.buttonGenerateRandom.Size = new System.Drawing.Size(228, 44);
+            this.buttonGenerateRandom.TabIndex = 21;
+            this.buttonGenerateRandom.Text = "Generate Random";
+            this.buttonGenerateRandom.UseVisualStyleBackColor = true;
+            this.buttonGenerateRandom.Click += new System.EventHandler(this.buttonGenerateRandom_Click);
+            // 
             // buttonAddPatron
             // 
             this.buttonAddPatron.Location = new System.Drawing.Point(615, 786);
             this.buttonAddPatron.Name = "buttonAddPatron";
             this.buttonAddPatron.Size = new System.Drawing.Size(164, 44);
-            this.buttonAddPatron.TabIndex = 0;
+            this.buttonAddPatron.TabIndex = 22;
             this.buttonAddPatron.Text = "Add Patron";
             this.buttonAddPatron.UseVisualStyleBackColor = true;
             this.buttonAddPatron.Click += new System.EventHandler(this.buttonAddPatron_Click);
@@ -283,13 +293,6 @@
             this.comboBoxState.Size = new System.Drawing.Size(126, 33);
             this.comboBoxState.TabIndex = 13;
             // 
-            // textBoxZipcode
-            // 
-            this.textBoxZipcode.Location = new System.Drawing.Point(700, 83);
-            this.textBoxZipcode.Name = "textBoxZipcode";
-            this.textBoxZipcode.Size = new System.Drawing.Size(162, 31);
-            this.textBoxZipcode.TabIndex = 4;
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -326,44 +329,12 @@
             this.label6.TabIndex = 18;
             this.label6.Text = "Email:";
             // 
-            // textBoxAddress1
-            // 
-            this.textBoxAddress1.Location = new System.Drawing.Point(133, 31);
-            this.textBoxAddress1.Name = "textBoxAddress1";
-            this.textBoxAddress1.Size = new System.Drawing.Size(360, 31);
-            this.textBoxAddress1.TabIndex = 1;
-            // 
             // textBoxCity
             // 
             this.textBoxCity.Location = new System.Drawing.Point(95, 286);
             this.textBoxCity.Name = "textBoxCity";
             this.textBoxCity.Size = new System.Drawing.Size(162, 31);
             this.textBoxCity.TabIndex = 11;
-            // 
-            // textBoxAddress2
-            // 
-            this.textBoxAddress2.Location = new System.Drawing.Point(663, 30);
-            this.textBoxAddress2.Name = "textBoxAddress2";
-            this.textBoxAddress2.Size = new System.Drawing.Size(338, 31);
-            this.textBoxAddress2.TabIndex = 3;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(17, 34);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(97, 25);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Address:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(531, 34);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(109, 25);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Address2:";
             // 
             // label2
             // 
@@ -454,6 +425,45 @@
             this.groupBoxAddress.TabStop = false;
             this.groupBoxAddress.Text = "Address";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(17, 34);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(97, 25);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Address:";
+            // 
+            // textBoxAddress1
+            // 
+            this.textBoxAddress1.Location = new System.Drawing.Point(133, 31);
+            this.textBoxAddress1.Name = "textBoxAddress1";
+            this.textBoxAddress1.Size = new System.Drawing.Size(360, 31);
+            this.textBoxAddress1.TabIndex = 1;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(531, 34);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(109, 25);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Address2:";
+            // 
+            // textBoxAddress2
+            // 
+            this.textBoxAddress2.Location = new System.Drawing.Point(663, 30);
+            this.textBoxAddress2.Name = "textBoxAddress2";
+            this.textBoxAddress2.Size = new System.Drawing.Size(338, 31);
+            this.textBoxAddress2.TabIndex = 3;
+            // 
+            // textBoxZipcode
+            // 
+            this.textBoxZipcode.Location = new System.Drawing.Point(700, 83);
+            this.textBoxZipcode.Name = "textBoxZipcode";
+            this.textBoxZipcode.Size = new System.Drawing.Size(162, 31);
+            this.textBoxZipcode.TabIndex = 4;
+            // 
             // groupBoxContactInfo
             // 
             this.groupBoxContactInfo.Location = new System.Drawing.Point(11, 368);
@@ -462,16 +472,6 @@
             this.groupBoxContactInfo.TabIndex = 15;
             this.groupBoxContactInfo.TabStop = false;
             this.groupBoxContactInfo.Text = "Contact info";
-            // 
-            // buttonGenerateRandom
-            // 
-            this.buttonGenerateRandom.Location = new System.Drawing.Point(281, 786);
-            this.buttonGenerateRandom.Name = "buttonGenerateRandom";
-            this.buttonGenerateRandom.Size = new System.Drawing.Size(228, 44);
-            this.buttonGenerateRandom.TabIndex = 21;
-            this.buttonGenerateRandom.Text = "Generate Random";
-            this.buttonGenerateRandom.UseVisualStyleBackColor = true;
-            this.buttonGenerateRandom.Click += new System.EventHandler(this.buttonGenerateRandom_Click);
             // 
             // buttonExit
             // 

@@ -145,7 +145,7 @@ namespace TestSelenium
 
         private void buttonGenerateRandom_Click(object sender, EventArgs e) {
             string PIN = GetRandomDigits(4);
-            this.textBoxFirstName.Text = $"Fred{GetRandomString(3)}";
+            this.textBoxFirstName.Text = $"Xerxes";
             this.textBoxLastName.Text = $"Smith{GetRandomString(3)}";
             this.textBoxDateOfBirth.Text = $"2000-07-21";
             this.textBoxEmail.Text = $"fred.smith{GetRandomString(5)}@gmail.com";
