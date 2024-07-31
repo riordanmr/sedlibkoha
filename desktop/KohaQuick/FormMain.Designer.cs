@@ -739,7 +739,6 @@
             this.textBoxPatronBarcodeForReceipt.Name = "textBoxPatronBarcodeForReceipt";
             this.textBoxPatronBarcodeForReceipt.Size = new System.Drawing.Size(346, 34);
             this.textBoxPatronBarcodeForReceipt.TabIndex = 2;
-            this.textBoxPatronBarcodeForReceipt.Text = "23701000360606";
             // 
             // buttonPrintItemsCheckedOut
             // 
