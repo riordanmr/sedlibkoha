@@ -180,3 +180,7 @@ misc/biblio1.json
 misc/nextbarcode.txt
 
 misc/SeleniumIDE
+*.out
+*.testjson
+*.testcs
+

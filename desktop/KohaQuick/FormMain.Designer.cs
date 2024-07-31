@@ -42,6 +42,8 @@
             this.textBoxPatronBarcode = new System.Windows.Forms.TextBox();
             this.labelPatronBarcode = new System.Windows.Forms.Label();
             this.tabPageAddPatron = new System.Windows.Forms.TabPage();
+            this.textBoxAddPatronMsg = new System.Windows.Forms.TextBox();
+            this.buttonClearInfo = new System.Windows.Forms.Button();
             this.buttonGenerateRandom = new System.Windows.Forms.Button();
             this.buttonAddPatron = new System.Windows.Forms.Button();
             this.groupBoxLibraryCard = new System.Windows.Forms.GroupBox();
@@ -82,9 +84,14 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonClearInfo = new System.Windows.Forms.Button();
-            this.textBoxAddPatronMsg = new System.Windows.Forms.TextBox();
+            this.tabPagePrintCheckouts = new System.Windows.Forms.TabPage();
+            this.labelPrintReceiptHeader = new System.Windows.Forms.Label();
+            this.labelPatronBarcodeForReceipt = new System.Windows.Forms.Label();
+            this.textBoxPatronBarcodeForReceipt = new System.Windows.Forms.TextBox();
+            this.buttonPrintItemsCheckedOut = new System.Windows.Forms.Button();
+            this.textBoxPrintCheckoutMsg = new System.Windows.Forms.TextBox();
             this.tabControlHolds.SuspendLayout();
             this.tabPageTrapHolds.SuspendLayout();
             this.tabPageCheckPIN.SuspendLayout();
@@ -94,6 +101,7 @@
             this.groupBoxAddress.SuspendLayout();
             this.groupBoxContactInfo.SuspendLayout();
             this.menuStrip2.SuspendLayout();
+            this.tabPagePrintCheckouts.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlHolds
@@ -101,6 +109,7 @@
             this.tabControlHolds.Controls.Add(this.tabPageTrapHolds);
             this.tabControlHolds.Controls.Add(this.tabPageCheckPIN);
             this.tabControlHolds.Controls.Add(this.tabPageAddPatron);
+            this.tabControlHolds.Controls.Add(this.tabPagePrintCheckouts);
             this.tabControlHolds.Location = new System.Drawing.Point(12, 58);
             this.tabControlHolds.Name = "tabControlHolds";
             this.tabControlHolds.SelectedIndex = 0;
@@ -274,6 +283,26 @@
             this.tabPageAddPatron.TabIndex = 2;
             this.tabPageAddPatron.Text = "Add Patron";
             this.tabPageAddPatron.UseVisualStyleBackColor = true;
+            // 
+            // textBoxAddPatronMsg
+            // 
+            this.textBoxAddPatronMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxAddPatronMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxAddPatronMsg.Location = new System.Drawing.Point(22, 731);
+            this.textBoxAddPatronMsg.Multiline = true;
+            this.textBoxAddPatronMsg.Name = "textBoxAddPatronMsg";
+            this.textBoxAddPatronMsg.Size = new System.Drawing.Size(1030, 62);
+            this.textBoxAddPatronMsg.TabIndex = 7;
+            // 
+            // buttonClearInfo
+            // 
+            this.buttonClearInfo.Location = new System.Drawing.Point(137, 676);
+            this.buttonClearInfo.Name = "buttonClearInfo";
+            this.buttonClearInfo.Size = new System.Drawing.Size(200, 44);
+            this.buttonClearInfo.TabIndex = 4;
+            this.buttonClearInfo.Text = "Clear Info";
+            this.buttonClearInfo.UseVisualStyleBackColor = true;
+            this.buttonClearInfo.Click += new System.EventHandler(this.buttonClearInfo_Click);
             // 
             // buttonGenerateRandom
             // 
@@ -621,6 +650,7 @@
             this.settingsToolStripMenuItem,
             this.loginToolStripMenuItem,
             this.logoutToolStripMenuItem,
+            this.restartToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(71, 36);
@@ -654,6 +684,13 @@
             this.logoutToolStripMenuItem.Text = "Log&out";
             this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
             // 
+            // restartToolStripMenuItem
+            // 
+            this.restartToolStripMenuItem.Name = "restartToolStripMenuItem";
+            this.restartToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
+            this.restartToolStripMenuItem.Text = "&Restart";
+            this.restartToolStripMenuItem.Click += new System.EventHandler(this.restartToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -661,25 +698,70 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // buttonClearInfo
+            // tabPagePrintCheckouts
             // 
-            this.buttonClearInfo.Location = new System.Drawing.Point(137, 676);
-            this.buttonClearInfo.Name = "buttonClearInfo";
-            this.buttonClearInfo.Size = new System.Drawing.Size(200, 44);
-            this.buttonClearInfo.TabIndex = 4;
-            this.buttonClearInfo.Text = "Clear Info";
-            this.buttonClearInfo.UseVisualStyleBackColor = true;
-            this.buttonClearInfo.Click += new System.EventHandler(this.buttonClearInfo_Click);
+            this.tabPagePrintCheckouts.Controls.Add(this.textBoxPrintCheckoutMsg);
+            this.tabPagePrintCheckouts.Controls.Add(this.buttonPrintItemsCheckedOut);
+            this.tabPagePrintCheckouts.Controls.Add(this.textBoxPatronBarcodeForReceipt);
+            this.tabPagePrintCheckouts.Controls.Add(this.labelPatronBarcodeForReceipt);
+            this.tabPagePrintCheckouts.Controls.Add(this.labelPrintReceiptHeader);
+            this.tabPagePrintCheckouts.Location = new System.Drawing.Point(8, 39);
+            this.tabPagePrintCheckouts.Name = "tabPagePrintCheckouts";
+            this.tabPagePrintCheckouts.Size = new System.Drawing.Size(1085, 796);
+            this.tabPagePrintCheckouts.TabIndex = 3;
+            this.tabPagePrintCheckouts.Text = "Print Checkouts";
+            this.tabPagePrintCheckouts.UseVisualStyleBackColor = true;
             // 
-            // textBoxAddPatronMsg
+            // labelPrintReceiptHeader
             // 
-            this.textBoxAddPatronMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxAddPatronMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxAddPatronMsg.Location = new System.Drawing.Point(22, 731);
-            this.textBoxAddPatronMsg.Multiline = true;
-            this.textBoxAddPatronMsg.Name = "textBoxAddPatronMsg";
-            this.textBoxAddPatronMsg.Size = new System.Drawing.Size(1030, 62);
-            this.textBoxAddPatronMsg.TabIndex = 7;
+            this.labelPrintReceiptHeader.AutoSize = true;
+            this.labelPrintReceiptHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPrintReceiptHeader.Location = new System.Drawing.Point(185, 20);
+            this.labelPrintReceiptHeader.Name = "labelPrintReceiptHeader";
+            this.labelPrintReceiptHeader.Size = new System.Drawing.Size(714, 31);
+            this.labelPrintReceiptHeader.TabIndex = 0;
+            this.labelPrintReceiptHeader.Text = "Print receipt of items checked out today by this patron";
+            // 
+            // labelPatronBarcodeForReceipt
+            // 
+            this.labelPatronBarcodeForReceipt.AutoSize = true;
+            this.labelPatronBarcodeForReceipt.Location = new System.Drawing.Point(209, 85);
+            this.labelPatronBarcodeForReceipt.Name = "labelPatronBarcodeForReceipt";
+            this.labelPatronBarcodeForReceipt.Size = new System.Drawing.Size(165, 25);
+            this.labelPatronBarcodeForReceipt.TabIndex = 1;
+            this.labelPatronBarcodeForReceipt.Text = "Patron barcode:";
+            this.labelPatronBarcodeForReceipt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textBoxPatronBarcodeForReceipt
+            // 
+            this.textBoxPatronBarcodeForReceipt.Font = new System.Drawing.Font("Lucida Console", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxPatronBarcodeForReceipt.Location = new System.Drawing.Point(390, 81);
+            this.textBoxPatronBarcodeForReceipt.Name = "textBoxPatronBarcodeForReceipt";
+            this.textBoxPatronBarcodeForReceipt.Size = new System.Drawing.Size(346, 34);
+            this.textBoxPatronBarcodeForReceipt.TabIndex = 2;
+            this.textBoxPatronBarcodeForReceipt.Text = "23701000360606";
+            // 
+            // buttonPrintItemsCheckedOut
+            // 
+            this.buttonPrintItemsCheckedOut.Location = new System.Drawing.Point(438, 146);
+            this.buttonPrintItemsCheckedOut.Name = "buttonPrintItemsCheckedOut";
+            this.buttonPrintItemsCheckedOut.Size = new System.Drawing.Size(229, 53);
+            this.buttonPrintItemsCheckedOut.TabIndex = 3;
+            this.buttonPrintItemsCheckedOut.Text = "Print Receipt";
+            this.buttonPrintItemsCheckedOut.UseVisualStyleBackColor = true;
+            this.buttonPrintItemsCheckedOut.Click += new System.EventHandler(this.buttonPrintItemsCheckedOut_Click);
+            // 
+            // textBoxPrintCheckoutMsg
+            // 
+            this.textBoxPrintCheckoutMsg.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBoxPrintCheckoutMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxPrintCheckoutMsg.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxPrintCheckoutMsg.Location = new System.Drawing.Point(89, 220);
+            this.textBoxPrintCheckoutMsg.Multiline = true;
+            this.textBoxPrintCheckoutMsg.Name = "textBoxPrintCheckoutMsg";
+            this.textBoxPrintCheckoutMsg.ReadOnly = true;
+            this.textBoxPrintCheckoutMsg.Size = new System.Drawing.Size(877, 175);
+            this.textBoxPrintCheckoutMsg.TabIndex = 8;
             // 
             // FormMain
             // 
@@ -708,6 +790,8 @@
             this.groupBoxContactInfo.PerformLayout();
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
+            this.tabPagePrintCheckouts.ResumeLayout(false);
+            this.tabPagePrintCheckouts.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -774,6 +858,13 @@
         private System.Windows.Forms.GroupBox groupBoxContactInfo;
         private System.Windows.Forms.TextBox textBoxAddPatronMsg;
         private System.Windows.Forms.Button buttonClearInfo;
+        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPagePrintCheckouts;
+        private System.Windows.Forms.Label labelPrintReceiptHeader;
+        private System.Windows.Forms.Button buttonPrintItemsCheckedOut;
+        private System.Windows.Forms.TextBox textBoxPatronBarcodeForReceipt;
+        private System.Windows.Forms.Label labelPatronBarcodeForReceipt;
+        private System.Windows.Forms.TextBox textBoxPrintCheckoutMsg;
     }
 }
 

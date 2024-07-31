@@ -13,7 +13,7 @@ namespace KohaQuick
         private readonly Random random = new Random();
 
         public PrintImpl printImpl;
-        public KohaRESTAPI kohaRESTAPI = new KohaRESTAPI();
+        public KohaRESTAPI kohaRESTAPI;
 
         public FormMain() {
             InitializeComponent();
@@ -24,6 +24,7 @@ namespace KohaQuick
             this.FormClosing += FormMain_FormClosing;
             // Subscribe to the KeyDown event of the TextBox
             textBoxItemBarcode.KeyDown += TextBoxItemBarcode_KeyDown;
+            textBoxPatronBarcodeForReceipt.KeyDown += TextBoxPatronBarcodeForReceipt_KeyDown;
             this.Activated += FormMain_Activated;
             this.tabControlHolds.SelectedIndexChanged += new System.EventHandler(this.tabControlHolds_SelectedIndexChanged);
         }
@@ -97,6 +98,15 @@ namespace KohaQuick
             if (e.KeyCode == Keys.Enter) {
                 // Enter key was pressed, trigger the button click event
                 buttonTrapHold_Click(sender, e);
+                // Optionally, suppress the default beep sound
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void TextBoxPatronBarcodeForReceipt_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                // Enter key was pressed, trigger the button click event
+                buttonPrintItemsCheckedOut_Click(sender, e);
                 // Optionally, suppress the default beep sound
                 e.SuppressKeyPress = true;
             }
@@ -241,6 +251,25 @@ namespace KohaQuick
             this.textBoxPIN.Text = "";
             this.textBoxPIN2.Text = "";
             this.textBoxAddPatronMsg.Text = "";
+        }
+
+        private void restartToolStripMenuItem_Click(object sender, EventArgs e) {
+            Application.Restart();
+            Application.Exit();
+        }
+
+        private void buttonPrintItemsCheckedOut_Click(object sender, EventArgs e) {
+            string errmsg = "";
+            Object []aryItemInfo = null;
+            string cardnumber = this.textBoxPatronBarcodeForReceipt.Text.Trim();
+            CheckoutInfo checkoutInfo = new CheckoutInfo();
+            bool bOK = kohaRESTAPI.GetItemsCheckedOutTodayForPatron(cardnumber,
+                ref checkoutInfo, out errmsg);
+            if (bOK) {
+
+            } else {
+                textBoxPrintCheckoutMsg.Text = errmsg;
+            }
         }
 
         private void buttonCheckPatronPIN_Click(object sender, EventArgs e) {

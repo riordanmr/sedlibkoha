@@ -38,6 +38,8 @@ namespace KohaQuick {
                     this.textBoxUsername.Text, this.textBoxPassword.Text, out errmsg);
                 if (bLoggedIn) {
                     labelLoginResult.Text = "Login successful!";
+                    // Now that we know the creds, create the KohaRESTAPI object.
+                    Program.FormMain.kohaRESTAPI = new KohaRESTAPI();
                     this.Close();
                 } else {
                     labelLoginResult.Text = "Login failed. Please try again.\n" + errmsg;
