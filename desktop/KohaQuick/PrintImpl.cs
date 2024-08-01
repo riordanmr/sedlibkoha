@@ -36,9 +36,13 @@ namespace KohaQuick {
 
         public HoldSlip holdSlip;
 
+        public CheckoutItemCol checkoutItemCol;
+
         public PrintImpl(Settings parmSettings) {
             settings = parmSettings;
         }
+
+        //PrintJobType printJobType = PrintJobType.PrintNone;
 
         public const string FIELD_PATRON = "Patron";
         public const string FIELD_CURRENTDATETIME = "Current date/time";
@@ -73,7 +77,7 @@ namespace KohaQuick {
             printDocument.PrinterSettings.PrintFileName = pdfOutputFileName;
 
             // Handle the PrintPage event to specify what to print.
-            printDocument.PrintPage += new PrintPageEventHandler(PrintPageHandler);
+            printDocument.PrintPage += new PrintPageEventHandler(PrintHoldSlipHandler);
             // Handle the EndPrint event to determine when the print job has completed.
             printDocument.EndPrint += new PrintEventHandler(PrintEndHandler);
 
@@ -120,6 +124,38 @@ namespace KohaQuick {
             PrintSlip();
         }
 
+        public void PrintCheckoutSlip(CheckoutItemCol checkoutItemCol) {
+            this.checkoutItemCol = checkoutItemCol;
+            string reply = "";
+
+            PrintDocument printDocument = new PrintDocument();
+
+            // Set the printer name. Make sure the name matches exactly.
+            string printerName = settings.Printer;
+            printDocument.PrinterSettings.PrinterName = printerName;
+            printDocument.PrinterSettings.PrintToFile = settings.PrintToPDF;
+            string pdfOutputFileName = "KohaQuickOut.pdf";
+            printDocument.PrinterSettings.PrintFileName = pdfOutputFileName;
+
+            // Handle the PrintPage event to specify what to print.
+            printDocument.PrintPage += new PrintPageEventHandler(PrintCheckedOutSlipHandler);
+            // Handle the EndPrint event to determine when the print job has completed.
+            printDocument.EndPrint += new PrintEventHandler(PrintEndHandler);
+
+            try {
+                // Print the document.
+                printDocument.Print();
+                reply = $"Printed OK to {printerName}";
+                if (settings.PrintToPDF) {
+                    reply += $" on {pdfOutputFileName}";
+                }
+                ShowMsg(reply);
+            } catch (Exception ex) {
+                reply = "Error: " + ex.Message;
+                ShowMsg(reply);
+            }
+        }
+
         private void PrintLine(string msg, PrintPageEventArgs e, Font font, float lineSpacing, int x, ref int y) {
             int printableWidthInPixels;
             if (settings.PageWidth > 0) {
@@ -149,8 +185,7 @@ namespace KohaQuick {
             } while (bContinue);
         }
 
-        private void PrintPageHandler(object sender, PrintPageEventArgs e) {
-            // Specify what to print. In this case, a simple text message.
+        private void PrintHoldSlipHandler(object sender, PrintPageEventArgs e) {
             int x = settings.UpperLeftX;
             int y = settings.UpperLeftY;
             Font fontPatron = new Font(settings.FontFamilyPatron, settings.FontSizePatron, FontStyle.Bold);
@@ -217,6 +252,11 @@ namespace KohaQuick {
             if (bLastIsBlank) {
                 PrintLine(".", e, fontOther, settings.LineSpacingOther, x, ref y);
             }
+        }
+
+        private void PrintCheckedOutSlipHandler(object sender, PrintPageEventArgs e) {
+            // This method is called when the print job is to print a list of checked-out items.
+            // This is not yet implemented.
         }
 
         private void PrintEndHandler(object sender, PrintEventArgs e) {
