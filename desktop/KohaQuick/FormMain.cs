@@ -90,7 +90,7 @@ namespace KohaQuick {
         }
 
         private void printSampleToolStripMenuItem_Click(object sender, EventArgs e) {
-            printImpl.PrintSample();
+            printImpl.PrintHoldSample();
         }
 
         // Event handler for KeyDown event of the TextBox
@@ -146,7 +146,7 @@ namespace KohaQuick {
                         if (session2.GetInfoOnTrappedItem(barcode, ref holdSlip)) {
                             textBoxTrapMsg.Text = "Printing hold slip";
                             printImpl.holdSlip = holdSlip;
-                            printImpl.PrintSlip();
+                            printImpl.PrintHoldSlip();
                         } else {
                             textBoxTrapMsg.Text = "Error getting hold slip info";
                         }

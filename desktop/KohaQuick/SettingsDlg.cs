@@ -23,8 +23,8 @@ namespace KohaQuick {
                 Program.FormMain.printImpl.settings.FontSizeOther.ToString();
             this.checkBoxPrintConfig.Checked = Program.FormMain.printImpl.settings.PrintConfig;
 
-            this.listBoxFieldsAvailable.Items.AddRange(Program.FormMain.printImpl.GetFieldsAvailable());
-            this.listBoxFieldsActual.Items.AddRange(Program.FormMain.printImpl.settings.Fields);
+            this.listBoxFieldsAvailable.Items.AddRange(Program.FormMain.printImpl.GetHoldsFieldsAvailable());
+            this.listBoxFieldsActual.Items.AddRange(Program.FormMain.printImpl.settings.HoldFields);
 
             this.textBoxBrowserWidth.Text = Program.FormMain.settings.BrowserWidth.ToString();
             this.textBoxBrowserHeight.Text = Program.FormMain.settings.BrowserHeight.ToString();
@@ -172,7 +172,7 @@ namespace KohaQuick {
             for (int i = 0; i < this.listBoxFieldsActual.Items.Count; i++) {
                 fields[i] = this.listBoxFieldsActual.Items[i].ToString();
             }
-            Program.FormMain.printImpl.settings.Fields = fields;
+            Program.FormMain.printImpl.settings.HoldFields = fields;
 
             if (ok) {
                 Program.FormMain.printImpl.settings.Save();

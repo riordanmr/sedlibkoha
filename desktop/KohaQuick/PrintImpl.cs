@@ -54,17 +54,25 @@ namespace KohaQuick {
         public const string FIELD_EXPDATE = "Expdate";
         public const string FIELD_BLANKLINE = "Blank line";
 
-        public string[] GetFieldsAvailable() {
+        public const string FIELD_DUEDATE = "Due date";
+        public const string FIELD_CHECKOUTDATE = "Checkout date";
+
+        public string[] GetHoldsFieldsAvailable() {
             return new string[] { FIELD_EXPDATE, FIELD_PATRON, FIELD_CURRENTDATETIME,
             FIELD_LIBRARY, FIELD_TITLE, FIELD_AUTHOR, FIELD_BARCODE, FIELD_CALLNUMBER,
             FIELD_BLANKLINE};
+        }
+
+        public string [] GetCheckoutFieldsAvailable() {
+            return new string[] { FIELD_TITLE, FIELD_CALLNUMBER, FIELD_DUEDATE, 
+            FIELD_CHECKOUTDATE, FIELD_BLANKLINE};
         }
 
         public void ShowMsg(string msg) {
             Program.FormDebug.AddDebugLine(msg);
         }
 
-        public string PrintSlip() {
+        public string PrintHoldSlip() {
             string reply = "";
 
             PrintDocument printDocument = new PrintDocument();
@@ -96,7 +104,7 @@ namespace KohaQuick {
             return reply;
         }
 
-        public void PrintSample() {
+        public void PrintHoldSample() {
             string filePath = "holdslip.json";
             ShowMsg("Printing sample slip. Looking for " + filePath);
             string jsonStr = null;
@@ -121,7 +129,7 @@ namespace KohaQuick {
                 holdSlip = new HoldSlip();
                 holdSlip.InitSample();
             }
-            PrintSlip();
+            PrintHoldSlip();
         }
 
         public void PrintCheckoutSlip(CheckoutItemCol checkoutItemCol) {
@@ -194,7 +202,7 @@ namespace KohaQuick {
 
             string msg;
             bool bLastIsBlank = false;
-            foreach (string field in settings.Fields) {
+            foreach (string field in settings.HoldFields) {
                 bLastIsBlank = false;
                 if (field == FIELD_BLANKLINE) {
                     bLastIsBlank = true;
@@ -234,7 +242,7 @@ namespace KohaQuick {
             msg += $" Other font: {settings.FontFamilyOther} {settings.FontSizeOther} {settings.LineSpacingOther.ToString()};";
             msg += $" Fields: ";
             string strFields = "";
-            foreach (string field in settings.Fields) {
+            foreach (string field in settings.HoldFields) {
                 if (strFields.Length > 0) {
                     strFields += ", ";
                 }

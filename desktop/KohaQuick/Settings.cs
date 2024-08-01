@@ -42,7 +42,9 @@ namespace KohaQuick {
 
         public int UpperLeftY { get; set; } = 5;
 
-        public string[] Fields = new string[] { PrintImpl.FIELD_EXPDATE, PrintImpl.FIELD_PATRON,
+        // Configured list of fields we actually want to print on a hold slip.
+        // This is the default value, which can be overridden via the Settings dialog.
+        public string[] HoldFields = new string[] { PrintImpl.FIELD_EXPDATE, PrintImpl.FIELD_PATRON,
             PrintImpl.FIELD_CURRENTDATETIME, PrintImpl.FIELD_LIBRARY, PrintImpl.FIELD_BLANKLINE,
             PrintImpl.FIELD_TITLE, PrintImpl.FIELD_BARCODE,
             PrintImpl.FIELD_CALLNUMBER, PrintImpl.FIELD_BLANKLINE, PrintImpl.FIELD_BLANKLINE
