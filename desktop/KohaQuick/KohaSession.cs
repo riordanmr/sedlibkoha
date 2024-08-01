@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using OpenQA.Selenium.Interactions;
 
 
 namespace KohaQuick {
@@ -26,18 +27,51 @@ namespace KohaQuick {
         Unknown
     };
 
+    public class CheckoutItem {
+        //public string barcode { get; set; }
+        public string due_date { get; set; }
+        public string checkout_date { get; set; }
+        public string call_number { get; set; }
+        public string title { get; set; }
+
+        public override string ToString() {
+            return $"{{Title: {title}, Call number: {call_number}, Checked out: {checkout_date}, Due Date: {due_date}}}";
+        }
+    }
+
+    public class CheckoutItemCol {
+        public string patronFirstName { get; set; }
+        public string patronLastName { get; set; }
+        public List<CheckoutItem> items { get; set; } = new List<CheckoutItem>();
+
+        public override string ToString() {
+            var itemsInfo = string.Join(", ", items.Select(item => item.ToString()));
+            return $"Patron: {patronFirstName} {patronLastName}; {items.Count} Items: [{itemsInfo}]";
+        }
+
+        public void AddCheckout(string titleParm, string callNumberParm, string checkedOutOnParm, 
+            string due_dateParm) {
+            items.Add(new CheckoutItem {
+                title = titleParm,
+                call_number = callNumberParm,
+                checkout_date = checkedOutOnParm,
+                due_date = due_dateParm,
+            });
+        }
+    }
+
     // Represents a browser session to Koha.
     public class KohaSession {
         const int MAX_PAGE_WAIT_SECS = 7;
-        public IWebDriver driver1;
+        public IWebDriver driver;
         public WebDriverWait wait1;
         public int sessionNum;
 
         public KohaSession(int sessNum) {
             sessionNum = sessNum;
-            driver1 = CreateWebDriver();
+            driver = CreateWebDriver();
             // Initialize WebDriverWait with a timeout.
-            wait1 = new WebDriverWait(driver1, TimeSpan.FromSeconds(MAX_PAGE_WAIT_SECS));
+            wait1 = new WebDriverWait(driver, TimeSpan.FromSeconds(MAX_PAGE_WAIT_SECS));
         }
 
         void ShowMsg(string msg) {
@@ -94,14 +128,14 @@ namespace KohaQuick {
 
         void WaitForPageToLoad() {
             // Wait for the page to load completely by checking the document's ready state
-            WebDriverWait wait = new WebDriverWait(driver1, TimeSpan.FromSeconds(MAX_PAGE_WAIT_SECS));
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MAX_PAGE_WAIT_SECS));
             wait.Until(driver => ((IJavaScriptExecutor)driver).
                ExecuteScript("return document.readyState").Equals("complete"));
         }
 
         IWebElement WaitForElement(By by) {
             try {
-                WebDriverWait wait = new WebDriverWait(driver1, TimeSpan.FromSeconds(MAX_PAGE_WAIT_SECS));
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MAX_PAGE_WAIT_SECS));
                 return wait.Until(ExpectedConditions.ElementIsVisible(by));
             } catch (WebDriverTimeoutException) {
                 return null;
@@ -111,7 +145,7 @@ namespace KohaQuick {
 
         string GetTitle() {
             // Find all h3 elements
-            IReadOnlyCollection<IWebElement> h3Elements = driver1.FindElements(By.TagName("h3"));
+            IReadOnlyCollection<IWebElement> h3Elements = driver.FindElements(By.TagName("h3"));
 
             foreach (IWebElement h3 in h3Elements) {
                 // Check if the h3 element's text includes "Hold found".
@@ -134,27 +168,27 @@ namespace KohaQuick {
             bool bOK = false;
             errmsg = string.Empty;
             try {
-                driver1.Navigate().GoToUrl(url);
+                driver.Navigate().GoToUrl(url);
                 WaitForPageToLoad();
 
                 IWebElement userIdInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Id("userid")));
                 // Enter the username into the input element
                 userIdInput.SendKeys(username);
 
-                IWebElement passwordInput = driver1.FindElement(By.Id("password"));
+                IWebElement passwordInput = driver.FindElement(By.Id("password"));
                 passwordInput.SendKeys(password);
 
-                IWebElement submitButton = driver1.FindElement(By.Id("submit-button"));
+                IWebElement submitButton = driver.FindElement(By.Id("submit-button"));
                 submitButton.Click();
 
                 WaitForPageToLoad();
 
                 // Check if the page contains the text "Invalid username or password"
-                if (driver1.PageSource.Contains("Invalid username or password")) {
+                if (driver.PageSource.Contains("Invalid username or password")) {
                     //MessageBox.Show("Invalid username or password. Please correct and try again.",
                     //    "Login failure", MessageBoxButtons.OK);
                     errmsg = "Invalid username or password";
-                } else if(driver1.PageSource.Contains("You do not have permission")) {
+                } else if(driver.PageSource.Contains("You do not have permission")) {
                     errmsg = "You do not have permission to access this page";
                 } else {
                     bOK = true; // Login successful
@@ -175,7 +209,7 @@ namespace KohaQuick {
             try {
                 LogoutPatron();
 
-                driver1.Navigate().GoToUrl(url);
+                driver.Navigate().GoToUrl(url);
                 WaitForPageToLoad();
 
                 // Bizarrely, the patron login page has two similar login forms, one
@@ -184,31 +218,31 @@ namespace KohaQuick {
                 // Enter the username into the input element
                 userIdInput.SendKeys(username);
 
-                IWebElement passwordInput = driver1.FindElement(By.Id("password"));
+                IWebElement passwordInput = driver.FindElement(By.Id("password"));
                 passwordInput.SendKeys(password);
 
                 // Find the correct Log in button. This was difficult to figure out!
-                IWebElement submitButton = driver1.FindElement(By.CssSelector(
+                IWebElement submitButton = driver.FindElement(By.CssSelector(
                     ".local-login:nth-child(2) .btn"));
                 submitButton.Click();
 
                 WaitForPageToLoad();
                 Thread.Sleep(1000);
 
-                ShowMsg($"After click on Log in : {driver1.PageSource}");
+                ShowMsg($"After click on Log in : {driver.PageSource}");
 
                 // Check if the page contains the text "Invalid username or password"
-                if (driver1.PageSource.Contains("Invalid username or password") ||
-                    driver1.PageSource.Contains("incorrect username or password")) {
+                if (driver.PageSource.Contains("Invalid username or password") ||
+                    driver.PageSource.Contains("incorrect username or password")) {
                     //MessageBox.Show("Invalid username or password. Please correct and try again.",
                     //    "Login failure", MessageBoxButtons.OK);
                     errmsg = "Incorrect user barcode or PIN";
                     loginStatus = LoginStatus.Failure;
-                } else if (driver1.PageSource.Contains("You do not have permission")) {
+                } else if (driver.PageSource.Contains("You do not have permission")) {
                     errmsg = "You do not have permission to access this page";
                     loginStatus = LoginStatus.Failure;
-                } else if (driver1.PageSource.Contains("Your summary") ||
-                    driver1.PageSource.Contains("Welcome, ")) {
+                } else if (driver.PageSource.Contains("Your summary") ||
+                    driver.PageSource.Contains("Welcome, ")) {
                     // Check for text confirming that we logged in OK.
                     //ShowMsg($"Looking for successful login");
                     //IWebElement summaryHeader = wait1.Until(ExpectedConditions.ElementIsVisible(
@@ -216,7 +250,7 @@ namespace KohaQuick {
                     loginStatus = LoginStatus.Success;
                 } else {
                     errmsg = "I don't recognize this page. See debug log.";
-                    ShowMsg($"LoginPatron doesn't recognize this page: {driver1.PageSource}");
+                    ShowMsg($"LoginPatron doesn't recognize this page: {driver.PageSource}");
                     loginStatus = LoginStatus.Unknown;
                 }
             } catch (Exception ex) {
@@ -231,7 +265,7 @@ namespace KohaQuick {
 
         public void LogoutStaff() {
             string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/mainpage.pl?logout.x=1";
-            driver1.Navigate().GoToUrl(url);
+            driver.Navigate().GoToUrl(url);
             try {
                 WaitForPageToLoad();
                 wait1.Until((driver) => ((IJavaScriptExecutor)driver).
@@ -243,7 +277,7 @@ namespace KohaQuick {
 
         public void LogoutPatron() {
             string url = Program.FormMain.settings.KohaUrlPatron + "/cgi-bin/koha/opac-main.pl?logout.x=1";
-            driver1.Navigate().GoToUrl(url);
+            driver.Navigate().GoToUrl(url);
             try {
                 WaitForPageToLoad();
                 wait1.Until((driver) => ((IJavaScriptExecutor)driver).
@@ -254,7 +288,23 @@ namespace KohaQuick {
         }
 
         public bool AtUrl(string url) {
-            return url == driver1.Url;
+            return url == driver.Url;
+        }
+
+        public bool EnsureAtUrl(string url) {
+            bool bOK = false;
+            if (AtUrl(url)) {
+                bOK = true;
+            } else {
+                driver.Navigate().GoToUrl(url);
+                try {
+                    WaitForPageToLoad();
+                    bOK = true;
+                } catch (Exception ex) {
+                    ShowMsg($"Logout patron: {ex.Message}");
+                }
+            }
+            return bOK;
         }
 
         public void TrapHold(string barcode, ref HoldSlip holdSlip,
@@ -266,7 +316,7 @@ namespace KohaQuick {
             holdSlip.Currentdatetime = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
             try {
                 if (!AtUrl(url)) {
-                    driver1.Navigate().GoToUrl(url);
+                    driver.Navigate().GoToUrl(url);
                     // Wait for the page to load completely by checking the document's ready state
                     wait1.Until((driver) => ((IJavaScriptExecutor)driver).
                         ExecuteScript("return document.readyState").Equals("complete"));
@@ -295,7 +345,7 @@ namespace KohaQuick {
                 // Look for a hold that needs to be transferred to another branch.
                 try {
                     ShowMsg("Looking for Transfer to:, one time");
-                    webElement = driver1.FindElement(By.XPath(
+                    webElement = driver.FindElement(By.XPath(
                         "//h4[strong[contains(text(), 'Transfer to:')]]"));
                     // If we get here, the element exists, but it might not be visible yet.
                     // We don't do the wait Until first, because the element might not exist
@@ -339,7 +389,7 @@ namespace KohaQuick {
                     try {
                         // Look for an element like:  <h4><strong>Hold at</strong> Franklin</h4>
                         // This didn't work; apparently the element existed but wasn't yet visible.
-                        webElement = driver1.FindElement(By.XPath(
+                        webElement = driver.FindElement(By.XPath(
                             "//h4[strong[contains(text(), 'Hold at')]]"));
                         webElement = wait1.Until(ExpectedConditions.ElementIsVisible(By.XPath(
                             "//h4[strong[contains(text(), 'Hold at')]]")));
@@ -372,7 +422,7 @@ namespace KohaQuick {
                 // Look for a message indicating no such item exists.
                 if (status == TrapHoldItemStatus.None) {
                     try {
-                        webElement = driver1.FindElement(By.XPath(
+                        webElement = driver.FindElement(By.XPath(
                             "//p[contains(@class, 'problem ret_badbarcode') and contains(text(), 'No item with barcode:')]"));
                         status = TrapHoldItemStatus.NoSuchItem;
                     } catch (NoSuchElementException) {
@@ -387,7 +437,7 @@ namespace KohaQuick {
 
                     // Find the title of the item.
                     // Find the h3 element containing the text "Check in message"
-                    var h3Element = driver1.FindElement(By.XPath("//h3[contains(text(), 'Check in message')]"));
+                    var h3Element = driver.FindElement(By.XPath("//h3[contains(text(), 'Check in message')]"));
 
                     if (h3Element != null) {
                         // Find the first p element following the h3 element
@@ -423,7 +473,7 @@ namespace KohaQuick {
             bool bOK = false;
             string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/circ/waitingreserves.pl";
             if (!AtUrl(url)) {
-                driver1.Navigate().GoToUrl(url);
+                driver.Navigate().GoToUrl(url);
                 WaitForPageToLoad();
             }
 
@@ -432,7 +482,7 @@ namespace KohaQuick {
                     ShowMsg("Refreshing waiting reserves page...");
 
                     // Refresh the page
-                    driver1.Navigate().Refresh();
+                    driver.Navigate().Refresh();
                     WaitForPageToLoad();
 
                     IWebElement inputBox = WaitForElement(By.CssSelector(
@@ -527,11 +577,67 @@ namespace KohaQuick {
             return bOK;
         }
 
+        public bool GetItemsCheckedOutForPatron(string url, string barcode, 
+            ref CheckoutItemCol checkoutItemCol, out string errmsg) {
+            bool bOK = false;
+            errmsg = "";
+
+            try {
+                EnsureAtUrl(url);
+
+                driver.FindElement(By.Id("findborrower")).SendKeys(barcode);
+                driver.FindElement(By.CssSelector("#patronsearch > button > .fa")).Click();
+                // Locate the span element with class 'checkout_count'
+                IWebElement spanElement = driver.FindElement(By.ClassName("checkout_count"));
+
+                // Fetch the text of the span element
+                string spanText = spanElement.Text;
+                ShowMsg($"Checkout count: {spanText}");
+                if(spanText == "0") {
+                    errmsg = "No items checked out to this patron";
+                    return false;
+                }
+                driver.FindElement(By.Id("issues-table-load-now-button")).Click();
+                {
+                    var element = driver.FindElement(By.CssSelector(".buttons-colvis"));
+                    Actions builder = new Actions(driver);
+                    builder.MoveToElement(element).Perform();
+                }
+                {
+                    var element = driver.FindElement(By.TagName("body"));
+                    Actions builder = new Actions(driver);
+                    builder.MoveToElement(element, 0, 0).Perform();
+                }
+                {
+                    var element = driver.FindElement(By.CssSelector(".export_controls"));
+                    Actions builder = new Actions(driver);
+                    builder.MoveToElement(element).Perform();
+                }
+                {
+                    var element = driver.FindElement(By.TagName("body"));
+                    Actions builder = new Actions(driver);
+                    builder.MoveToElement(element, 0, 0).Perform();
+                }
+                driver.FindElement(By.CssSelector(".export_controls .dt-button-text")).Click();
+                driver.FindElement(By.CssSelector(".buttons-csv > span")).Click();
+
+                string foundFilePath;
+                if (Util.FindRecentDownloadedFile("Checking out*.csv", 10000, out foundFilePath)) {
+                    ShowMsg($"Found {foundFilePath}");
+                    bOK = Util.ParseCheckedOutCSV(foundFilePath, ref checkoutItemCol, out errmsg);
+                }
+            } catch(Exception ex) {
+                ShowMsg($"GetItemsCheckedOutForPatron: {ex.Message}");
+                errmsg = ex.Message;
+            }
+            return bOK;
+        }
+
 
         public void Close() {
             try {
-                driver1.Close();
-                driver1.Quit();
+                driver.Close();
+                driver.Quit();
             } catch (Exception) {
                 // Ignore
             }

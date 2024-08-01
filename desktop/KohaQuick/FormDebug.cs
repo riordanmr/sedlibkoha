@@ -29,7 +29,7 @@ namespace KohaQuick {
         }
 
         public void AddDebugLine(string msg) {
-            string stamp = DateTime.Now.ToString("HH:mm:ss");
+            string stamp = DateTime.Now.ToString("HH:mm:ss.ff");
             textBoxMsgs.AppendText($"{stamp} {msg}\r\n");
             // Move the caret to the end of the text.
             textBoxMsgs.SelectionStart = textBoxMsgs.TextLength;

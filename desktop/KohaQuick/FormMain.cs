@@ -2,10 +2,8 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace KohaQuick
-{
-    public partial class FormMain : Form
-    {
+namespace KohaQuick {
+    public partial class FormMain : Form {
         public Settings settings;
         public Creds creds;
         public KohaSession session1, session2, sessionPIN;
@@ -51,16 +49,18 @@ namespace KohaQuick
 
         private void FormMain_Shown(object sender, EventArgs e) {
             session1 = new KohaSession(1);
-            session2 = new KohaSession(2);
-            Program.FormDebug.WindowState = FormWindowState.Minimized;
+            //ToDo: restore this for production.
+            //Program.FormDebug.WindowState = FormWindowState.Minimized;
             Program.FormDebug.Show();
             ShowLoginDialog();
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e) {
             session1.Close();
-            session2.Close();
-            if(null != sessionPIN) {
+            if (null != session2) {
+                session2.Close();
+            }
+            if (null != sessionPIN) {
                 sessionPIN.Close();
             }
         }
@@ -119,44 +119,56 @@ namespace KohaQuick
             textBoxBarcodeMsg.Text = $"Barcode scanned: {barcode}";
             textBoxItemBarcode.Text = string.Empty;
             textBoxTitleMsg.Text = string.Empty;
-            if (barcode.Length == 0) {
-                textBoxTrapMsg.Text = "You must enter a barcode";
-            } else {
-                textBoxTrapMsg.Text = $"Looking up {barcode}";
-                string message = String.Empty;
-                HoldSlip holdSlip = new HoldSlip();
-                session1.TrapHold(barcode, ref holdSlip, out status, out message);
-                textBoxTrapMsg.Text = status.ToString();
-
-                if (status == TrapHoldItemStatus.HoldFoundLocal) {
-                    textBoxTitleMsg.Text = holdSlip.Title;
-                    textBoxTrapMsg.Text = "Local hold found; gathering info for hold slip";
-                    holdSlip.Barcode = barcode;
-                    if (session2.GetInfoOnTrappedItem(barcode, ref holdSlip)) {
-                        textBoxTrapMsg.Text = "Printing hold slip";
-                        printImpl.holdSlip = holdSlip;
-                        printImpl.PrintSlip();
-                    } else {
-                        textBoxTrapMsg.Text = "Error getting hold slip info";
-                    }
-                } else if (status == TrapHoldItemStatus.HoldFoundTransfer) {
-                    textBoxTitleMsg.Text = holdSlip.Title;
-                    string msg = $"Transfer to {holdSlip.Library}";
-                    if (holdSlip.Library == "SPL in the Village") {
-                        msg += " (DOWNWIND)";
-                    } else {
-                        msg += " (TRANSFER)";
-                    }
-                    textBoxTrapMsg.Text = msg;
-                } else if (status == TrapHoldItemStatus.NoSuchItem) {
-                    textBoxTrapMsg.Text = "No such item found.";
-                } else if (status == TrapHoldItemStatus.NoHold) {
-                    textBoxTitleMsg.Text = message;
-                    textBoxTrapMsg.Text = "No holds found for " + message;
+            do {
+                if (barcode.Length == 0) {
+                    textBoxTrapMsg.Text = "You must enter a barcode";
                 } else {
-                    textBoxTrapMsg.Text = "Error. See debug log or Chrome windows for more info.";
+                    textBoxTrapMsg.Text = $"Looking up {barcode}";
+                    string message = String.Empty;
+                    HoldSlip holdSlip = new HoldSlip();
+                    session1.TrapHold(barcode, ref holdSlip, out status, out message);
+                    textBoxTrapMsg.Text = status.ToString();
+
+                    if (status == TrapHoldItemStatus.HoldFoundLocal) {
+                        textBoxTitleMsg.Text = holdSlip.Title;
+                        textBoxTrapMsg.Text = "Local hold found; gathering info for hold slip";
+                        holdSlip.Barcode = barcode;
+                        if (null == session2) {
+                            session2 = new KohaSession(2);
+                            string errmsg = "";
+                            if (!Program.FormMain.session2.LoginStaff(Program.FormMain.settings.KohaUrlStaff,
+                                Program.FormMain.creds.KohaUsername,
+                                Program.FormMain.creds.KohaPassword, out errmsg)) {
+                                textBoxTrapMsg.Text = "Error logging in to staff session 2";
+                                break;
+                            }
+                        }
+                        if (session2.GetInfoOnTrappedItem(barcode, ref holdSlip)) {
+                            textBoxTrapMsg.Text = "Printing hold slip";
+                            printImpl.holdSlip = holdSlip;
+                            printImpl.PrintSlip();
+                        } else {
+                            textBoxTrapMsg.Text = "Error getting hold slip info";
+                        }
+                    } else if (status == TrapHoldItemStatus.HoldFoundTransfer) {
+                        textBoxTitleMsg.Text = holdSlip.Title;
+                        string msg = $"Transfer to {holdSlip.Library}";
+                        if (holdSlip.Library == "SPL in the Village") {
+                            msg += " (DOWNWIND)";
+                        } else {
+                            msg += " (TRANSFER)";
+                        }
+                        textBoxTrapMsg.Text = msg;
+                    } else if (status == TrapHoldItemStatus.NoSuchItem) {
+                        textBoxTrapMsg.Text = "No such item found.";
+                    } else if (status == TrapHoldItemStatus.NoHold) {
+                        textBoxTitleMsg.Text = message;
+                        textBoxTrapMsg.Text = "No holds found for " + message;
+                    } else {
+                        textBoxTrapMsg.Text = "Error. See debug log or Chrome windows for more info.";
+                    }
                 }
-            }
+            } while (false);
         }
 
         public void OnPrintJobComplete() {
@@ -222,13 +234,13 @@ namespace KohaQuick
             patron.password = this.textBoxPIN.Text;
             patron.category_id = "AD";
 
-            if(textBoxPIN.Text != textBoxPIN2.Text) {
+            if (textBoxPIN.Text != textBoxPIN2.Text) {
                 MessageBox.Show("PINs do not match!");
                 return;
             }
             string errmsg = "";
             bool bOK = kohaRESTAPI.AddPatron(patron, out errmsg);
-            if(bOK) {
+            if (bOK) {
                 textBoxAddPatronMsg.Text = "Patron added successfully.";
             } else {
                 textBoxAddPatronMsg.Text = "Error adding patron:\r\n" + errmsg;
@@ -260,11 +272,14 @@ namespace KohaQuick
 
         private void buttonPrintItemsCheckedOut_Click(object sender, EventArgs e) {
             string errmsg = "";
-            Object []aryItemInfo = null;
             string cardnumber = this.textBoxPatronBarcodeForReceipt.Text.Trim();
-            CheckoutInfo checkoutInfo = new CheckoutInfo();
-            bool bOK = kohaRESTAPI.GetItemsCheckedOutTodayForPatron(cardnumber,
-                ref checkoutInfo, out errmsg);
+            textBoxPrintCheckoutMsg.Text = $"Searching for patron with barcode {cardnumber}";
+            this.textBoxPatronBarcodeForReceipt.Text = "";
+            CheckoutItemCol checkoutItemCol = new CheckoutItemCol();
+            string url = settings.KohaUrlStaff + "/cgi-bin/koha/circ/circulation-home.pl";
+            bool bOK = session1.GetItemsCheckedOutForPatron(url, cardnumber, 
+                ref checkoutItemCol, out errmsg);
+            ShowMsg($"GetItemsCheckedOutForPatron ret {bOK}: {checkoutItemCol}");
             if (bOK) {
 
             } else {
@@ -280,13 +295,13 @@ namespace KohaQuick
             }
             string errmsg = "";
             textBoxPatronPINMsg.Text = errmsg;
-            LoginStatus loginStatus = sessionPIN.LoginPatron(settings.KohaUrlPatron, textBoxPatronBarcode.Text, 
+            LoginStatus loginStatus = sessionPIN.LoginPatron(settings.KohaUrlPatron, textBoxPatronBarcode.Text,
                 textBoxPatronPIN.Text, out errmsg);
             if (loginStatus == LoginStatus.Success) {
                 textBoxPatronPINMsg.Text = "PIN is correct.";
-            } else if(loginStatus == LoginStatus.Failure) {
+            } else if (loginStatus == LoginStatus.Failure) {
                 textBoxPatronPINMsg.Text = "Incorrect PIN!\r\n" + errmsg;
-            } else if(loginStatus == LoginStatus.Unknown) {
+            } else if (loginStatus == LoginStatus.Unknown) {
                 textBoxPatronPINMsg.Text = "Unknown error logging in!\r\n" + errmsg;
             } else {
                 textBoxPatronPINMsg.Text = "Internal error logging in!\r\n" + errmsg;
@@ -296,8 +311,10 @@ namespace KohaQuick
 
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e) {
             session1.LogoutStaff();
-            session2.LogoutStaff();
-            if(null != sessionPIN) {
+            if (null != session2) {
+                session2.LogoutStaff();
+            }
+            if (null != sessionPIN) {
                 sessionPIN.LogoutPatron();
             }
         }
