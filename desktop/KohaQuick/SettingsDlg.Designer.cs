@@ -65,29 +65,41 @@
             this.textBoxStaffURL = new System.Windows.Forms.TextBox();
             this.labelPatronURL = new System.Windows.Forms.Label();
             this.labelStaffURL = new System.Windows.Forms.Label();
-            this.tabPagePrint = new System.Windows.Forms.TabPage();
+            this.tabPagePrintHolds = new System.Windows.Forms.TabPage();
             this.tabPageBrowser = new System.Windows.Forms.TabPage();
-            this.groupBoxBrowser = new System.Windows.Forms.GroupBox();
-            this.labelBrowserWidth = new System.Windows.Forms.Label();
-            this.labelBrowserX = new System.Windows.Forms.Label();
-            this.labelBrowserHeight = new System.Windows.Forms.Label();
-            this.textBoxBrowserWidth = new System.Windows.Forms.TextBox();
-            this.textBoxBrowserHeight = new System.Windows.Forms.TextBox();
-            this.textBoxBrowserX = new System.Windows.Forms.TextBox();
             this.groupBoxInitialBrowserState = new System.Windows.Forms.GroupBox();
-            this.radioButtonBrowserNormal = new System.Windows.Forms.RadioButton();
-            this.radioButtonBrowserHidden = new System.Windows.Forms.RadioButton();
             this.radioButtonBrowserMinimized = new System.Windows.Forms.RadioButton();
+            this.radioButtonBrowserHidden = new System.Windows.Forms.RadioButton();
+            this.radioButtonBrowserNormal = new System.Windows.Forms.RadioButton();
+            this.groupBoxBrowser = new System.Windows.Forms.GroupBox();
+            this.textBoxBrowserX = new System.Windows.Forms.TextBox();
+            this.textBoxBrowserHeight = new System.Windows.Forms.TextBox();
+            this.textBoxBrowserWidth = new System.Windows.Forms.TextBox();
+            this.labelBrowserHeight = new System.Windows.Forms.Label();
+            this.labelBrowserX = new System.Windows.Forms.Label();
+            this.labelBrowserWidth = new System.Windows.Forms.Label();
+            this.tabPagePrintCheckouts = new System.Windows.Forms.TabPage();
+            this.buttonCheckoutFieldDown = new System.Windows.Forms.Button();
+            this.buttonCheckoutFieldUp = new System.Windows.Forms.Button();
+            this.buttonCheckoutFieldRemove = new System.Windows.Forms.Button();
+            this.buttonCheckoutFieldAdd = new System.Windows.Forms.Button();
+            this.listBoxCheckoutFieldsActual = new System.Windows.Forms.ListBox();
+            this.listBoxCheckoutFieldsAvailable = new System.Windows.Forms.ListBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.labelCheckoutConfigured = new System.Windows.Forms.Label();
+            this.labelCheckoutAvailable = new System.Windows.Forms.Label();
             this.groupBoxFontPatron.SuspendLayout();
             this.groupBoxFontOther.SuspendLayout();
             this.groupBoxFields.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
             this.tabPageURLs.SuspendLayout();
             this.groupBoxURLs.SuspendLayout();
-            this.tabPagePrint.SuspendLayout();
+            this.tabPagePrintHolds.SuspendLayout();
             this.tabPageBrowser.SuspendLayout();
-            this.groupBoxBrowser.SuspendLayout();
             this.groupBoxInitialBrowserState.SuspendLayout();
+            this.groupBoxBrowser.SuspendLayout();
+            this.tabPagePrintCheckouts.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonFontPatron
@@ -381,8 +393,9 @@
             // tabControlSettings
             // 
             this.tabControlSettings.Controls.Add(this.tabPageURLs);
-            this.tabControlSettings.Controls.Add(this.tabPagePrint);
+            this.tabControlSettings.Controls.Add(this.tabPagePrintHolds);
             this.tabControlSettings.Controls.Add(this.tabPageBrowser);
+            this.tabControlSettings.Controls.Add(this.tabPagePrintCheckouts);
             this.tabControlSettings.Location = new System.Drawing.Point(12, 1);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
@@ -447,28 +460,28 @@
             this.labelStaffURL.Text = "Staff URL:";
             this.labelStaffURL.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // tabPagePrint
+            // tabPagePrintHolds
             // 
-            this.tabPagePrint.Controls.Add(this.labelPrinter);
-            this.tabPagePrint.Controls.Add(this.groupBoxFields);
-            this.tabPagePrint.Controls.Add(this.groupBoxFontOther);
-            this.tabPagePrint.Controls.Add(this.groupBoxFontPatron);
-            this.tabPagePrint.Controls.Add(this.checkBoxPrintConfig);
-            this.tabPagePrint.Controls.Add(this.labelUpperLeft);
-            this.tabPagePrint.Controls.Add(this.labelComma);
-            this.tabPagePrint.Controls.Add(this.textBoxX);
-            this.tabPagePrint.Controls.Add(this.textBoxPageWidth);
-            this.tabPagePrint.Controls.Add(this.textBoxY);
-            this.tabPagePrint.Controls.Add(this.labelPageWidth);
-            this.tabPagePrint.Controls.Add(this.buttonPrinter);
-            this.tabPagePrint.Controls.Add(this.checkBoxPrintToPDF);
-            this.tabPagePrint.Location = new System.Drawing.Point(8, 39);
-            this.tabPagePrint.Name = "tabPagePrint";
-            this.tabPagePrint.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePrint.Size = new System.Drawing.Size(1194, 707);
-            this.tabPagePrint.TabIndex = 1;
-            this.tabPagePrint.Text = "Print";
-            this.tabPagePrint.UseVisualStyleBackColor = true;
+            this.tabPagePrintHolds.Controls.Add(this.labelPrinter);
+            this.tabPagePrintHolds.Controls.Add(this.groupBoxFields);
+            this.tabPagePrintHolds.Controls.Add(this.groupBoxFontOther);
+            this.tabPagePrintHolds.Controls.Add(this.groupBoxFontPatron);
+            this.tabPagePrintHolds.Controls.Add(this.checkBoxPrintConfig);
+            this.tabPagePrintHolds.Controls.Add(this.labelUpperLeft);
+            this.tabPagePrintHolds.Controls.Add(this.labelComma);
+            this.tabPagePrintHolds.Controls.Add(this.textBoxX);
+            this.tabPagePrintHolds.Controls.Add(this.textBoxPageWidth);
+            this.tabPagePrintHolds.Controls.Add(this.textBoxY);
+            this.tabPagePrintHolds.Controls.Add(this.labelPageWidth);
+            this.tabPagePrintHolds.Controls.Add(this.buttonPrinter);
+            this.tabPagePrintHolds.Controls.Add(this.checkBoxPrintToPDF);
+            this.tabPagePrintHolds.Location = new System.Drawing.Point(8, 39);
+            this.tabPagePrintHolds.Name = "tabPagePrintHolds";
+            this.tabPagePrintHolds.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagePrintHolds.Size = new System.Drawing.Size(1194, 707);
+            this.tabPagePrintHolds.TabIndex = 1;
+            this.tabPagePrintHolds.Text = "Print Holds";
+            this.tabPagePrintHolds.UseVisualStyleBackColor = true;
             // 
             // tabPageBrowser
             // 
@@ -480,6 +493,51 @@
             this.tabPageBrowser.TabIndex = 2;
             this.tabPageBrowser.Text = "Browser";
             this.tabPageBrowser.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxInitialBrowserState
+            // 
+            this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserMinimized);
+            this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserHidden);
+            this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserNormal);
+            this.groupBoxInitialBrowserState.Location = new System.Drawing.Point(17, 211);
+            this.groupBoxInitialBrowserState.Name = "groupBoxInitialBrowserState";
+            this.groupBoxInitialBrowserState.Size = new System.Drawing.Size(1152, 160);
+            this.groupBoxInitialBrowserState.TabIndex = 1;
+            this.groupBoxInitialBrowserState.TabStop = false;
+            this.groupBoxInitialBrowserState.Text = "Initial Browser State";
+            // 
+            // radioButtonBrowserMinimized
+            // 
+            this.radioButtonBrowserMinimized.AutoSize = true;
+            this.radioButtonBrowserMinimized.Location = new System.Drawing.Point(32, 76);
+            this.radioButtonBrowserMinimized.Name = "radioButtonBrowserMinimized";
+            this.radioButtonBrowserMinimized.Size = new System.Drawing.Size(457, 29);
+            this.radioButtonBrowserMinimized.TabIndex = 1;
+            this.radioButtonBrowserMinimized.TabStop = true;
+            this.radioButtonBrowserMinimized.Text = "Minimized (do not use; under development)";
+            this.radioButtonBrowserMinimized.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonBrowserHidden
+            // 
+            this.radioButtonBrowserHidden.AutoSize = true;
+            this.radioButtonBrowserHidden.Location = new System.Drawing.Point(32, 113);
+            this.radioButtonBrowserHidden.Name = "radioButtonBrowserHidden";
+            this.radioButtonBrowserHidden.Size = new System.Drawing.Size(111, 29);
+            this.radioButtonBrowserHidden.TabIndex = 2;
+            this.radioButtonBrowserHidden.TabStop = true;
+            this.radioButtonBrowserHidden.Text = "Hidden";
+            this.radioButtonBrowserHidden.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonBrowserNormal
+            // 
+            this.radioButtonBrowserNormal.AutoSize = true;
+            this.radioButtonBrowserNormal.Location = new System.Drawing.Point(32, 39);
+            this.radioButtonBrowserNormal.Name = "radioButtonBrowserNormal";
+            this.radioButtonBrowserNormal.Size = new System.Drawing.Size(111, 29);
+            this.radioButtonBrowserNormal.TabIndex = 0;
+            this.radioButtonBrowserNormal.TabStop = true;
+            this.radioButtonBrowserNormal.Text = "Normal";
+            this.radioButtonBrowserNormal.UseVisualStyleBackColor = true;
             // 
             // groupBoxBrowser
             // 
@@ -496,14 +554,35 @@
             this.groupBoxBrowser.TabStop = false;
             this.groupBoxBrowser.Text = "Size and Position of Automated Browsers";
             // 
-            // labelBrowserWidth
+            // textBoxBrowserX
             // 
-            this.labelBrowserWidth.Location = new System.Drawing.Point(27, 39);
-            this.labelBrowserWidth.Name = "labelBrowserWidth";
-            this.labelBrowserWidth.Size = new System.Drawing.Size(104, 31);
-            this.labelBrowserWidth.TabIndex = 0;
-            this.labelBrowserWidth.Text = "Width:";
-            this.labelBrowserWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.textBoxBrowserX.Location = new System.Drawing.Point(146, 119);
+            this.textBoxBrowserX.Name = "textBoxBrowserX";
+            this.textBoxBrowserX.Size = new System.Drawing.Size(81, 31);
+            this.textBoxBrowserX.TabIndex = 5;
+            // 
+            // textBoxBrowserHeight
+            // 
+            this.textBoxBrowserHeight.Location = new System.Drawing.Point(146, 79);
+            this.textBoxBrowserHeight.Name = "textBoxBrowserHeight";
+            this.textBoxBrowserHeight.Size = new System.Drawing.Size(81, 31);
+            this.textBoxBrowserHeight.TabIndex = 3;
+            // 
+            // textBoxBrowserWidth
+            // 
+            this.textBoxBrowserWidth.Location = new System.Drawing.Point(146, 39);
+            this.textBoxBrowserWidth.Name = "textBoxBrowserWidth";
+            this.textBoxBrowserWidth.Size = new System.Drawing.Size(81, 31);
+            this.textBoxBrowserWidth.TabIndex = 1;
+            // 
+            // labelBrowserHeight
+            // 
+            this.labelBrowserHeight.Location = new System.Drawing.Point(16, 82);
+            this.labelBrowserHeight.Name = "labelBrowserHeight";
+            this.labelBrowserHeight.Size = new System.Drawing.Size(115, 25);
+            this.labelBrowserHeight.TabIndex = 2;
+            this.labelBrowserHeight.Text = "Height:";
+            this.labelBrowserHeight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // labelBrowserX
             // 
@@ -515,80 +594,119 @@
             this.labelBrowserX.Text = "X Position:";
             this.labelBrowserX.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // labelBrowserHeight
+            // labelBrowserWidth
             // 
-            this.labelBrowserHeight.Location = new System.Drawing.Point(16, 82);
-            this.labelBrowserHeight.Name = "labelBrowserHeight";
-            this.labelBrowserHeight.Size = new System.Drawing.Size(115, 25);
-            this.labelBrowserHeight.TabIndex = 2;
-            this.labelBrowserHeight.Text = "Height:";
-            this.labelBrowserHeight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelBrowserWidth.Location = new System.Drawing.Point(27, 39);
+            this.labelBrowserWidth.Name = "labelBrowserWidth";
+            this.labelBrowserWidth.Size = new System.Drawing.Size(104, 31);
+            this.labelBrowserWidth.TabIndex = 0;
+            this.labelBrowserWidth.Text = "Width:";
+            this.labelBrowserWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBoxBrowserWidth
+            // tabPagePrintCheckouts
             // 
-            this.textBoxBrowserWidth.Location = new System.Drawing.Point(146, 39);
-            this.textBoxBrowserWidth.Name = "textBoxBrowserWidth";
-            this.textBoxBrowserWidth.Size = new System.Drawing.Size(81, 31);
-            this.textBoxBrowserWidth.TabIndex = 1;
+            this.tabPagePrintCheckouts.Controls.Add(this.groupBox1);
+            this.tabPagePrintCheckouts.Location = new System.Drawing.Point(8, 39);
+            this.tabPagePrintCheckouts.Name = "tabPagePrintCheckouts";
+            this.tabPagePrintCheckouts.Size = new System.Drawing.Size(1194, 707);
+            this.tabPagePrintCheckouts.TabIndex = 3;
+            this.tabPagePrintCheckouts.Text = "Print Checkouts";
+            this.tabPagePrintCheckouts.UseVisualStyleBackColor = true;
             // 
-            // textBoxBrowserHeight
+            // buttonCheckoutFieldDown
             // 
-            this.textBoxBrowserHeight.Location = new System.Drawing.Point(146, 79);
-            this.textBoxBrowserHeight.Name = "textBoxBrowserHeight";
-            this.textBoxBrowserHeight.Size = new System.Drawing.Size(81, 31);
-            this.textBoxBrowserHeight.TabIndex = 3;
+            this.buttonCheckoutFieldDown.Location = new System.Drawing.Point(580, 255);
+            this.buttonCheckoutFieldDown.Name = "buttonCheckoutFieldDown";
+            this.buttonCheckoutFieldDown.Size = new System.Drawing.Size(37, 48);
+            this.buttonCheckoutFieldDown.TabIndex = 7;
+            this.buttonCheckoutFieldDown.Text = "↓";
+            this.buttonCheckoutFieldDown.UseVisualStyleBackColor = true;
+            this.buttonCheckoutFieldDown.Click += new System.EventHandler(this.buttonCheckoutFieldDown_Click);
             // 
-            // textBoxBrowserX
+            // buttonCheckoutFieldUp
             // 
-            this.textBoxBrowserX.Location = new System.Drawing.Point(146, 119);
-            this.textBoxBrowserX.Name = "textBoxBrowserX";
-            this.textBoxBrowserX.Size = new System.Drawing.Size(81, 31);
-            this.textBoxBrowserX.TabIndex = 5;
+            this.buttonCheckoutFieldUp.Location = new System.Drawing.Point(580, 150);
+            this.buttonCheckoutFieldUp.Name = "buttonCheckoutFieldUp";
+            this.buttonCheckoutFieldUp.Size = new System.Drawing.Size(37, 48);
+            this.buttonCheckoutFieldUp.TabIndex = 6;
+            this.buttonCheckoutFieldUp.Text = "↑";
+            this.buttonCheckoutFieldUp.UseVisualStyleBackColor = true;
+            this.buttonCheckoutFieldUp.Click += new System.EventHandler(this.buttonCheckoutFieldUp_Click);
             // 
-            // groupBoxInitialBrowserState
+            // buttonCheckoutFieldRemove
             // 
-            this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserMinimized);
-            this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserHidden);
-            this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserNormal);
-            this.groupBoxInitialBrowserState.Location = new System.Drawing.Point(17, 211);
-            this.groupBoxInitialBrowserState.Name = "groupBoxInitialBrowserState";
-            this.groupBoxInitialBrowserState.Size = new System.Drawing.Size(1152, 160);
-            this.groupBoxInitialBrowserState.TabIndex = 1;
-            this.groupBoxInitialBrowserState.TabStop = false;
-            this.groupBoxInitialBrowserState.Text = "Initial Browser State";
+            this.buttonCheckoutFieldRemove.Location = new System.Drawing.Point(258, 255);
+            this.buttonCheckoutFieldRemove.Name = "buttonCheckoutFieldRemove";
+            this.buttonCheckoutFieldRemove.Size = new System.Drawing.Size(52, 37);
+            this.buttonCheckoutFieldRemove.TabIndex = 3;
+            this.buttonCheckoutFieldRemove.Text = "←";
+            this.buttonCheckoutFieldRemove.UseVisualStyleBackColor = true;
+            this.buttonCheckoutFieldRemove.Click += new System.EventHandler(this.buttonCheckoutFieldRemove_Click);
             // 
-            // radioButtonBrowserNormal
+            // buttonCheckoutFieldAdd
             // 
-            this.radioButtonBrowserNormal.AutoSize = true;
-            this.radioButtonBrowserNormal.Location = new System.Drawing.Point(32, 39);
-            this.radioButtonBrowserNormal.Name = "radioButtonBrowserNormal";
-            this.radioButtonBrowserNormal.Size = new System.Drawing.Size(111, 29);
-            this.radioButtonBrowserNormal.TabIndex = 0;
-            this.radioButtonBrowserNormal.TabStop = true;
-            this.radioButtonBrowserNormal.Text = "Normal";
-            this.radioButtonBrowserNormal.UseVisualStyleBackColor = true;
+            this.buttonCheckoutFieldAdd.Location = new System.Drawing.Point(256, 150);
+            this.buttonCheckoutFieldAdd.Name = "buttonCheckoutFieldAdd";
+            this.buttonCheckoutFieldAdd.Size = new System.Drawing.Size(52, 37);
+            this.buttonCheckoutFieldAdd.TabIndex = 2;
+            this.buttonCheckoutFieldAdd.Text = "→";
+            this.buttonCheckoutFieldAdd.UseVisualStyleBackColor = true;
+            this.buttonCheckoutFieldAdd.Click += new System.EventHandler(this.buttonCheckoutFieldAdd_Click);
             // 
-            // radioButtonBrowserHidden
+            // listBoxCheckoutFieldsActual
             // 
-            this.radioButtonBrowserHidden.AutoSize = true;
-            this.radioButtonBrowserHidden.Location = new System.Drawing.Point(32, 113);
-            this.radioButtonBrowserHidden.Name = "radioButtonBrowserHidden";
-            this.radioButtonBrowserHidden.Size = new System.Drawing.Size(111, 29);
-            this.radioButtonBrowserHidden.TabIndex = 2;
-            this.radioButtonBrowserHidden.TabStop = true;
-            this.radioButtonBrowserHidden.Text = "Hidden";
-            this.radioButtonBrowserHidden.UseVisualStyleBackColor = true;
+            this.listBoxCheckoutFieldsActual.FormattingEnabled = true;
+            this.listBoxCheckoutFieldsActual.ItemHeight = 25;
+            this.listBoxCheckoutFieldsActual.Location = new System.Drawing.Point(332, 75);
+            this.listBoxCheckoutFieldsActual.Name = "listBoxCheckoutFieldsActual";
+            this.listBoxCheckoutFieldsActual.Size = new System.Drawing.Size(228, 329);
+            this.listBoxCheckoutFieldsActual.TabIndex = 5;
             // 
-            // radioButtonBrowserMinimized
+            // listBoxCheckoutFieldsAvailable
             // 
-            this.radioButtonBrowserMinimized.AutoSize = true;
-            this.radioButtonBrowserMinimized.Location = new System.Drawing.Point(32, 76);
-            this.radioButtonBrowserMinimized.Name = "radioButtonBrowserMinimized";
-            this.radioButtonBrowserMinimized.Size = new System.Drawing.Size(457, 29);
-            this.radioButtonBrowserMinimized.TabIndex = 1;
-            this.radioButtonBrowserMinimized.TabStop = true;
-            this.radioButtonBrowserMinimized.Text = "Minimized (do not use; under development)";
-            this.radioButtonBrowserMinimized.UseVisualStyleBackColor = true;
+            this.listBoxCheckoutFieldsAvailable.FormattingEnabled = true;
+            this.listBoxCheckoutFieldsAvailable.ItemHeight = 25;
+            this.listBoxCheckoutFieldsAvailable.Location = new System.Drawing.Point(6, 75);
+            this.listBoxCheckoutFieldsAvailable.Name = "listBoxCheckoutFieldsAvailable";
+            this.listBoxCheckoutFieldsAvailable.Size = new System.Drawing.Size(228, 329);
+            this.listBoxCheckoutFieldsAvailable.TabIndex = 1;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.buttonCheckoutFieldDown);
+            this.groupBox1.Controls.Add(this.buttonCheckoutFieldUp);
+            this.groupBox1.Controls.Add(this.labelCheckoutConfigured);
+            this.groupBox1.Controls.Add(this.labelCheckoutAvailable);
+            this.groupBox1.Controls.Add(this.buttonCheckoutFieldRemove);
+            this.groupBox1.Controls.Add(this.buttonCheckoutFieldAdd);
+            this.groupBox1.Controls.Add(this.listBoxCheckoutFieldsActual);
+            this.groupBox1.Controls.Add(this.listBoxCheckoutFieldsAvailable);
+            this.groupBox1.Location = new System.Drawing.Point(31, 26);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(623, 471);
+            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Fields";
+            // 
+            // labelCheckoutConfigured
+            // 
+            this.labelCheckoutConfigured.AutoSize = true;
+            this.labelCheckoutConfigured.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCheckoutConfigured.Location = new System.Drawing.Point(388, 34);
+            this.labelCheckoutConfigured.Name = "labelCheckoutConfigured";
+            this.labelCheckoutConfigured.Size = new System.Drawing.Size(127, 25);
+            this.labelCheckoutConfigured.TabIndex = 4;
+            this.labelCheckoutConfigured.Text = "Configured";
+            // 
+            // labelCheckoutAvailable
+            // 
+            this.labelCheckoutAvailable.AutoSize = true;
+            this.labelCheckoutAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCheckoutAvailable.Location = new System.Drawing.Point(63, 34);
+            this.labelCheckoutAvailable.Name = "labelCheckoutAvailable";
+            this.labelCheckoutAvailable.Size = new System.Drawing.Size(109, 25);
+            this.labelCheckoutAvailable.TabIndex = 0;
+            this.labelCheckoutAvailable.Text = "Available";
             // 
             // SettingsDlg
             // 
@@ -609,13 +727,16 @@
             this.tabPageURLs.ResumeLayout(false);
             this.groupBoxURLs.ResumeLayout(false);
             this.groupBoxURLs.PerformLayout();
-            this.tabPagePrint.ResumeLayout(false);
-            this.tabPagePrint.PerformLayout();
+            this.tabPagePrintHolds.ResumeLayout(false);
+            this.tabPagePrintHolds.PerformLayout();
             this.tabPageBrowser.ResumeLayout(false);
-            this.groupBoxBrowser.ResumeLayout(false);
-            this.groupBoxBrowser.PerformLayout();
             this.groupBoxInitialBrowserState.ResumeLayout(false);
             this.groupBoxInitialBrowserState.PerformLayout();
+            this.groupBoxBrowser.ResumeLayout(false);
+            this.groupBoxBrowser.PerformLayout();
+            this.tabPagePrintCheckouts.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -654,7 +775,7 @@
         private System.Windows.Forms.Button buttonFieldDown;
         private System.Windows.Forms.TabControl tabControlSettings;
         private System.Windows.Forms.TabPage tabPageURLs;
-        private System.Windows.Forms.TabPage tabPagePrint;
+        private System.Windows.Forms.TabPage tabPagePrintHolds;
         private System.Windows.Forms.GroupBox groupBoxURLs;
         private System.Windows.Forms.TextBox textBoxPatronURL;
         private System.Windows.Forms.TextBox textBoxStaffURL;
@@ -672,5 +793,15 @@
         private System.Windows.Forms.RadioButton radioButtonBrowserMinimized;
         private System.Windows.Forms.RadioButton radioButtonBrowserHidden;
         private System.Windows.Forms.RadioButton radioButtonBrowserNormal;
+        private System.Windows.Forms.TabPage tabPagePrintCheckouts;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button buttonCheckoutFieldDown;
+        private System.Windows.Forms.Button buttonCheckoutFieldUp;
+        private System.Windows.Forms.Label labelCheckoutConfigured;
+        private System.Windows.Forms.Label labelCheckoutAvailable;
+        private System.Windows.Forms.Button buttonCheckoutFieldRemove;
+        private System.Windows.Forms.Button buttonCheckoutFieldAdd;
+        private System.Windows.Forms.ListBox listBoxCheckoutFieldsActual;
+        private System.Windows.Forms.ListBox listBoxCheckoutFieldsAvailable;
     }
 }

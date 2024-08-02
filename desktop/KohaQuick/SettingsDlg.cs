@@ -26,6 +26,9 @@ namespace KohaQuick {
             this.listBoxFieldsAvailable.Items.AddRange(Program.FormMain.printImpl.GetHoldsFieldsAvailable());
             this.listBoxFieldsActual.Items.AddRange(Program.FormMain.printImpl.settings.HoldFields);
 
+            this.listBoxCheckoutFieldsAvailable.Items.AddRange(Program.FormMain.printImpl.GetCheckoutFieldsAvailable());
+            this.listBoxCheckoutFieldsActual.Items.AddRange(Program.FormMain.printImpl.settings.CheckoutItemFields);
+
             this.textBoxBrowserWidth.Text = Program.FormMain.settings.BrowserWidth.ToString();
             this.textBoxBrowserHeight.Text = Program.FormMain.settings.BrowserHeight.ToString();
             this.textBoxBrowserX.Text = Program.FormMain.settings.BrowserX.ToString();
@@ -167,12 +170,19 @@ namespace KohaQuick {
                 Program.FormMain.settings.BrowserWindowState = Settings.BROWSER_WINDOW_STATE_HIDDEN;
             }
 
-            // Save the configured print slip fields.
+            // Save the configured print hold slip fields.
             string[] fields = new string[this.listBoxFieldsActual.Items.Count];
             for (int i = 0; i < this.listBoxFieldsActual.Items.Count; i++) {
                 fields[i] = this.listBoxFieldsActual.Items[i].ToString();
             }
             Program.FormMain.printImpl.settings.HoldFields = fields;
+
+            // Save the configured print checkout fields.
+            fields = new string[this.listBoxCheckoutFieldsActual.Items.Count];
+            for (int i = 0; i < this.listBoxCheckoutFieldsActual.Items.Count; i++) {
+                fields[i] = this.listBoxCheckoutFieldsActual.Items[i].ToString();
+            }
+            Program.FormMain.printImpl.settings.CheckoutItemFields = fields;
 
             if (ok) {
                 Program.FormMain.printImpl.settings.Save();
@@ -224,6 +234,55 @@ namespace KohaQuick {
                 this.listBoxFieldsActual.Items.RemoveAt(index);
                 this.listBoxFieldsActual.Items.Insert(index + 1, item);
                 this.listBoxFieldsActual.SelectedIndex = index + 1;
+            }
+        }
+
+        private void buttonCheckoutFieldAdd_Click(object sender, EventArgs e) {
+            // Add the selected item from the Available list to the Actual list.
+            if (this.listBoxCheckoutFieldsAvailable.SelectedItem != null) {
+                object itemToAdd = this.listBoxCheckoutFieldsAvailable.SelectedItem;
+                int insertIndex = this.listBoxCheckoutFieldsActual.SelectedIndex;
+
+                // Check if there is a selected item in listBoxFieldsActual to insert after
+                if (insertIndex != -1) {
+                    // Insert right after the selected item
+                    this.listBoxCheckoutFieldsActual.Items.Insert(insertIndex + 1, itemToAdd);
+                } else {
+                    // No selection, add to the end of the list
+                    this.listBoxCheckoutFieldsActual.Items.Add(itemToAdd);
+                }
+            }
+
+        }
+
+        private void buttonCheckoutFieldRemove_Click(object sender, EventArgs e) {
+            // Remove the selected item from the Actual list.
+            if (this.listBoxCheckoutFieldsActual.SelectedIndex != -1) { // Check if an item is actually selected
+                this.listBoxCheckoutFieldsActual.Items.RemoveAt(this.listBoxCheckoutFieldsActual.SelectedIndex);
+            }
+        }
+
+        private void buttonCheckoutFieldUp_Click(object sender, EventArgs e) {
+            // Move the selected field down in the list.
+            if (this.listBoxCheckoutFieldsActual.SelectedIndex != -1 &&
+                this.listBoxCheckoutFieldsActual.SelectedIndex < this.listBoxCheckoutFieldsActual.Items.Count - 1) {
+                int index = this.listBoxCheckoutFieldsActual.SelectedIndex;
+                object item = this.listBoxCheckoutFieldsActual.SelectedItem;
+                this.listBoxCheckoutFieldsActual.Items.RemoveAt(index);
+                this.listBoxCheckoutFieldsActual.Items.Insert(index + 1, item);
+                this.listBoxCheckoutFieldsActual.SelectedIndex = index + 1;
+            }
+        }
+
+        private void buttonCheckoutFieldDown_Click(object sender, EventArgs e) {
+            // Move the selected field down in the list.
+            if (this.listBoxCheckoutFieldsActual.SelectedIndex != -1 &&
+                this.listBoxCheckoutFieldsActual.SelectedIndex < this.listBoxCheckoutFieldsActual.Items.Count - 1) {
+                int index = this.listBoxCheckoutFieldsActual.SelectedIndex;
+                object item = this.listBoxCheckoutFieldsActual.SelectedItem;
+                this.listBoxCheckoutFieldsActual.Items.RemoveAt(index);
+                this.listBoxCheckoutFieldsActual.Items.Insert(index + 1, item);
+                this.listBoxCheckoutFieldsActual.SelectedIndex = index + 1;
             }
         }
     }
