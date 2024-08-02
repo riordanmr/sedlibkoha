@@ -48,7 +48,11 @@ namespace KohaQuick {
             PrintImpl.FIELD_CURRENTDATETIME, PrintImpl.FIELD_LIBRARY, PrintImpl.FIELD_BLANKLINE,
             PrintImpl.FIELD_TITLE, PrintImpl.FIELD_BARCODE,
             PrintImpl.FIELD_CALLNUMBER, PrintImpl.FIELD_BLANKLINE, PrintImpl.FIELD_BLANKLINE
-            };
+        };
+
+        public string[] CheckoutItemFields = new string[] { PrintImpl.FIELD_TITLE,
+            PrintImpl.FIELD_DUEDATE, PrintImpl.FIELD_CALLNUMBER, PrintImpl.FIELD_BLANKLINE
+        };
 
         // Page width in pixels. On some printers, my calculation for page width
         // don't work, probably due to unit conversion problems.  So I allow this

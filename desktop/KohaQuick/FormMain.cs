@@ -171,8 +171,12 @@ namespace KohaQuick {
             } while (false);
         }
 
-        public void OnPrintJobComplete() {
+        public void OnHoldSlipPrintJobComplete() {
             textBoxTrapMsg.Text = "Hold slip printed.";
+        }
+
+        public void OnCheckoutSlipPrintJobComplete() {
+            textBoxPrintCheckoutMsg.Text = "Checkout slip printed.";
         }
 
         private void loginToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -273,17 +277,29 @@ namespace KohaQuick {
         private void buttonPrintItemsCheckedOut_Click(object sender, EventArgs e) {
             string errmsg = "";
             string cardnumber = this.textBoxPatronBarcodeForReceipt.Text.Trim();
-            textBoxPrintCheckoutMsg.Text = $"Searching for patron with barcode {cardnumber}";
-            this.textBoxPatronBarcodeForReceipt.Text = "";
-            CheckoutItemCol checkoutItemCol = new CheckoutItemCol();
-            string url = settings.KohaUrlStaff + "/cgi-bin/koha/circ/circulation-home.pl";
-            bool bOK = session1.GetItemsCheckedOutForPatron(url, cardnumber, 
-                ref checkoutItemCol, out errmsg);
-            ShowMsg($"GetItemsCheckedOutForPatron ret {bOK}: {checkoutItemCol}");
-            if (bOK) {
-
+            if (cardnumber.Length == 0) {
+                textBoxPrintCheckoutMsg.Text = "You must enter a patron library code barcode number";
             } else {
-                textBoxPrintCheckoutMsg.Text = errmsg;
+                textBoxPrintCheckoutMsg.Text = $"Searching for patron with barcode {cardnumber}";
+                this.textBoxPatronBarcodeForReceipt.Text = "";
+                CheckoutItemCol checkoutItemCol = new CheckoutItemCol();
+                string url = settings.KohaUrlStaff + "/cgi-bin/koha/circ/circulation-home.pl";
+                bool bOK = session1.GetItemsCheckedOutForPatron(url, cardnumber,
+                    ref checkoutItemCol, out errmsg);
+                ShowMsg($"GetItemsCheckedOutForPatron ret {bOK}: {checkoutItemCol}");
+                if (bOK) {
+                    if(this.checkBoxPrintOnlyItemsCheckedOutToday.Checked) {
+                        checkoutItemCol.RemoveCheckoutsNotToday();
+                    }
+                    if(checkoutItemCol.items.Count == 0) {
+                        textBoxPrintCheckoutMsg.Text = $"No items checked out today for {cardnumber}";
+                        return;
+                    }
+                    textBoxPrintCheckoutMsg.Text = $"Printing items checked out today for {cardnumber}";
+                    printImpl.PrintCheckoutSlip(checkoutItemCol);
+                } else {
+                    textBoxPrintCheckoutMsg.Text = errmsg;
+                }
             }
         }
 

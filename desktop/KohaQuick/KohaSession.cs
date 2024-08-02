@@ -58,6 +58,19 @@ namespace KohaQuick {
                 due_date = due_dateParm,
             });
         }
+
+
+        public void RemoveCheckoutsNotToday() {
+            int nItemsRemoved = 0;
+            string strToday = DateTime.Now.Date.ToString("MM/dd/yyyy");
+            for (int i = this.items.Count - 1; i >= 0; i--) {
+                if (this.items[i].checkout_date != strToday) {
+                    this.items.RemoveAt(i);
+                    nItemsRemoved++;
+                }
+            }
+            Program.FormMain.ShowMsg($"RemoveCheckoutsNotToday: Removed {nItemsRemoved} items");
+        }
     }
 
     // Represents a browser session to Koha.

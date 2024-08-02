@@ -63,8 +63,8 @@ namespace KohaQuick {
             FIELD_BLANKLINE};
         }
 
-        public string [] GetCheckoutFieldsAvailable() {
-            return new string[] { FIELD_TITLE, FIELD_CALLNUMBER, FIELD_DUEDATE, 
+        public string[] GetCheckoutFieldsAvailable() {
+            return new string[] { FIELD_TITLE, FIELD_CALLNUMBER, FIELD_DUEDATE,
             FIELD_CHECKOUTDATE, FIELD_BLANKLINE};
         }
 
@@ -87,7 +87,7 @@ namespace KohaQuick {
             // Handle the PrintPage event to specify what to print.
             printDocument.PrintPage += new PrintPageEventHandler(PrintHoldSlipHandler);
             // Handle the EndPrint event to determine when the print job has completed.
-            printDocument.EndPrint += new PrintEventHandler(PrintEndHandler);
+            printDocument.EndPrint += new PrintEventHandler(PrintHoldSlipEndHandler);
 
             try {
                 // Print the document.
@@ -148,7 +148,7 @@ namespace KohaQuick {
             // Handle the PrintPage event to specify what to print.
             printDocument.PrintPage += new PrintPageEventHandler(PrintCheckedOutSlipHandler);
             // Handle the EndPrint event to determine when the print job has completed.
-            printDocument.EndPrint += new PrintEventHandler(PrintEndHandler);
+            printDocument.EndPrint += new PrintEventHandler(PrintCheckoutSlipEndHandler);
 
             try {
                 // Print the document.
@@ -164,7 +164,19 @@ namespace KohaQuick {
             }
         }
 
-        private void PrintLine(string msg, PrintPageEventArgs e, Font font, float lineSpacing, int x, ref int y) {
+        /// <summary>
+        /// Print a line on the print page, wrapping it to fit the page width.
+        /// </summary>
+        /// <param name="msg">The line of text to print</param>
+        /// <param name="e">Object holding information about the print page</param>
+        /// <param name="font">The font to use</param>
+        /// <param name="lineSpacing">Line spacing relative to the font; 1.0 mean normal</param>
+        /// <param name="bIndent">true if the second and subsequent lines should be indented</param>
+        /// <param name="x">The x coordinate at which to start</param>
+        /// <param name="y">The y coordinate at which to start. On exit, this
+        ///     has been advanced.</param>
+        private void PrintWrappedLine(string msg, PrintPageEventArgs e, Font font, 
+            float lineSpacing, bool bIndent, int x, ref int y) {
             int printableWidthInPixels;
             if (settings.PageWidth > 0) {
                 // The user has specified a manual override for the page width.
@@ -178,19 +190,33 @@ namespace KohaQuick {
             int maxPrintableWidth = printableWidthInPixels - x;
             //ShowMsg($"MarginBounds.Width={e.MarginBounds.Width} dpiX={dpiX} printableWidthInPixels={printableWidthInPixels} maxPrintableWidth={maxPrintableWidth}");
             //ShowMsg($"MeasureString={e.Graphics.MeasureString(msg, font).Width}");
+            int pixelsIndent = 0;
+            if (bIndent) {
+                // Calculate the amount to indent the second and subsequent lines.
+                pixelsIndent = (int)(e.Graphics.MeasureString("M", font).Width);
+            }
             string thisLine = msg;
             bool bContinue;
+            int pixelsIndentThisLine = 0;
             do {
                 string thisPart = thisLine;
                 bContinue = false;
-                while ((int)e.Graphics.MeasureString(thisPart, font).Width > maxPrintableWidth) {
+                // Take increasingly smaller initial substrings of the line until it fits.
+                while ((int)e.Graphics.MeasureString(thisPart, font).Width > 
+                    maxPrintableWidth-pixelsIndentThisLine) {
                     thisPart = thisPart.Substring(0, thisPart.Length - 1);
                     bContinue = true;
                 }
-                e.Graphics.DrawString(thisPart, font, Brushes.Black, x, y);
+                e.Graphics.DrawString(thisPart, font, Brushes.Black, x+pixelsIndentThisLine, y);
                 y += (int)(lineSpacing * font.Height);
                 thisLine = thisLine.Substring(thisPart.Length);
+                pixelsIndentThisLine = pixelsIndent;
             } while (bContinue);
+        }
+
+        private void PrintLine(string msg, PrintPageEventArgs e, Font font,
+            float lineSpacing, int x, ref int y) {
+            PrintWrappedLine(msg, e, font, lineSpacing, false, x, ref y);
         }
 
         private void PrintHoldSlipHandler(object sender, PrintPageEventArgs e) {
@@ -264,13 +290,74 @@ namespace KohaQuick {
 
         private void PrintCheckedOutSlipHandler(object sender, PrintPageEventArgs e) {
             // This method is called when the print job is to print a list of checked-out items.
-            // This is not yet implemented.
+            int x = settings.UpperLeftX;
+            int y = settings.UpperLeftY;
+            Font fontOther = new Font(settings.FontFamilyOther, settings.FontSizeOther);
+            Font fontOtherBold = new Font(settings.FontFamilyOther, settings.FontSizeOther, FontStyle.Bold);
+
+            string msg;
+            bool bLastIsBlank = false;
+            foreach (CheckoutItem checkoutItem in checkoutItemCol.items) {
+                foreach (string field in settings.CheckoutItemFields) {
+                    bLastIsBlank = false;
+                    if (field == FIELD_BLANKLINE) {
+                        bLastIsBlank = true;
+                        PrintLine("", e, fontOther, settings.LineSpacingOther, x, ref y);
+                        continue;
+                    } else if (field == FIELD_DUEDATE) {
+                        msg = $"Due date: {checkoutItem.due_date}";
+                        PrintLine(msg, e, fontOtherBold, settings.LineSpacingOther, x, ref y);
+                    } else if (field == FIELD_TITLE) {
+                        msg = $"{checkoutItem.title}";
+                        PrintWrappedLine(msg, e, fontOther, settings.LineSpacingOther, true, x, ref y);
+                    } else if (field == FIELD_CHECKOUTDATE) {
+                        msg = $"{checkoutItem.checkout_date}";
+                        PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
+                    }
+                }
+            }
+
+            msg = $"Config: ({settings.UpperLeftX},{settings.UpperLeftY});" +
+                $" Width {settings.PageWidth};";
+            msg += $" Other font: {settings.FontFamilyOther} {settings.FontSizeOther} {settings.LineSpacingOther.ToString()};";
+            msg += $" Fields: ";
+            string strFields = "";
+            foreach (string field in settings.CheckoutItemFields) {
+                if (strFields.Length > 0) {
+                    strFields += ", ";
+                }
+                strFields += field;
+            }
+            msg += strFields;
+            ShowMsg(msg);
+            if (settings.PrintConfig) {
+                PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
+            }
+
+            for (int iBlank = 0; iBlank < 3; iBlank++) {
+                PrintLine("", e, fontOther, settings.LineSpacingOther, x, ref y);
+            }
+            bLastIsBlank = true;
+
+            // The print driver seems to ignore blank lines unless we print 
+            // something below them, so do so.  Note: printing with a white
+            // brush doesn't work; the paper isn't advanced to this point.
+            // So we print a black ".".
+            if (bLastIsBlank) {
+                PrintLine(".", e, fontOther, settings.LineSpacingOther, x, ref y);
+            }
         }
 
-        private void PrintEndHandler(object sender, PrintEventArgs e) {
+        private void PrintHoldSlipEndHandler(object sender, PrintEventArgs e) {
             // This method is called when the print job has completed.
-            ShowMsg("Print job completed.");
-            Program.FormMain.OnPrintJobComplete();
+            ShowMsg("Print job for hold split completed.");
+            Program.FormMain.OnHoldSlipPrintJobComplete();
+        }
+
+        private void PrintCheckoutSlipEndHandler(object sender, PrintEventArgs e) {
+            // This method is called when the print job has completed.
+            ShowMsg("Print job for checkout slip completed.");
+            Program.FormMain.OnCheckoutSlipPrintJobComplete();
         }
 
     }
