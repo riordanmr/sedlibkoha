@@ -645,7 +645,14 @@ namespace KohaQuick {
                     errmsg = $"No items checked out patron with card number {barcode}";
                     return false;
                 }
-                driver.FindElement(By.Id("issues-table-load-now-button")).Click();
+
+                // Do we need to explicitly load the checkouts?
+                IWebElement checkbox = driver.FindElement(By.Id("issues-table-load-immediately"));
+                if (!checkbox.Selected) {
+                    // Yes, they are not automatically loaded, so we need to load the checkouts.
+                    driver.FindElement(By.Id("issues-table-load-now-button")).Click();
+                    WaitForPageToLoad();
+                }
                 {
                     var element = driver.FindElement(By.CssSelector(".buttons-colvis"));
                     Actions builder = new Actions(driver);
