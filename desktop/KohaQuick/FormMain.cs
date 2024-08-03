@@ -48,6 +48,7 @@ namespace KohaQuick {
         }
 
         private void FormMain_Shown(object sender, EventArgs e) {
+            ShowMsg($"Running with config file {Settings.ComputeSettingsFilename()}.");
             session1 = new KohaSession(1);
             Program.FormDebug.WindowState = FormWindowState.Minimized;
             Program.FormDebug.Show();
