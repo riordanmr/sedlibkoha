@@ -184,3 +184,5 @@ misc/SeleniumIDE
 *.testjson
 *.testcs
 
+barcodes.txt
+setenvvars.bat

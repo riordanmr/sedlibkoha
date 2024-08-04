@@ -600,17 +600,59 @@ namespace KohaQuick {
 
                 driver.FindElement(By.Id("findborrower")).SendKeys(barcode);
                 driver.FindElement(By.CssSelector("#patronsearch > button > .fa")).Click();
+
+                bool bPatronFound = false;
+                bool isConditionMet = wait1.Until(drv =>
+                {
+                    try {
+                        // Check for the div with id 'memberresultst_info' containing the text 'No entries to show'
+                        var divElement = drv.FindElement(By.Id("memberresultst_info"));
+                        if (divElement.Text.Contains("No entries to show")) {
+                            ShowMsg($"Found \"No entries to show\", indicating that the patron with card number {barcode} was not found");
+                            return true;
+                        }
+                    } catch (NoSuchElementException) {
+                        ShowMsg("GetItemsCheckedOutForPatron: \"No entries to show\" not found");
+                    }
+
+                    string lookfor = "(" + barcode + ")";
+                    try {
+                        // Check for the h1 containing the text '(barcode)'
+                        var h1Element = driver.FindElements(By.TagName("h1"))
+                          .FirstOrDefault(e => e.Text.Contains(lookfor));
+                        // If we get here, we didn't get an exception. 
+                        ShowMsg($"Found patron text \"{lookfor}\"");
+                        bPatronFound = true;
+                        return true;
+                    } catch (NoSuchElementException) {
+                        ShowMsg($"GetItemsCheckedOutForPatron: Could not find h1 with {lookfor}");
+                    }
+
+                    return false;
+                });
+
+                if (!bPatronFound) {
+                    errmsg = $"Could not find patron with card number {barcode}";
+                    return false;
+                }
+
                 // Locate the span element with class 'checkout_count'
                 IWebElement spanElement = driver.FindElement(By.ClassName("checkout_count"));
-
                 // Fetch the text of the span element
                 string spanText = spanElement.Text;
                 ShowMsg($"Checkout count: {spanText}");
                 if(spanText == "0") {
-                    errmsg = "No items checked out to this patron";
+                    errmsg = $"No items checked out patron with card number {barcode}";
                     return false;
                 }
-                driver.FindElement(By.Id("issues-table-load-now-button")).Click();
+
+                // Do we need to explicitly load the checkouts?
+                IWebElement checkbox = driver.FindElement(By.Id("issues-table-load-immediately"));
+                if (!checkbox.Selected) {
+                    // Yes, they are not automatically loaded, so we need to load the checkouts.
+                    driver.FindElement(By.Id("issues-table-load-now-button")).Click();
+                    WaitForPageToLoad();
+                }
                 {
                     var element = driver.FindElement(By.CssSelector(".buttons-colvis"));
                     Actions builder = new Actions(driver);

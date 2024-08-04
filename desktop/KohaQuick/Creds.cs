@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,14 +9,16 @@ using System.Threading.Tasks;
 
 namespace KohaQuick {
     public class Creds {
-        public const string CredsFilenameOnly = Settings.ApplicationName + "-creds.json";
-
-        public static string CredsFilename {
-            get {
-                string localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                string configFilePath = Path.Combine(localAppDataPath, Settings.ApplicationName, CredsFilenameOnly);
-                return configFilePath;
+        public static string ComputeCredsFilename() {
+            string localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filename = Settings.ApplicationName + "-creds";
+            if (Program.programArgs.profile.Length > 0) {
+                filename += "-";
             }
+            filename += Program.programArgs.profile;
+            filename += ".json";
+            string filePath = Path.Combine(localAppDataPath, Settings.ApplicationName, filename);
+            return filePath;
         }
 
         public string KohaUsername { get; set; } = "";
@@ -28,7 +31,7 @@ namespace KohaQuick {
 
         public static Creds Load() {
             try {
-                string json = System.IO.File.ReadAllText(CredsFilename);
+                string json = System.IO.File.ReadAllText(ComputeCredsFilename());
                 return FromJson(json);
             } catch (System.IO.FileNotFoundException) {
                 return new Creds();
@@ -39,10 +42,10 @@ namespace KohaQuick {
 
         public void Save() {
             string json = JsonConvert.SerializeObject(this, Formatting.Indented);
-            string directoryPath = Path.GetDirectoryName(CredsFilename);
+            string directoryPath = Path.GetDirectoryName(ComputeCredsFilename());
             // Ensure the directory exists before writing the file.
             Directory.CreateDirectory(directoryPath);
-            File.WriteAllText(CredsFilename, json);
+            File.WriteAllText(ComputeCredsFilename(), json);
         }
     }
 

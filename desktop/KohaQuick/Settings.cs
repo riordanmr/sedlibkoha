@@ -6,17 +6,22 @@ namespace KohaQuick {
     public class Settings {
         public Settings() { }
         public const string ApplicationName = "KohaQuick";
-        public const string SettingsFilenameOnly = ApplicationName + "-config.json";
+        public const string SettingsFilenameOnly = ApplicationName + "-config";
+        public const string SettingsFilenameExt = ".json";
         public const string BROWSER_WINDOW_STATE_NORMAL = "Normal";
         public const string BROWSER_WINDOW_STATE_MINIMIZED = "Minimized";
         public const string BROWSER_WINDOW_STATE_HIDDEN = "Hidden";
 
-        public static string SettingsFilename {
-            get {
-                string localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                string configFilePath = Path.Combine(localAppDataPath, ApplicationName, SettingsFilenameOnly);
-                return configFilePath;
+        public static string ComputeSettingsFilename() {
+            string localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string configFilename = SettingsFilenameOnly;
+            if (Program.programArgs.profile.Length > 0) {
+                configFilename += "-";
             }
+            configFilename += Program.programArgs.profile;
+            configFilename += SettingsFilenameExt;
+            string configFilePath = Path.Combine(localAppDataPath, ApplicationName, configFilename);
+            return configFilePath;
         }
 
         public string KohaUrlStaff = "";
@@ -79,7 +84,7 @@ namespace KohaQuick {
 
         public static Settings Load() {
             try {
-                string json = System.IO.File.ReadAllText(SettingsFilename);
+                string json = System.IO.File.ReadAllText(ComputeSettingsFilename());
                 return FromJson(json);
             } catch (System.IO.FileNotFoundException) {
                 return new Settings();
@@ -90,10 +95,10 @@ namespace KohaQuick {
 
         public void Save() {
             string json = JsonConvert.SerializeObject(this, Formatting.Indented);
-            string directoryPath = Path.GetDirectoryName(SettingsFilename);
+            string directoryPath = Path.GetDirectoryName(ComputeSettingsFilename());
             // Ensure the directory exists before writing the file.
             Directory.CreateDirectory(directoryPath);
-            File.WriteAllText(SettingsFilename, json);
+            File.WriteAllText(ComputeSettingsFilename(), json);
         }
     }
 }

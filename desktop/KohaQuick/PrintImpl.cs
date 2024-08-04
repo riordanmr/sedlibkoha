@@ -307,6 +307,9 @@ namespace KohaQuick {
                     } else if (field == FIELD_DUEDATE) {
                         msg = $"Due date: {checkoutItem.due_date}";
                         PrintLine(msg, e, fontOtherBold, settings.LineSpacingOther, x, ref y);
+                    } else if (field == FIELD_CALLNUMBER) {
+                        msg = $"{checkoutItem.call_number}";
+                        PrintWrappedLine(msg, e, fontOther, settings.LineSpacingOther, true, x, ref y);
                     } else if (field == FIELD_TITLE) {
                         msg = $"{checkoutItem.title}";
                         PrintWrappedLine(msg, e, fontOther, settings.LineSpacingOther, true, x, ref y);
