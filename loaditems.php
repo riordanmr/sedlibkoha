@@ -195,11 +195,12 @@
     // callNum - the call number of the book
     function parseCallNumber($callNumRaw)
     {
+        // The original version of this function was written when the call number
+        // exported from Koha could have different formats. But since the production
+        // instance of Koha has gone live, the location seems to always be present
+        // in the call number as the first token (always in uppercase).
         // The Call Number field in the CSV file has various formats, such as:
         // BIO - Biography Collection BIOGRAPHY BRODEUR, A.
-        // Children's Area - Beginner Readers - Fiction HOURAN
-        // Children's Area - Boardbooks BB
-        // Children's Area - Easy Books - Nonfiction 590 MONTGOMERY
         // DVD Collection 780.966 THEY
         // DVD Collection BIOGRAPHY HUBERMAN, B.
         // DVD Collection FARGO SEASON 2
@@ -208,10 +209,9 @@
         // JDVD - Children's Area - DVDs 591.9 WILD
         // JFIC - Children's Area - Fiction HINOJOSA, S. #1
         // JNF - Children's Area - Nonfiction 736.982 GEORGE
-        // Mystery Collection MYSTERY KING, L.
+        // LOCALAUTHR - Local Authors BUDDEN, D.
         // NBFIC - New Books - Fiction MEDINA, N.
         // NF - Nonfiction Books 516.1 DU SAUTOY
-        // Shelving Cart SINNER SEASON 2
         // YAFIC - Young Adult Area - Fiction WESTERFELD, S. UGLIES #2
         // 
         // Parsing this is quite ad hoc.
@@ -227,15 +227,24 @@
 
         // Check for whether it starts with an old location code.
         $words = explode(" ", $fld);
+        if(count($words)>0 && isAllUppercaseAlphabetic($words[0])) {
+            $location = $words[0];
+            if (strpos($location, "J") === 0) {
+                $area = "C";
+            }
+        } else {
+            echo "First word is not an old location code: $words[0]\n";
+        }
         if(count($words)>1 && isAllUppercaseAlphabetic($words[0]) && $words[1]=="-") {
             // Ignore the first word and "-".
             $fld = implode(" ", array_slice($words, 2));
+        } else {
+            $fld = implode(" ", $words);
         }
 
         // By now, if the field contains "Children's Area -" at all, it should be at the start.
         if(startsWith($fld, "Children's Area -")) {
             $area = "C";
-            $location = "Children";
             // Strip off "Children's Area - " from the start of the string.
             $rest = substr($fld, strlen("Children's Area - "));
             // print "Rest: $rest\n";
@@ -257,19 +266,17 @@
                 $idxStartCallNum++;
             }
 
-            $location = "J " . implode(" ", array_slice($childparts, 0, $idxStartCallNum));
             $callNum = implode(" ", array_slice($childparts, $idxStartCallNum));
         } else {
             $words = explode(" ", $fld);
             // Look for a word that indicates the end of the name of the location.
             for($idx=0; $idx<count($words); $idx++) {
-                if($words[$idx]=="Collection" || $words[$idx]=="Books" || $words[$idx]=="Area" || $words[$idx] == "Cart") {
+                if($words[$idx]=="Collection" || $words[$idx]=="Books" || $words[$idx]=="Area" 
+                  || $words[$idx] == "Cart" || $words[$idx] == "Authors" || $words[$idx] == "Arrivals") {
                     if(count($words)>$idx+1 && $words[$idx+1] == "-") {
                         // We have something like Young Adult Area - Fiction BLUME, J.
-                        $location = implode(" ", array_slice($words, 0, $idx)) . " " . $words[$idx+2];
                         $callNum = implode(" ", array_slice($words, $idx+3));
                     } else {
-                        $location = implode(" ", array_slice($words, 0, $idx));
                         $callNum = implode(" ", array_slice($words, $idx+1));
                     }
                     break;
