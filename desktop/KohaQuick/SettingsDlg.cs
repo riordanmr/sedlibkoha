@@ -263,14 +263,12 @@ namespace KohaQuick {
         }
 
         private void buttonCheckoutFieldUp_Click(object sender, EventArgs e) {
-            // Move the selected field down in the list.
-            if (this.listBoxCheckoutFieldsActual.SelectedIndex != -1 &&
-                this.listBoxCheckoutFieldsActual.SelectedIndex < this.listBoxCheckoutFieldsActual.Items.Count - 1) {
+            if (this.listBoxCheckoutFieldsActual.SelectedIndex > 0) {
                 int index = this.listBoxCheckoutFieldsActual.SelectedIndex;
                 object item = this.listBoxCheckoutFieldsActual.SelectedItem;
                 this.listBoxCheckoutFieldsActual.Items.RemoveAt(index);
-                this.listBoxCheckoutFieldsActual.Items.Insert(index + 1, item);
-                this.listBoxCheckoutFieldsActual.SelectedIndex = index + 1;
+                this.listBoxCheckoutFieldsActual.Items.Insert(index - 1, item);
+                this.listBoxCheckoutFieldsActual.SelectedIndex = index - 1;
             }
         }
 
