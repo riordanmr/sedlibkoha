@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace KohaQuick {
     public class Patron {
         public string firstname { get; set; }
+        public string middlename { get; set; }
         public string surname { get; set; }
         public string email { get; set; }
         public string phone { get; set; }

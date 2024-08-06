@@ -72,6 +72,8 @@ namespace KohaQuick {
 
         public string BrowserWindowState { get; set; } = BROWSER_WINDOW_STATE_NORMAL;
 
+        public string DefaultPatronCategory { get; set; } = "AD";
+
         // Serializes the current instance to a JSON string
         public string ToJson() {
             return JsonConvert.SerializeObject(this);

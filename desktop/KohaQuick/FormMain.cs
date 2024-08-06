@@ -204,11 +204,12 @@ namespace KohaQuick {
         }
 
         private void buttonGenerateRandom_Click(object sender, EventArgs e) {
+            this.textBoxAddPatronMsg.Text = ""; 
             string PIN = GetRandomDigits(4);
             this.textBoxFirstName.Text = $"Xerxes";
             this.textBoxLastName.Text = $"Smith{GetRandomString(3)}";
-            this.textBoxDateOfBirth.Text = $"2000-07-21";
-            this.textBoxEmail.Text = $"xerxex.smith{GetRandomString(5)}@gmail.com";
+            this.textBoxDateOfBirth.Text = $"07/21/2000";
+            this.textBoxEmail.Text = $"xerxes.smith{GetRandomString(5)}@gmail.com";
             this.textBoxPhone.Text = $"555-555-{GetRandomDigits(4)}";
             this.textBoxAddress1.Text = $"{PIN} Main St";
             this.textBoxAddress2.Text = $"Apt {GetRandomString(3)}";
@@ -221,8 +222,10 @@ namespace KohaQuick {
         }
 
         private void buttonAddPatron_Click(object sender, EventArgs e) {
+            textBoxAddPatronMsg.Text = "";
             Patron patron = new Patron();
             patron.firstname = this.textBoxFirstName.Text;
+            patron.middlename = this.textBoxMiddleName.Text;
             patron.surname = this.textBoxLastName.Text;
             patron.email = this.textBoxEmail.Text;
             patron.phone = this.textBoxPhone.Text;
@@ -236,16 +239,27 @@ namespace KohaQuick {
             patron.cardnumber = this.textBoxLibraryCardBarcode.Text;
             patron.date_of_birth = this.textBoxDateOfBirth.Text;
             patron.password = this.textBoxPIN.Text;
+            // Fix this - we have a default but we need to be able to change it
             patron.category_id = "AD";
+
+            // Check if any property of patron is an empty string
+            bool hasEmptyRequiredProperty = patron.GetType().GetProperties()
+                .Any(prop => prop.GetValue(patron)?.ToString() == string.Empty &&
+                    prop.Name != "middlename" && prop.Name != "address2");
+            if(hasEmptyRequiredProperty) {
+                textBoxAddPatronMsg.Text = "Please fill in all required fields.";
+                return;
+            }
 
             if (textBoxPIN.Text != textBoxPIN2.Text) {
                 MessageBox.Show("PINs do not match!");
                 return;
             }
+            textBoxAddPatronMsg.Text = "Adding patron...";
             string errmsg = "";
-            bool bOK = kohaRESTAPI.AddPatron(patron, out errmsg);
+            bool bOK = session1.AddPatron(patron, out errmsg);
             if (bOK) {
-                textBoxAddPatronMsg.Text = "Patron added successfully.";
+                textBoxAddPatronMsg.Text = errmsg;
             } else {
                 textBoxAddPatronMsg.Text = "Error adding patron:\r\n" + errmsg;
             }

@@ -79,6 +79,7 @@
             this.labelPhone = new System.Windows.Forms.Label();
             this.labelEmail = new System.Windows.Forms.Label();
             this.tabPagePrintCheckouts = new System.Windows.Forms.TabPage();
+            this.checkBoxPrintOnlyItemsCheckedOutToday = new System.Windows.Forms.CheckBox();
             this.textBoxPrintCheckoutMsg = new System.Windows.Forms.TextBox();
             this.buttonPrintItemsCheckedOut = new System.Windows.Forms.Button();
             this.textBoxPatronBarcodeForReceipt = new System.Windows.Forms.TextBox();
@@ -92,7 +93,6 @@
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkBoxPrintOnlyItemsCheckedOutToday = new System.Windows.Forms.CheckBox();
             this.tabControlHolds.SuspendLayout();
             this.tabPageTrapHolds.SuspendLayout();
             this.tabPageCheckPIN.SuspendLayout();
@@ -114,7 +114,7 @@
             this.tabControlHolds.Location = new System.Drawing.Point(12, 58);
             this.tabControlHolds.Name = "tabControlHolds";
             this.tabControlHolds.SelectedIndex = 0;
-            this.tabControlHolds.Size = new System.Drawing.Size(1101, 843);
+            this.tabControlHolds.Size = new System.Drawing.Size(1101, 877);
             this.tabControlHolds.TabIndex = 0;
             // 
             // tabPageTrapHolds
@@ -280,7 +280,7 @@
             this.tabPageAddPatron.Controls.Add(this.groupBoxContactInfo);
             this.tabPageAddPatron.Location = new System.Drawing.Point(8, 39);
             this.tabPageAddPatron.Name = "tabPageAddPatron";
-            this.tabPageAddPatron.Size = new System.Drawing.Size(1085, 796);
+            this.tabPageAddPatron.Size = new System.Drawing.Size(1085, 830);
             this.tabPageAddPatron.TabIndex = 2;
             this.tabPageAddPatron.Text = "Add Patron";
             this.tabPageAddPatron.UseVisualStyleBackColor = true;
@@ -289,15 +289,15 @@
             // 
             this.textBoxAddPatronMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxAddPatronMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxAddPatronMsg.Location = new System.Drawing.Point(22, 731);
+            this.textBoxAddPatronMsg.Location = new System.Drawing.Point(22, 717);
             this.textBoxAddPatronMsg.Multiline = true;
             this.textBoxAddPatronMsg.Name = "textBoxAddPatronMsg";
-            this.textBoxAddPatronMsg.Size = new System.Drawing.Size(1030, 62);
+            this.textBoxAddPatronMsg.Size = new System.Drawing.Size(1030, 110);
             this.textBoxAddPatronMsg.TabIndex = 7;
             // 
             // buttonClearInfo
             // 
-            this.buttonClearInfo.Location = new System.Drawing.Point(137, 676);
+            this.buttonClearInfo.Location = new System.Drawing.Point(137, 658);
             this.buttonClearInfo.Name = "buttonClearInfo";
             this.buttonClearInfo.Size = new System.Drawing.Size(200, 44);
             this.buttonClearInfo.TabIndex = 4;
@@ -307,7 +307,7 @@
             // 
             // buttonGenerateRandom
             // 
-            this.buttonGenerateRandom.Location = new System.Drawing.Point(440, 674);
+            this.buttonGenerateRandom.Location = new System.Drawing.Point(440, 656);
             this.buttonGenerateRandom.Name = "buttonGenerateRandom";
             this.buttonGenerateRandom.Size = new System.Drawing.Size(200, 44);
             this.buttonGenerateRandom.TabIndex = 5;
@@ -317,7 +317,7 @@
             // 
             // buttonAddPatron
             // 
-            this.buttonAddPatron.Location = new System.Drawing.Point(729, 674);
+            this.buttonAddPatron.Location = new System.Drawing.Point(729, 656);
             this.buttonAddPatron.Name = "buttonAddPatron";
             this.buttonAddPatron.Size = new System.Drawing.Size(200, 44);
             this.buttonAddPatron.TabIndex = 6;
@@ -333,9 +333,9 @@
             this.groupBoxLibraryCard.Controls.Add(this.textBoxLibraryCardBarcode);
             this.groupBoxLibraryCard.Controls.Add(this.labelLibraryCardBarcode);
             this.groupBoxLibraryCard.Controls.Add(this.labelPIN);
-            this.groupBoxLibraryCard.Location = new System.Drawing.Point(22, 480);
+            this.groupBoxLibraryCard.Location = new System.Drawing.Point(17, 472);
             this.groupBoxLibraryCard.Name = "groupBoxLibraryCard";
-            this.groupBoxLibraryCard.Size = new System.Drawing.Size(1041, 176);
+            this.groupBoxLibraryCard.Size = new System.Drawing.Size(1041, 168);
             this.groupBoxLibraryCard.TabIndex = 3;
             this.groupBoxLibraryCard.TabStop = false;
             this.groupBoxLibraryCard.Text = "Library card";
@@ -406,7 +406,7 @@
             this.groupBoxIdentity.Controls.Add(this.textBoxFirstName);
             this.groupBoxIdentity.Location = new System.Drawing.Point(17, 19);
             this.groupBoxIdentity.Name = "groupBoxIdentity";
-            this.groupBoxIdentity.Size = new System.Drawing.Size(1046, 142);
+            this.groupBoxIdentity.Size = new System.Drawing.Size(1041, 142);
             this.groupBoxIdentity.TabIndex = 0;
             this.groupBoxIdentity.TabStop = false;
             this.groupBoxIdentity.Text = "Identity";
@@ -414,6 +414,7 @@
             // labelMiddleName
             // 
             this.labelMiddleName.AutoSize = true;
+            this.labelMiddleName.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.labelMiddleName.Location = new System.Drawing.Point(359, 44);
             this.labelMiddleName.Name = "labelMiddleName";
             this.labelMiddleName.Size = new System.Drawing.Size(82, 25);
@@ -487,9 +488,9 @@
             this.groupBoxAddress.Controls.Add(this.labelCity);
             this.groupBoxAddress.Controls.Add(this.labelState);
             this.groupBoxAddress.Controls.Add(this.comboBoxState);
-            this.groupBoxAddress.Location = new System.Drawing.Point(17, 184);
+            this.groupBoxAddress.Location = new System.Drawing.Point(17, 180);
             this.groupBoxAddress.Name = "groupBoxAddress";
-            this.groupBoxAddress.Size = new System.Drawing.Size(1046, 142);
+            this.groupBoxAddress.Size = new System.Drawing.Size(1041, 142);
             this.groupBoxAddress.TabIndex = 1;
             this.groupBoxAddress.TabStop = false;
             this.groupBoxAddress.Text = "Address";
@@ -513,6 +514,7 @@
             // labelAddress2
             // 
             this.labelAddress2.AutoSize = true;
+            this.labelAddress2.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.labelAddress2.Location = new System.Drawing.Point(535, 34);
             this.labelAddress2.Name = "labelAddress2";
             this.labelAddress2.Size = new System.Drawing.Size(109, 25);
@@ -575,9 +577,56 @@
             // 
             this.comboBoxState.FormattingEnabled = true;
             this.comboBoxState.Items.AddRange(new object[] {
+            "AL",
+            "AK",
             "AZ",
+            "AR",
+            "CA",
+            "CO",
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "HI",
+            "ID",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "ME",
+            "MD",
+            "MA",
             "MI",
-            "WI"});
+            "MN",
+            "MS",
+            "MO",
+            "MT",
+            "NE",
+            "NV",
+            "NH",
+            "NJ",
+            "NM",
+            "NY",
+            "NC",
+            "ND",
+            "OH",
+            "OK",
+            "OR",
+            "PA",
+            "RI",
+            "SC",
+            "SD",
+            "TN",
+            "TX",
+            "UT",
+            "VT",
+            "VA",
+            "WA",
+            "WV",
+            "WI",
+            "WY"});
             this.comboBoxState.Location = new System.Drawing.Point(402, 75);
             this.comboBoxState.Name = "comboBoxState";
             this.comboBoxState.Size = new System.Drawing.Size(126, 33);
@@ -590,7 +639,7 @@
             this.groupBoxContactInfo.Controls.Add(this.textBoxPhone);
             this.groupBoxContactInfo.Controls.Add(this.labelPhone);
             this.groupBoxContactInfo.Controls.Add(this.labelEmail);
-            this.groupBoxContactInfo.Location = new System.Drawing.Point(22, 352);
+            this.groupBoxContactInfo.Location = new System.Drawing.Point(17, 344);
             this.groupBoxContactInfo.Name = "groupBoxContactInfo";
             this.groupBoxContactInfo.Size = new System.Drawing.Size(1041, 110);
             this.groupBoxContactInfo.TabIndex = 2;
@@ -646,6 +695,18 @@
             this.tabPagePrintCheckouts.TabIndex = 3;
             this.tabPagePrintCheckouts.Text = "Print Checkouts";
             this.tabPagePrintCheckouts.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxPrintOnlyItemsCheckedOutToday
+            // 
+            this.checkBoxPrintOnlyItemsCheckedOutToday.AutoSize = true;
+            this.checkBoxPrintOnlyItemsCheckedOutToday.Checked = true;
+            this.checkBoxPrintOnlyItemsCheckedOutToday.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxPrintOnlyItemsCheckedOutToday.Location = new System.Drawing.Point(390, 135);
+            this.checkBoxPrintOnlyItemsCheckedOutToday.Name = "checkBoxPrintOnlyItemsCheckedOutToday";
+            this.checkBoxPrintOnlyItemsCheckedOutToday.Size = new System.Drawing.Size(375, 29);
+            this.checkBoxPrintOnlyItemsCheckedOutToday.TabIndex = 3;
+            this.checkBoxPrintOnlyItemsCheckedOutToday.Text = "Only print items checked out today";
+            this.checkBoxPrintOnlyItemsCheckedOutToday.UseVisualStyleBackColor = true;
             // 
             // textBoxPrintCheckoutMsg
             // 
@@ -764,23 +825,11 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // checkBoxPrintOnlyItemsCheckedOutToday
-            // 
-            this.checkBoxPrintOnlyItemsCheckedOutToday.AutoSize = true;
-            this.checkBoxPrintOnlyItemsCheckedOutToday.Checked = true;
-            this.checkBoxPrintOnlyItemsCheckedOutToday.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxPrintOnlyItemsCheckedOutToday.Location = new System.Drawing.Point(390, 135);
-            this.checkBoxPrintOnlyItemsCheckedOutToday.Name = "checkBoxPrintOnlyItemsCheckedOutToday";
-            this.checkBoxPrintOnlyItemsCheckedOutToday.Size = new System.Drawing.Size(375, 29);
-            this.checkBoxPrintOnlyItemsCheckedOutToday.TabIndex = 3;
-            this.checkBoxPrintOnlyItemsCheckedOutToday.Text = "Only print items checked out today";
-            this.checkBoxPrintOnlyItemsCheckedOutToday.UseVisualStyleBackColor = true;
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1120, 900);
+            this.ClientSize = new System.Drawing.Size(1120, 938);
             this.Controls.Add(this.tabControlHolds);
             this.Controls.Add(this.menuStrip2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

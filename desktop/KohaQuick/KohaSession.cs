@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using OpenQA.Selenium.Interactions;
+using System.Text.RegularExpressions;
+using System.Reflection;
 
 
 namespace KohaQuick {
@@ -90,6 +92,21 @@ namespace KohaQuick {
         void ShowMsg(string msg) {
             System.Diagnostics.Debug.WriteLine(msg);
             Program.FormMain.ShowMsg(msg);
+        }
+
+        static string GetAllElementProperties(IWebElement element) {
+            string result = "";
+            Type type = element.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+
+            foreach (PropertyInfo property in properties) {
+                try {
+                    object value = property.GetValue(element);
+                    result += $"{property.Name}: {value}; ";
+                } catch (TargetInvocationException) {
+                }
+            }
+            return result;
         }
 
         static string RemoveTextAfterFirst(string input, char delim) {
@@ -688,6 +705,105 @@ namespace KohaQuick {
             return bOK;
         }
 
+        public bool AddPatron(Patron patron, out string errmsg) {
+            bool bOK = false;
+            errmsg = "";
+
+            try {
+                string url = Program.FormMain.settings.KohaUrlStaff +
+                    $"/cgi-bin/koha/members/memberentry.pl?op=add&categorycode={Program.FormMain.settings.DefaultPatronCategory}" ;
+                driver.Navigate().GoToUrl(url);
+                WaitForPageToLoad();
+
+                driver.FindElement(By.Id("firstname")).SendKeys(patron.firstname);
+                driver.FindElement(By.Id("middle_name")).SendKeys(patron.middlename);
+                driver.FindElement(By.Id("surname")).SendKeys(patron.surname);
+
+                // A lot of time was spent on trying to set the date of birth,
+                // due to the crappy HTML used by Koha.  Why not give the control an id?
+
+                // For reasons I don't understand, Selenium can't find the date of birth input element
+                // using this selector.
+                //driver.FindElement(By.CssSelector("input.flatpickr.flatpickr-input.noEnterSubmit.active"))
+                //    .SendKeys(patron.date_of_birth);
+
+                // And this one says the element is not interactable.
+                //driver.FindElement(By.Id("dateofbirth")).SendKeys(patron.date_of_birth);
+
+                // Update: this works with the test system, but gets "element not found"
+                // on prod, even though the HTML DOM seems similar:
+                //driver.FindElement(By.CssSelector(".flatpickr_wrapper_dateofbirth > .flatpickr")).Click();
+                //driver.FindElement(By.CssSelector(".flatpickr_wrapper_dateofbirth > .flatpickr")).SendKeys(patron.date_of_birth);
+
+                try {
+                    // Find the first <label> element containing the text "Date of birth:"
+                    IWebElement labelElement = driver.FindElement(By.XPath("//label[contains(text(), 'Date of birth:')]"));
+                    // Step 2: Find the next span element with class "flatpickr_wrapper"
+                    IWebElement nextElement = labelElement.FindElement(By.XPath("following-sibling::span[contains(@class, 'flatpickr_wrapper')]"));
+                    // Step 3: Find the first input element with class "flatpickr" that is a child of the span
+                    IWebElement dobElement = nextElement.FindElement(By.CssSelector("input.flatpickr"));
+                    // Hopefully this will work.
+                    dobElement.SendKeys(patron.date_of_birth);
+                } catch(Exception ex) {
+                    ShowMsg($"Could not set date of birth: {ex.Message}");
+                    errmsg = "Could not find the date of birth element";
+                    return false;
+                }
+
+                driver.FindElement(By.Id("email")).SendKeys(patron.email);
+                driver.FindElement(By.Id("phone")).SendKeys(patron.phone);
+                driver.FindElement(By.Id("address")).SendKeys(patron.address);
+                driver.FindElement(By.Id("address2")).SendKeys(patron.address2);
+                driver.FindElement(By.Id("city")).SendKeys(patron.city);
+                //driver.FindElement(By.Name("select_city")).Click();
+                //{
+                //    var dropdown = driver.FindElement(By.Name("select_city"));
+                //    dropdown.FindElement(By.XPath("//option[. = 'Clarkdale AZ 86326']")).Click();
+                //}
+                driver.FindElement(By.Id("state")).SendKeys(patron.state);
+                driver.FindElement(By.Id("zipcode")).SendKeys(patron.postal_code);
+                //driver.FindElement(By.Id("country")).SendKeys(patron.country);
+                driver.FindElement(By.Id("cardnumber")).SendKeys(patron.cardnumber);
+                driver.FindElement(By.Id("userid")).SendKeys(patron.cardnumber);
+                driver.FindElement(By.Id("password")).SendKeys(patron.password);
+                driver.FindElement(By.Id("password2")).SendKeys(patron.password);
+
+                // Save the new patron.
+                driver.FindElement(By.Id("saverecord")).Click();
+                WaitForPageToLoad();
+                if (driver.PageSource.Contains("Patron has nothing checked out.")) {
+                    // Get the barcode of the new patron, as a double-check.
+                    string h1Text = driver.FindElement(By.TagName("h1")).Text;
+                    string pattern = @"\((\d+)\)";
+                    Match match = Regex.Match(h1Text, pattern);
+
+                    if (match.Success) {
+                        string numberInParentheses = match.Groups[1].Value;
+                        if (patron.cardnumber == numberInParentheses) {
+                            errmsg = $"Patron with barcode {numberInParentheses} added successfully";
+                            bOK = true;
+                        } else {
+                            errmsg = $"Patron barcode mismatch: {patron.cardnumber} != {numberInParentheses}";
+                        }
+                    } else {
+                        errmsg = "Could not find patron barcode after adding patron";
+                    }
+                } else {
+                    // It seems that the patron was not added successfully.
+                    try {
+                        // Find the first <label> element with the class "error"
+                        IWebElement errorLabel = driver.FindElement(By.CssSelector("label.error"));
+                        errmsg = errorLabel.Text;
+                    } catch {
+                        errmsg = "Unknown problem adding patron.";
+                    }
+                }
+            } catch (Exception ex) {
+                errmsg = ex.Message;
+                ShowMsg($"AddPatron: {ex.Message}");
+            }
+            return bOK;
+        }
 
         public void Close() {
             try {
