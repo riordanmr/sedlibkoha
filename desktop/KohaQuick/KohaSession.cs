@@ -75,6 +75,16 @@ namespace KohaQuick {
         }
     }
 
+    public class ItemSearchResult {
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public string BiblioID { get; set; }
+    }
+
+    public class ItemSearchResultsCol {
+        public List<ItemSearchResult> ResultList { get; set; } = new List<ItemSearchResult>();
+    }
+
     // Represents a browser session to Koha.
     public class KohaSession {
         const int MAX_PAGE_WAIT_SECS = 7;
@@ -801,6 +811,112 @@ namespace KohaQuick {
             } catch (Exception ex) {
                 errmsg = ex.Message;
                 ShowMsg($"AddPatron: {ex.Message}");
+            }
+            return bOK;
+        }
+
+        public bool SearchForItems(string searchTerm, out ItemSearchResultsCol Results,
+            out string errmsg) {
+            bool bOK = false;
+            errmsg = "";
+            Results = new ItemSearchResultsCol();
+            try {
+                string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/catalogue/search.pl";
+                driver.Navigate().GoToUrl(url);
+                WaitForPageToLoad();
+
+                driver.FindElement(By.Name("q")).SendKeys(searchTerm);
+
+                driver.FindElement(By.CssSelector("button.btn.btn-primary")).Click();
+                WaitForPageToLoad();
+
+                if(driver.PageSource.Contains("No results found")) {
+                    errmsg = "No results found";
+                    return false;
+                }
+
+                // Find the first <tbody> element
+                IWebElement tbodyElement = driver.FindElement(By.TagName("tbody"));
+
+                // Find all <tr> elements within the <tbody>
+                IReadOnlyCollection<IWebElement> trElements = tbodyElement.FindElements(By.TagName("tr"));
+
+                // Iterate through each <tr> element
+                int irow = 0;
+                foreach (IWebElement trElement in trElements) {
+                    irow++;
+
+                    // Unfortunately, not all copies of Koha have the same number of
+                    // columns in the search results. So we'll count the number of columns
+                    // and guess which columns contain the information we want based on the
+                    // column count.
+
+                    // Find all <td> elements within the <tr>.
+                    IReadOnlyCollection<IWebElement> tdElements = trElement.FindElements(By.TagName("td"));
+
+                    // Get the count of <td> elements
+                    int tdCount = tdElements.Count;
+                    int icolCheckbox = -1, icolTitle = -1;
+                    if(tdCount == 3) {
+                        icolCheckbox = 0;
+                        icolTitle = 1;
+                    } else if(tdCount == 4) {
+                        icolCheckbox = 1;
+                        icolTitle = 2;
+                    } else {
+                        ShowMsg($"SearchForItems: Unexpected number of columns: {tdCount}");
+                        errmsg = "Unexpected number of columns in search results table";
+                        return false;
+                    }
+
+                    // Find the <td> element within the <tr> that contains the checkbox.
+                    IWebElement tdElementWithCheckbox = trElement.FindElements(By.TagName("td"))[icolCheckbox];
+
+                    // Find the first checkbox within the second <td> element
+                    IWebElement checkboxElement = tdElementWithCheckbox.FindElement(
+                        By.CssSelector("input[type='checkbox']"));
+
+                    // Retrieve the id of the checkbox
+                    string checkboxId = checkboxElement.GetAttribute("id");
+
+                    // Find the third <td> element within the <tr>
+                    IWebElement thirdTdElement = trElement.FindElements(By.TagName("td"))[icolTitle];
+
+                    // Find the first <a> element within the third <td> element
+                    IWebElement aElement = thirdTdElement.FindElement(By.TagName("a"));
+
+                    // Retrieve the text of the <a> element
+                    string title = aElement.Text;
+
+                    string author = "";
+                    try {
+                        // Search for the author. Some results do not have an author,
+                        // so we need to catch the exception.
+                        IWebElement pElement = thirdTdElement.FindElement(By.CssSelector("p.author"));
+
+                        // Retrieve the text of the <p> element
+                        author = pElement.Text;
+                        if (author.StartsWith("by ")) {
+                            author = author.Substring(3);
+                        }
+                    } catch (NoSuchElementException) {
+                        // Ignore
+                    }
+
+                    ItemSearchResult itemSearchResult = new ItemSearchResult {
+                        Title = title,
+                        Author = author,
+                        BiblioID = checkboxId
+                    };
+                    Results.ResultList.Add(itemSearchResult);
+                    ShowMsg($"  {irow}: Checkboxid: {checkboxId} Title: {title} Author: {author}");
+
+                }
+
+                bOK = true;
+            } catch (Exception ex) {
+                errmsg = ex.Message;
+                ShowMsg($"SearchForItems: {ex.Message}");
             }
             return bOK;
         }

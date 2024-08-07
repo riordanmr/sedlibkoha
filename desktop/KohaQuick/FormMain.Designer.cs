@@ -25,6 +25,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.tabControlHolds = new System.Windows.Forms.TabControl();
             this.tabPageTrapHolds = new System.Windows.Forms.TabPage();
@@ -85,6 +86,13 @@
             this.textBoxPatronBarcodeForReceipt = new System.Windows.Forms.TextBox();
             this.labelPatronBarcodeForReceipt = new System.Windows.Forms.Label();
             this.labelPrintReceiptHeader = new System.Windows.Forms.Label();
+            this.tabPagePlaceHold = new System.Windows.Forms.TabPage();
+            this.dataGridViewPlaceHold = new System.Windows.Forms.DataGridView();
+            this.buttonPlaceHoldSearch = new System.Windows.Forms.Button();
+            this.textBoxPlaceHoldItemSearch = new System.Windows.Forms.TextBox();
+            this.labelPlaceHoldItemSearch = new System.Windows.Forms.Label();
+            this.textBoxPlaceHoldPatronBarcode = new System.Windows.Forms.TextBox();
+            this.labelPlaceHoldPatronBarcode = new System.Windows.Forms.Label();
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printSampleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,6 +101,12 @@
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonPlaceHoldOnCheckedItems = new System.Windows.Forms.Button();
+            this.textBoxPlaceHoldMsg = new System.Windows.Forms.TextBox();
+            this.Hold = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Author = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BibID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlHolds.SuspendLayout();
             this.tabPageTrapHolds.SuspendLayout();
             this.tabPageCheckPIN.SuspendLayout();
@@ -102,6 +116,8 @@
             this.groupBoxAddress.SuspendLayout();
             this.groupBoxContactInfo.SuspendLayout();
             this.tabPagePrintCheckouts.SuspendLayout();
+            this.tabPagePlaceHold.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaceHold)).BeginInit();
             this.menuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -111,6 +127,7 @@
             this.tabControlHolds.Controls.Add(this.tabPageCheckPIN);
             this.tabControlHolds.Controls.Add(this.tabPageAddPatron);
             this.tabControlHolds.Controls.Add(this.tabPagePrintCheckouts);
+            this.tabControlHolds.Controls.Add(this.tabPagePlaceHold);
             this.tabControlHolds.Location = new System.Drawing.Point(12, 58);
             this.tabControlHolds.Name = "tabControlHolds";
             this.tabControlHolds.SelectedIndex = 0;
@@ -758,6 +775,95 @@
             this.labelPrintReceiptHeader.TabIndex = 0;
             this.labelPrintReceiptHeader.Text = "Print receipt of items checked out by this patron";
             // 
+            // tabPagePlaceHold
+            // 
+            this.tabPagePlaceHold.Controls.Add(this.textBoxPlaceHoldMsg);
+            this.tabPagePlaceHold.Controls.Add(this.buttonPlaceHoldOnCheckedItems);
+            this.tabPagePlaceHold.Controls.Add(this.dataGridViewPlaceHold);
+            this.tabPagePlaceHold.Controls.Add(this.buttonPlaceHoldSearch);
+            this.tabPagePlaceHold.Controls.Add(this.textBoxPlaceHoldItemSearch);
+            this.tabPagePlaceHold.Controls.Add(this.labelPlaceHoldItemSearch);
+            this.tabPagePlaceHold.Controls.Add(this.textBoxPlaceHoldPatronBarcode);
+            this.tabPagePlaceHold.Controls.Add(this.labelPlaceHoldPatronBarcode);
+            this.tabPagePlaceHold.Location = new System.Drawing.Point(8, 39);
+            this.tabPagePlaceHold.Name = "tabPagePlaceHold";
+            this.tabPagePlaceHold.Size = new System.Drawing.Size(1085, 830);
+            this.tabPagePlaceHold.TabIndex = 4;
+            this.tabPagePlaceHold.Text = "Place Hold";
+            this.tabPagePlaceHold.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewPlaceHold
+            // 
+            this.dataGridViewPlaceHold.AllowUserToAddRows = false;
+            this.dataGridViewPlaceHold.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewPlaceHold.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewPlaceHold.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewPlaceHold.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Hold,
+            this.Title,
+            this.Author,
+            this.BibID});
+            this.dataGridViewPlaceHold.Location = new System.Drawing.Point(6, 109);
+            this.dataGridViewPlaceHold.Name = "dataGridViewPlaceHold";
+            this.dataGridViewPlaceHold.RowHeadersVisible = false;
+            this.dataGridViewPlaceHold.RowHeadersWidth = 82;
+            this.dataGridViewPlaceHold.RowTemplate.Height = 33;
+            this.dataGridViewPlaceHold.Size = new System.Drawing.Size(1082, 536);
+            this.dataGridViewPlaceHold.TabIndex = 5;
+            // 
+            // buttonPlaceHoldSearch
+            // 
+            this.buttonPlaceHoldSearch.Location = new System.Drawing.Point(805, 56);
+            this.buttonPlaceHoldSearch.Name = "buttonPlaceHoldSearch";
+            this.buttonPlaceHoldSearch.Size = new System.Drawing.Size(204, 38);
+            this.buttonPlaceHoldSearch.TabIndex = 4;
+            this.buttonPlaceHoldSearch.Text = "Search for items";
+            this.buttonPlaceHoldSearch.UseVisualStyleBackColor = true;
+            this.buttonPlaceHoldSearch.Click += new System.EventHandler(this.buttonPlaceHoldSearch_Click);
+            // 
+            // textBoxPlaceHoldItemSearch
+            // 
+            this.textBoxPlaceHoldItemSearch.Font = new System.Drawing.Font("Lucida Console", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxPlaceHoldItemSearch.Location = new System.Drawing.Point(346, 60);
+            this.textBoxPlaceHoldItemSearch.Name = "textBoxPlaceHoldItemSearch";
+            this.textBoxPlaceHoldItemSearch.Size = new System.Drawing.Size(426, 34);
+            this.textBoxPlaceHoldItemSearch.TabIndex = 3;
+            // 
+            // labelPlaceHoldItemSearch
+            // 
+            this.labelPlaceHoldItemSearch.AutoSize = true;
+            this.labelPlaceHoldItemSearch.Location = new System.Drawing.Point(201, 64);
+            this.labelPlaceHoldItemSearch.Name = "labelPlaceHoldItemSearch";
+            this.labelPlaceHoldItemSearch.Size = new System.Drawing.Size(129, 25);
+            this.labelPlaceHoldItemSearch.TabIndex = 2;
+            this.labelPlaceHoldItemSearch.Text = "Item search:";
+            this.labelPlaceHoldItemSearch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textBoxPlaceHoldPatronBarcode
+            // 
+            this.textBoxPlaceHoldPatronBarcode.Font = new System.Drawing.Font("Lucida Console", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxPlaceHoldPatronBarcode.Location = new System.Drawing.Point(346, 20);
+            this.textBoxPlaceHoldPatronBarcode.Name = "textBoxPlaceHoldPatronBarcode";
+            this.textBoxPlaceHoldPatronBarcode.Size = new System.Drawing.Size(426, 34);
+            this.textBoxPlaceHoldPatronBarcode.TabIndex = 1;
+            // 
+            // labelPlaceHoldPatronBarcode
+            // 
+            this.labelPlaceHoldPatronBarcode.AutoSize = true;
+            this.labelPlaceHoldPatronBarcode.Location = new System.Drawing.Point(165, 24);
+            this.labelPlaceHoldPatronBarcode.Name = "labelPlaceHoldPatronBarcode";
+            this.labelPlaceHoldPatronBarcode.Size = new System.Drawing.Size(165, 25);
+            this.labelPlaceHoldPatronBarcode.TabIndex = 0;
+            this.labelPlaceHoldPatronBarcode.Text = "Patron barcode:";
+            this.labelPlaceHoldPatronBarcode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // menuStrip2
             // 
             this.menuStrip2.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
@@ -825,6 +931,57 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // buttonPlaceHoldOnCheckedItems
+            // 
+            this.buttonPlaceHoldOnCheckedItems.Location = new System.Drawing.Point(370, 651);
+            this.buttonPlaceHoldOnCheckedItems.Name = "buttonPlaceHoldOnCheckedItems";
+            this.buttonPlaceHoldOnCheckedItems.Size = new System.Drawing.Size(328, 46);
+            this.buttonPlaceHoldOnCheckedItems.TabIndex = 6;
+            this.buttonPlaceHoldOnCheckedItems.Text = "Place Holds on Checked Items";
+            this.buttonPlaceHoldOnCheckedItems.UseVisualStyleBackColor = true;
+            // 
+            // textBoxPlaceHoldMsg
+            // 
+            this.textBoxPlaceHoldMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxPlaceHoldMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxPlaceHoldMsg.Location = new System.Drawing.Point(23, 715);
+            this.textBoxPlaceHoldMsg.Multiline = true;
+            this.textBoxPlaceHoldMsg.Name = "textBoxPlaceHoldMsg";
+            this.textBoxPlaceHoldMsg.Size = new System.Drawing.Size(1040, 110);
+            this.textBoxPlaceHoldMsg.TabIndex = 8;
+            // 
+            // Hold
+            // 
+            this.Hold.HeaderText = "Hold?";
+            this.Hold.MinimumWidth = 10;
+            this.Hold.Name = "Hold";
+            this.Hold.Width = 75;
+            // 
+            // Title
+            // 
+            this.Title.HeaderText = "Title";
+            this.Title.MinimumWidth = 10;
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
+            this.Title.Width = 670;
+            // 
+            // Author
+            // 
+            this.Author.HeaderText = "Author";
+            this.Author.MinimumWidth = 10;
+            this.Author.Name = "Author";
+            this.Author.ReadOnly = true;
+            this.Author.Width = 295;
+            // 
+            // BibID
+            // 
+            this.BibID.HeaderText = "BibID";
+            this.BibID.MinimumWidth = 10;
+            this.BibID.Name = "BibID";
+            this.BibID.ReadOnly = true;
+            this.BibID.Visible = false;
+            this.BibID.Width = 200;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -853,6 +1010,9 @@
             this.groupBoxContactInfo.PerformLayout();
             this.tabPagePrintCheckouts.ResumeLayout(false);
             this.tabPagePrintCheckouts.PerformLayout();
+            this.tabPagePlaceHold.ResumeLayout(false);
+            this.tabPagePlaceHold.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaceHold)).EndInit();
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
             this.ResumeLayout(false);
@@ -929,6 +1089,19 @@
         private System.Windows.Forms.Label labelPatronBarcodeForReceipt;
         private System.Windows.Forms.TextBox textBoxPrintCheckoutMsg;
         private System.Windows.Forms.CheckBox checkBoxPrintOnlyItemsCheckedOutToday;
+        private System.Windows.Forms.TabPage tabPagePlaceHold;
+        private System.Windows.Forms.TextBox textBoxPlaceHoldItemSearch;
+        private System.Windows.Forms.Label labelPlaceHoldItemSearch;
+        private System.Windows.Forms.TextBox textBoxPlaceHoldPatronBarcode;
+        private System.Windows.Forms.Label labelPlaceHoldPatronBarcode;
+        private System.Windows.Forms.DataGridView dataGridViewPlaceHold;
+        private System.Windows.Forms.Button buttonPlaceHoldSearch;
+        private System.Windows.Forms.TextBox textBoxPlaceHoldMsg;
+        private System.Windows.Forms.Button buttonPlaceHoldOnCheckedItems;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Hold;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Author;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BibID;
     }
 }
 

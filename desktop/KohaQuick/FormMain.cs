@@ -23,6 +23,7 @@ namespace KohaQuick {
             // Subscribe to the KeyDown event of the TextBox
             textBoxItemBarcode.KeyDown += TextBoxItemBarcode_KeyDown;
             textBoxPatronBarcodeForReceipt.KeyDown += TextBoxPatronBarcodeForReceipt_KeyDown;
+            textBoxPlaceHoldItemSearch.KeyDown += TextBoxPlaceHoldSearch_KeyDown;
             this.Activated += FormMain_Activated;
             this.tabControlHolds.SelectedIndexChanged += new System.EventHandler(this.tabControlHolds_SelectedIndexChanged);
         }
@@ -314,6 +315,35 @@ namespace KohaQuick {
                 } else {
                     textBoxPrintCheckoutMsg.Text = errmsg;
                 }
+            }
+        }
+
+        private void buttonPlaceHoldSearch_Click(object sender, EventArgs e) {
+            ItemSearchResultsCol itemSearchResultsCol;
+            string errmsg = "";
+            string searchTerms = this.textBoxPlaceHoldItemSearch.Text.Trim();
+            if (searchTerms.Length == 0) {
+                this.textBoxPlaceHoldMsg.Text = "You must enter search terms";
+                return;
+            }
+            this.textBoxPlaceHoldMsg.Text = $"Searching for {searchTerms}...";
+            bool bOK = session1.SearchForItems(searchTerms, out itemSearchResultsCol, out errmsg);
+            if(bOK) {
+                this.textBoxPlaceHoldMsg.Text = $"Found {itemSearchResultsCol.ResultList.Count} items. Check the ones to hold.";
+                foreach(ItemSearchResult result in itemSearchResultsCol.ResultList) {
+                    this.dataGridViewPlaceHold.Rows.Add(false, result.Title, result.Author, result.BiblioID);
+                }
+            } else {
+                this.textBoxPlaceHoldMsg.Text = errmsg;
+            }
+        }
+
+        private void TextBoxPlaceHoldSearch_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                // Enter key was pressed, trigger the button click event
+                buttonPlaceHoldSearch_Click(sender, e);
+                // Optionally, suppress the default beep sound
+                e.SuppressKeyPress = true;
             }
         }
 
