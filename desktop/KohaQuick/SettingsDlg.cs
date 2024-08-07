@@ -9,6 +9,7 @@ namespace KohaQuick {
             InitializeComponent();
             this.textBoxStaffURL.Text = Program.FormMain.settings.KohaUrlStaff;
             this.textBoxPatronURL.Text = Program.FormMain.settings.KohaUrlPatron;
+            this.textBoxDefaultPatronType.Text = Program.FormMain.settings.DefaultPatronCategory;
 
             this.labelPrinter.Text = Program.FormMain.printImpl.settings.Printer;
             this.textBoxX.Text = Program.FormMain.printImpl.settings.UpperLeftX.ToString();
@@ -97,6 +98,7 @@ namespace KohaQuick {
             bool ok = true;
             Program.FormMain.settings.KohaUrlStaff = this.textBoxStaffURL.Text;
             Program.FormMain.settings.KohaUrlPatron = this.textBoxPatronURL.Text;
+            Program.FormMain.settings.DefaultPatronCategory = this.textBoxDefaultPatronType.Text;
             Program.FormMain.printImpl.settings.PrintToPDF = this.checkBoxPrintToPDF.Checked;
             if (Int32.TryParse(this.textBoxX.Text, out int xValue)) {
                 // Parsing successful, xValue contains the converted integer.

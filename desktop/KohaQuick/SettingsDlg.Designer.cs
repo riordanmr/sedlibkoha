@@ -79,15 +79,17 @@
             this.labelBrowserX = new System.Windows.Forms.Label();
             this.labelBrowserWidth = new System.Windows.Forms.Label();
             this.tabPagePrintCheckouts = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonCheckoutFieldDown = new System.Windows.Forms.Button();
             this.buttonCheckoutFieldUp = new System.Windows.Forms.Button();
+            this.labelCheckoutConfigured = new System.Windows.Forms.Label();
+            this.labelCheckoutAvailable = new System.Windows.Forms.Label();
             this.buttonCheckoutFieldRemove = new System.Windows.Forms.Button();
             this.buttonCheckoutFieldAdd = new System.Windows.Forms.Button();
             this.listBoxCheckoutFieldsActual = new System.Windows.Forms.ListBox();
             this.listBoxCheckoutFieldsAvailable = new System.Windows.Forms.ListBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.labelCheckoutConfigured = new System.Windows.Forms.Label();
-            this.labelCheckoutAvailable = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxDefaultPatronType = new System.Windows.Forms.TextBox();
             this.groupBoxFontPatron.SuspendLayout();
             this.groupBoxFontOther.SuspendLayout();
             this.groupBoxFields.SuspendLayout();
@@ -404,13 +406,15 @@
             // 
             // tabPageURLs
             // 
+            this.tabPageURLs.Controls.Add(this.textBoxDefaultPatronType);
+            this.tabPageURLs.Controls.Add(this.label1);
             this.tabPageURLs.Controls.Add(this.groupBoxURLs);
             this.tabPageURLs.Location = new System.Drawing.Point(8, 39);
             this.tabPageURLs.Name = "tabPageURLs";
             this.tabPageURLs.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageURLs.Size = new System.Drawing.Size(1194, 707);
             this.tabPageURLs.TabIndex = 0;
-            this.tabPageURLs.Text = "URLs";
+            this.tabPageURLs.Text = "Koha";
             this.tabPageURLs.UseVisualStyleBackColor = true;
             // 
             // groupBoxURLs
@@ -421,7 +425,7 @@
             this.groupBoxURLs.Controls.Add(this.labelStaffURL);
             this.groupBoxURLs.Location = new System.Drawing.Point(17, 20);
             this.groupBoxURLs.Name = "groupBoxURLs";
-            this.groupBoxURLs.Size = new System.Drawing.Size(1157, 169);
+            this.groupBoxURLs.Size = new System.Drawing.Size(1157, 147);
             this.groupBoxURLs.TabIndex = 0;
             this.groupBoxURLs.TabStop = false;
             this.groupBoxURLs.Text = "Koha URLs";
@@ -613,6 +617,23 @@
             this.tabPagePrintCheckouts.Text = "Print Checkouts";
             this.tabPagePrintCheckouts.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.buttonCheckoutFieldDown);
+            this.groupBox1.Controls.Add(this.buttonCheckoutFieldUp);
+            this.groupBox1.Controls.Add(this.labelCheckoutConfigured);
+            this.groupBox1.Controls.Add(this.labelCheckoutAvailable);
+            this.groupBox1.Controls.Add(this.buttonCheckoutFieldRemove);
+            this.groupBox1.Controls.Add(this.buttonCheckoutFieldAdd);
+            this.groupBox1.Controls.Add(this.listBoxCheckoutFieldsActual);
+            this.groupBox1.Controls.Add(this.listBoxCheckoutFieldsAvailable);
+            this.groupBox1.Location = new System.Drawing.Point(31, 26);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(623, 471);
+            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Fields";
+            // 
             // buttonCheckoutFieldDown
             // 
             this.buttonCheckoutFieldDown.Location = new System.Drawing.Point(580, 255);
@@ -632,6 +653,26 @@
             this.buttonCheckoutFieldUp.Text = "↑";
             this.buttonCheckoutFieldUp.UseVisualStyleBackColor = true;
             this.buttonCheckoutFieldUp.Click += new System.EventHandler(this.buttonCheckoutFieldUp_Click);
+            // 
+            // labelCheckoutConfigured
+            // 
+            this.labelCheckoutConfigured.AutoSize = true;
+            this.labelCheckoutConfigured.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCheckoutConfigured.Location = new System.Drawing.Point(388, 34);
+            this.labelCheckoutConfigured.Name = "labelCheckoutConfigured";
+            this.labelCheckoutConfigured.Size = new System.Drawing.Size(127, 25);
+            this.labelCheckoutConfigured.TabIndex = 4;
+            this.labelCheckoutConfigured.Text = "Configured";
+            // 
+            // labelCheckoutAvailable
+            // 
+            this.labelCheckoutAvailable.AutoSize = true;
+            this.labelCheckoutAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCheckoutAvailable.Location = new System.Drawing.Point(63, 34);
+            this.labelCheckoutAvailable.Name = "labelCheckoutAvailable";
+            this.labelCheckoutAvailable.Size = new System.Drawing.Size(109, 25);
+            this.labelCheckoutAvailable.TabIndex = 0;
+            this.labelCheckoutAvailable.Text = "Available";
             // 
             // buttonCheckoutFieldRemove
             // 
@@ -671,42 +712,23 @@
             this.listBoxCheckoutFieldsAvailable.Size = new System.Drawing.Size(228, 329);
             this.listBoxCheckoutFieldsAvailable.TabIndex = 1;
             // 
-            // groupBox1
+            // label1
             // 
-            this.groupBox1.Controls.Add(this.buttonCheckoutFieldDown);
-            this.groupBox1.Controls.Add(this.buttonCheckoutFieldUp);
-            this.groupBox1.Controls.Add(this.labelCheckoutConfigured);
-            this.groupBox1.Controls.Add(this.labelCheckoutAvailable);
-            this.groupBox1.Controls.Add(this.buttonCheckoutFieldRemove);
-            this.groupBox1.Controls.Add(this.buttonCheckoutFieldAdd);
-            this.groupBox1.Controls.Add(this.listBoxCheckoutFieldsActual);
-            this.groupBox1.Controls.Add(this.listBoxCheckoutFieldsAvailable);
-            this.groupBox1.Location = new System.Drawing.Point(31, 26);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(623, 471);
-            this.groupBox1.TabIndex = 13;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Fields";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(42, 198);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(200, 25);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Default patron type:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // labelCheckoutConfigured
+            // textBoxDefaultPatronType
             // 
-            this.labelCheckoutConfigured.AutoSize = true;
-            this.labelCheckoutConfigured.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCheckoutConfigured.Location = new System.Drawing.Point(388, 34);
-            this.labelCheckoutConfigured.Name = "labelCheckoutConfigured";
-            this.labelCheckoutConfigured.Size = new System.Drawing.Size(127, 25);
-            this.labelCheckoutConfigured.TabIndex = 4;
-            this.labelCheckoutConfigured.Text = "Configured";
-            // 
-            // labelCheckoutAvailable
-            // 
-            this.labelCheckoutAvailable.AutoSize = true;
-            this.labelCheckoutAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCheckoutAvailable.Location = new System.Drawing.Point(63, 34);
-            this.labelCheckoutAvailable.Name = "labelCheckoutAvailable";
-            this.labelCheckoutAvailable.Size = new System.Drawing.Size(109, 25);
-            this.labelCheckoutAvailable.TabIndex = 0;
-            this.labelCheckoutAvailable.Text = "Available";
+            this.textBoxDefaultPatronType.Font = new System.Drawing.Font("Consolas", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxDefaultPatronType.Location = new System.Drawing.Point(248, 196);
+            this.textBoxDefaultPatronType.Name = "textBoxDefaultPatronType";
+            this.textBoxDefaultPatronType.Size = new System.Drawing.Size(200, 32);
+            this.textBoxDefaultPatronType.TabIndex = 2;
             // 
             // SettingsDlg
             // 
@@ -725,6 +747,7 @@
             this.groupBoxFields.PerformLayout();
             this.tabControlSettings.ResumeLayout(false);
             this.tabPageURLs.ResumeLayout(false);
+            this.tabPageURLs.PerformLayout();
             this.groupBoxURLs.ResumeLayout(false);
             this.groupBoxURLs.PerformLayout();
             this.tabPagePrintHolds.ResumeLayout(false);
@@ -803,5 +826,7 @@
         private System.Windows.Forms.Button buttonCheckoutFieldAdd;
         private System.Windows.Forms.ListBox listBoxCheckoutFieldsActual;
         private System.Windows.Forms.ListBox listBoxCheckoutFieldsAvailable;
+        private System.Windows.Forms.TextBox textBoxDefaultPatronType;
+        private System.Windows.Forms.Label label1;
     }
 }

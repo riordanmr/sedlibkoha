@@ -318,13 +318,13 @@ namespace KohaQuick {
         }
 
         private void buttonCheckPatronPIN_Click(object sender, EventArgs e) {
+            textBoxPatronPINMsg.Text = "Checking PIN...";
             if (null == sessionPIN) {
                 sessionPIN = new KohaSession(3);
             } else {
                 sessionPIN.LogoutStaff();
             }
             string errmsg = "";
-            textBoxPatronPINMsg.Text = errmsg;
             LoginStatus loginStatus = sessionPIN.LoginPatron(settings.KohaUrlPatron, textBoxPatronBarcode.Text,
                 textBoxPatronPIN.Text, out errmsg);
             if (loginStatus == LoginStatus.Success) {

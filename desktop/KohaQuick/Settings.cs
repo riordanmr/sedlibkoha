@@ -24,8 +24,8 @@ namespace KohaQuick {
             return configFilePath;
         }
 
-        public string KohaUrlStaff = "";
-        public string KohaUrlPatron = "";
+        public string KohaUrlStaff = "https://staff-yavapaiaz.bywatersolutions.com";
+        public string KohaUrlPatron = "https://yavapaiaz.bywatersolutions.com/";
 
         public string Printer = "Epson TM-T88IV Receipt";
 
@@ -72,7 +72,7 @@ namespace KohaQuick {
 
         public string BrowserWindowState { get; set; } = BROWSER_WINDOW_STATE_NORMAL;
 
-        public string DefaultPatronCategory { get; set; } = "AD";
+        public string DefaultPatronCategory { get; set; } = "PATRON";
 
         // Serializes the current instance to a JSON string
         public string ToJson() {
