@@ -332,7 +332,7 @@ namespace KohaQuick {
             bool bOK = session1.SearchForItems(searchTerms, out itemSearchResultsCol, 
                 out bThereAreMore, out errmsg);
             if(bOK) {
-                string msg = $"Found {itemSearchResultsCol.ResultList.Count} items.";
+                string msg = $"Found {itemSearchResultsCol.Count} items.";
                 if (bThereAreMore) {
                     msg += " (There are more items not shown here).";
                 }
@@ -353,6 +353,47 @@ namespace KohaQuick {
                 // Optionally, suppress the default beep sound
                 e.SuppressKeyPress = true;
             }
+        }
+
+        private void buttonPlaceHoldOnCheckedItems_Click(object sender, EventArgs e) {
+            this.textBoxPlaceHoldMsg.Text = "";
+            string cardnumber = this.textBoxPlaceHoldPatronBarcode.Text.Trim();
+            if (cardnumber.Length == 0) {
+                this.textBoxPlaceHoldMsg.Text = "You must enter a patron library code barcode number";
+                return;
+            }
+
+            ItemSearchResultsCol itemsToHold = new ItemSearchResultsCol();
+
+            foreach (DataGridViewRow row in dataGridViewPlaceHold.Rows) {
+                // Assuming the checkbox column is the first column (index 0)
+                DataGridViewCheckBoxCell checkBoxCell = row.Cells[0] as DataGridViewCheckBoxCell;
+
+                if (checkBoxCell != null && (bool)checkBoxCell.Value) {
+                    // The checkbox is checked
+                    string title = row.Cells["Title"].Value.ToString();
+                    string author = row.Cells["Author"].Value.ToString();
+                    string biblioID = row.Cells["BibID"].Value.ToString();
+                    itemsToHold.ResultList.Add(new ItemSearchResult {
+                        Title = title,
+                        Author = author,
+                        BiblioID = biblioID
+                    });
+                }
+            }
+
+            if (itemsToHold.Count == 0) {
+                this.textBoxPlaceHoldMsg.Text = "You must select at least one item to place a hold on";
+                return;
+            }
+
+            string msg = $"Placing {itemsToHold.Count} ";
+            if (itemsToHold.Count == 1) {
+                msg += "hold";
+            } else {
+                msg += "holds";
+            }
+            this.textBoxPlaceHoldMsg.Text = $"{msg} for patron {cardnumber}...";
         }
 
         private void buttonCheckPatronPIN_Click(object sender, EventArgs e) {

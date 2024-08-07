@@ -28,6 +28,7 @@ namespace KohaQuick
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.tabControlHolds = new System.Windows.Forms.TabControl();
             this.tabPageTrapHolds = new System.Windows.Forms.TabPage();
@@ -89,7 +90,13 @@ namespace KohaQuick
             this.labelPatronBarcodeForReceipt = new System.Windows.Forms.Label();
             this.labelPrintReceiptHeader = new System.Windows.Forms.Label();
             this.tabPagePlaceHold = new System.Windows.Forms.TabPage();
+            this.textBoxPlaceHoldMsg = new System.Windows.Forms.TextBox();
+            this.buttonPlaceHoldOnCheckedItems = new System.Windows.Forms.Button();
             this.dataGridViewPlaceHold = new System.Windows.Forms.DataGridView();
+            this.Hold = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Author = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BibID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonPlaceHoldSearch = new System.Windows.Forms.Button();
             this.textBoxPlaceHoldItemSearch = new System.Windows.Forms.TextBox();
             this.labelPlaceHoldItemSearch = new System.Windows.Forms.Label();
@@ -103,12 +110,6 @@ namespace KohaQuick
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonPlaceHoldOnCheckedItems = new System.Windows.Forms.Button();
-            this.textBoxPlaceHoldMsg = new System.Windows.Forms.TextBox();
-            this.Hold = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Author = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BibID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlHolds.SuspendLayout();
             this.tabPageTrapHolds.SuspendLayout();
             this.tabPageCheckPIN.SuspendLayout();
@@ -794,19 +795,38 @@ namespace KohaQuick
             this.tabPagePlaceHold.Text = "Place Hold";
             this.tabPagePlaceHold.UseVisualStyleBackColor = true;
             // 
+            // textBoxPlaceHoldMsg
+            // 
+            this.textBoxPlaceHoldMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxPlaceHoldMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxPlaceHoldMsg.Location = new System.Drawing.Point(23, 715);
+            this.textBoxPlaceHoldMsg.Multiline = true;
+            this.textBoxPlaceHoldMsg.Name = "textBoxPlaceHoldMsg";
+            this.textBoxPlaceHoldMsg.Size = new System.Drawing.Size(1040, 110);
+            this.textBoxPlaceHoldMsg.TabIndex = 8;
+            // 
+            // buttonPlaceHoldOnCheckedItems
+            // 
+            this.buttonPlaceHoldOnCheckedItems.Location = new System.Drawing.Point(370, 651);
+            this.buttonPlaceHoldOnCheckedItems.Name = "buttonPlaceHoldOnCheckedItems";
+            this.buttonPlaceHoldOnCheckedItems.Size = new System.Drawing.Size(328, 46);
+            this.buttonPlaceHoldOnCheckedItems.TabIndex = 6;
+            this.buttonPlaceHoldOnCheckedItems.Text = "Place Holds on Checked Items";
+            this.buttonPlaceHoldOnCheckedItems.UseVisualStyleBackColor = true;
+            this.buttonPlaceHoldOnCheckedItems.Click += new System.EventHandler(this.buttonPlaceHoldOnCheckedItems_Click);
+            // 
             // dataGridViewPlaceHold
             // 
             this.dataGridViewPlaceHold.AllowUserToAddRows = false;
             this.dataGridViewPlaceHold.AllowUserToDeleteRows = false;
-            //dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            //dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            //dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            //dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            //dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            //dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InfoText;
-            //dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            //this.dataGridViewPlaceHold.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridViewPlaceHold.ColumnHeadersDefaultCellStyle.BackColor = Color.LightBlue;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightBlue;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewPlaceHold.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewPlaceHold.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPlaceHold.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Hold,
@@ -820,6 +840,38 @@ namespace KohaQuick
             this.dataGridViewPlaceHold.RowTemplate.Height = 33;
             this.dataGridViewPlaceHold.Size = new System.Drawing.Size(1082, 536);
             this.dataGridViewPlaceHold.TabIndex = 5;
+            // 
+            // Hold
+            // 
+            this.Hold.HeaderText = "Hold?";
+            this.Hold.MinimumWidth = 10;
+            this.Hold.Name = "Hold";
+            this.Hold.Width = 75;
+            // 
+            // Title
+            // 
+            this.Title.HeaderText = "Title";
+            this.Title.MinimumWidth = 10;
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
+            this.Title.Width = 670;
+            // 
+            // Author
+            // 
+            this.Author.HeaderText = "Author";
+            this.Author.MinimumWidth = 10;
+            this.Author.Name = "Author";
+            this.Author.ReadOnly = true;
+            this.Author.Width = 295;
+            // 
+            // BibID
+            // 
+            this.BibID.HeaderText = "BibID";
+            this.BibID.MinimumWidth = 10;
+            this.BibID.Name = "BibID";
+            this.BibID.ReadOnly = true;
+            this.BibID.Visible = false;
+            this.BibID.Width = 200;
             // 
             // buttonPlaceHoldSearch
             // 
@@ -933,57 +985,6 @@ namespace KohaQuick
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // buttonPlaceHoldOnCheckedItems
-            // 
-            this.buttonPlaceHoldOnCheckedItems.Location = new System.Drawing.Point(370, 651);
-            this.buttonPlaceHoldOnCheckedItems.Name = "buttonPlaceHoldOnCheckedItems";
-            this.buttonPlaceHoldOnCheckedItems.Size = new System.Drawing.Size(328, 46);
-            this.buttonPlaceHoldOnCheckedItems.TabIndex = 6;
-            this.buttonPlaceHoldOnCheckedItems.Text = "Place Holds on Checked Items";
-            this.buttonPlaceHoldOnCheckedItems.UseVisualStyleBackColor = true;
-            // 
-            // textBoxPlaceHoldMsg
-            // 
-            this.textBoxPlaceHoldMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxPlaceHoldMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxPlaceHoldMsg.Location = new System.Drawing.Point(23, 715);
-            this.textBoxPlaceHoldMsg.Multiline = true;
-            this.textBoxPlaceHoldMsg.Name = "textBoxPlaceHoldMsg";
-            this.textBoxPlaceHoldMsg.Size = new System.Drawing.Size(1040, 110);
-            this.textBoxPlaceHoldMsg.TabIndex = 8;
-            // 
-            // Hold
-            // 
-            this.Hold.HeaderText = "Hold?";
-            this.Hold.MinimumWidth = 10;
-            this.Hold.Name = "Hold";
-            this.Hold.Width = 75;
-            // 
-            // Title
-            // 
-            this.Title.HeaderText = "Title";
-            this.Title.MinimumWidth = 10;
-            this.Title.Name = "Title";
-            this.Title.ReadOnly = true;
-            this.Title.Width = 670;
-            // 
-            // Author
-            // 
-            this.Author.HeaderText = "Author";
-            this.Author.MinimumWidth = 10;
-            this.Author.Name = "Author";
-            this.Author.ReadOnly = true;
-            this.Author.Width = 295;
-            // 
-            // BibID
-            // 
-            this.BibID.HeaderText = "BibID";
-            this.BibID.MinimumWidth = 10;
-            this.BibID.Name = "BibID";
-            this.BibID.ReadOnly = true;
-            this.BibID.Visible = false;
-            this.BibID.Width = 200;
             // 
             // FormMain
             // 

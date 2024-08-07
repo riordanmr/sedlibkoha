@@ -29,6 +29,7 @@ namespace KohaQuick {
         Unknown
     };
 
+    // Represents a checked-out item.  Used to print checkout slips.
     public class CheckoutItem {
         //public string barcode { get; set; }
         public string due_date { get; set; }
@@ -61,7 +62,6 @@ namespace KohaQuick {
             });
         }
 
-
         public void RemoveCheckoutsNotToday() {
             int nItemsRemoved = 0;
             string strToday = DateTime.Now.Date.ToString("MM/dd/yyyy");
@@ -83,6 +83,11 @@ namespace KohaQuick {
 
     public class ItemSearchResultsCol {
         public List<ItemSearchResult> ResultList { get; set; } = new List<ItemSearchResult>();
+        public int Count {
+            get {
+                return ResultList?.Count ?? 0;
+            }
+        } 
     }
 
     // Represents a browser session to Koha.
@@ -836,115 +841,164 @@ namespace KohaQuick {
                     return false;
                 }
 
-                // Find the first <tbody> element
-                IWebElement tbodyElement = driver.FindElement(By.TagName("tbody"));
+                // If there are multiple results, there will be a "tbody" element.
 
-                // Find all <tr> elements within the <tbody>
-                IReadOnlyCollection<IWebElement> trElements = tbodyElement.FindElements(By.TagName("tr"));
+                try {
+                    // Find the first <tbody> element
+                    IWebElement tbodyElement = driver.FindElement(By.TagName("tbody"));
 
-                // Iterate through each <tr> element
-                int irow = 0;
-                foreach (IWebElement trElement in trElements) {
-                    irow++;
+                    // Find all <tr> elements within the <tbody>
+                    IReadOnlyCollection<IWebElement> trElements = tbodyElement.FindElements(By.TagName("tr"));
 
-                    // Unfortunately, not all copies of Koha have the same number of
-                    // columns in the search results. So we'll count the number of columns
-                    // and guess which columns contain the information we want based on the
-                    // column count.
+                    // Iterate through each <tr> element
+                    int irow = 0;
+                    foreach (IWebElement trElement in trElements) {
+                        irow++;
 
-                    // Find all <td> elements within the <tr>.
-                    IReadOnlyCollection<IWebElement> tdElements = trElement.FindElements(By.TagName("td"));
+                        // Unfortunately, not all copies of Koha have the same number of
+                        // columns in the search results. So we'll count the number of columns
+                        // and guess which columns contain the information we want based on the
+                        // column count.
 
-                    // Get the count of <td> elements
-                    int tdCount = tdElements.Count;
-                    int icolCheckbox = -1, icolTitle = -1;
-                    if(tdCount == 3) {
-                        icolCheckbox = 0;
-                        icolTitle = 1;
-                    } else if(tdCount == 4) {
-                        icolCheckbox = 1;
-                        icolTitle = 2;
-                    } else {
-                        ShowMsg($"SearchForItems: Unexpected number of columns: {tdCount}");
-                        errmsg = "Unexpected number of columns in search results table";
-                        return false;
-                    }
+                        // Find all <td> elements within the <tr>.
+                        IReadOnlyCollection<IWebElement> tdElements = trElement.FindElements(By.TagName("td"));
 
-                    // Find the <td> element within the <tr> that contains the checkbox.
-                    IWebElement tdElementWithCheckbox = trElement.FindElements(By.TagName("td"))[icolCheckbox];
-
-                    // Find the first checkbox within the second <td> element
-                    IWebElement checkboxElement = tdElementWithCheckbox.FindElement(
-                        By.CssSelector("input[type='checkbox']"));
-
-                    // Retrieve the id of the checkbox
-                    string checkboxId = checkboxElement.GetAttribute("id");
-
-                    // Find the third <td> element within the <tr>
-                    IWebElement thirdTdElement = trElement.FindElements(By.TagName("td"))[icolTitle];
-
-                    // Find the first <a> element within the third <td> element
-                    IWebElement aElement = thirdTdElement.FindElement(By.TagName("a"));
-
-                    // Retrieve the text of the <a> element
-                    string title = aElement.Text;
-
-                    string author = "";
-                    try {
-                        // Search for the author. Some results do not have an author,
-                        // so we need to catch the exception.
-                        IWebElement pElement = thirdTdElement.FindElement(By.CssSelector("p.author"));
-
-                        // Retrieve the text of the <p> element
-                        author = pElement.Text;
-                        if (author.StartsWith("by ")) {
-                            author = author.Substring(3);
+                        // Get the count of <td> elements
+                        int tdCount = tdElements.Count;
+                        int icolCheckbox = -1, icolTitle = -1;
+                        if (tdCount == 3) {
+                            icolCheckbox = 0;
+                            icolTitle = 1;
+                        } else if (tdCount == 4) {
+                            icolCheckbox = 1;
+                            icolTitle = 2;
+                        } else {
+                            ShowMsg($"SearchForItems: Unexpected number of columns: {tdCount}");
+                            errmsg = "Unexpected number of columns in search results table";
+                            return false;
                         }
-                    } catch (NoSuchElementException) {
-                        // Ignore
-                    }
 
-                    ItemSearchResult itemSearchResult = new ItemSearchResult {
-                        Title = title,
-                        Author = author,
-                        BiblioID = checkboxId
-                    };
-                    Results.ResultList.Add(itemSearchResult);
-                    ShowMsg($"  {irow}: Checkboxid: {checkboxId} Title: {title} Author: {author}");
+                        // Find the <td> element within the <tr> that contains the checkbox.
+                        IWebElement tdElementWithCheckbox = trElement.FindElements(By.TagName("td"))[icolCheckbox];
 
-                }
+                        // Find the first checkbox within the second <td> element
+                        IWebElement checkboxElement = tdElementWithCheckbox.FindElement(
+                            By.CssSelector("input[type='checkbox']"));
 
-                // Now determine whether there are more pages of search results.
-                // We look for an "a" element with the text "Next"; this "a"
-                // element must be within an "li" element.
+                        // Retrieve the id of the checkbox
+                        string checkboxId = checkboxElement.GetAttribute("id");
 
-                // Find all <li> elements
-                IReadOnlyCollection<IWebElement> liElements = driver.FindElements(By.TagName("li"));
+                        // Find the third <td> element within the <tr>
+                        IWebElement thirdTdElement = trElement.FindElements(By.TagName("td"))[icolTitle];
 
-                // Iterate through each <li> element
-                foreach (IWebElement liElement in liElements) {
-                    try {
-                        // Find the <a> element within the <li> element
-                        IWebElement aElement = liElement.FindElement(By.TagName("a"));
+                        // Find the first <a> element within the third <td> element
+                        IWebElement aElement = thirdTdElement.FindElement(By.TagName("a"));
 
-                        // Check if the text of the <a> element contains "Next"
-                        if (aElement.Text.Contains("Next")) {
-                            bThereAreMore = true;
-                            break;
+                        // Retrieve the text of the <a> element
+                        string title = aElement.Text;
+
+                        string author = "";
+                        try {
+                            // Search for the author. Some results do not have an author,
+                            // so we need to catch the exception.
+                            IWebElement pElement = thirdTdElement.FindElement(By.CssSelector("p.author"));
+
+                            // Retrieve the text of the <p> element
+                            author = pElement.Text;
+                            if (author.StartsWith("by ")) {
+                                author = author.Substring(3);
+                            }
+                        } catch (NoSuchElementException) {
+                            // Ignore
                         }
-                    } catch (NoSuchElementException) {
-                        // If no <a> element is found within the <li>, continue to the next <li>
-                        continue;
-                    }
-                }
 
-                bOK = true;
+                        ItemSearchResult itemSearchResult = new ItemSearchResult {
+                            Title = title,
+                            Author = author,
+                            BiblioID = checkboxId
+                        };
+                        Results.ResultList.Add(itemSearchResult);
+                        ShowMsg($"  {irow}: Checkboxid: {checkboxId} Title: {title} Author: {author}");
+
+                    }
+
+                    // Now determine whether there are more pages of search results.
+                    // We look for an "a" element with the text "Next"; this "a"
+                    // element must be within an "li" element.
+
+                    // Find all <li> elements
+                    IReadOnlyCollection<IWebElement> liElements = driver.FindElements(By.TagName("li"));
+
+                    // Iterate through each <li> element
+                    foreach (IWebElement liElement in liElements) {
+                        try {
+                            // Find the <a> element within the <li> element
+                            IWebElement aElement = liElement.FindElement(By.TagName("a"));
+
+                            // Check if the text of the <a> element contains "Next"
+                            if (aElement.Text.Contains("Next")) {
+                                bThereAreMore = true;
+                                break;
+                            }
+                        } catch (NoSuchElementException) {
+                            // If no <a> element is found within the <li>, continue to the next <li>
+                            continue;
+                        }
+                    }
+
+                    bOK = true;
+                } catch (NoSuchElementException) {
+                    // If we get here, it seems that there was exactly one result,
+                    // so we are going to have to look for it differently.
+                    ShowMsg("SearchForItems: Only one result found");
+                }
             } catch (Exception ex) {
                 errmsg = ex.Message;
                 ShowMsg($"SearchForItems: {ex.Message}");
             }
             return bOK;
         }
+
+        bool PlaceHoldsForPatron(string cardnumber, ItemSearchResultsCol ItemsToHold, out string errmsg) {
+            bool bOK = false;
+            errmsg = "";
+            try {
+                string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/members/memberentry.pl?borrowernumber=" + cardnumber;
+                driver.Navigate().GoToUrl(url);
+                WaitForPageToLoad();
+
+                foreach (ItemSearchResult item in ItemsToHold.ResultList) {
+                    // Find the checkbox element with the id of the biblio ID
+                    IWebElement checkboxElement = driver.FindElement(By.Id(item.BiblioID));
+
+                    // Click the checkbox
+                    checkboxElement.Click();
+                }
+
+                // Find the "Place hold" button
+                IWebElement placeHoldButton = driver.FindElement(By.CssSelector("button.btn.btn-primary.place_hold"));
+
+                // Click the "Place hold" button
+                placeHoldButton.Click();
+
+                WaitForPageToLoad();
+
+                // Find the "Place hold" button
+                IWebElement confirmHoldButton = driver.FindElement(By.CssSelector("button.btn.btn-primary.place_hold"));
+
+                // Click the "Place hold" button
+                confirmHoldButton.Click();
+
+                WaitForPageToLoad();
+
+                bOK = true;
+            } catch (Exception ex) {
+                errmsg = ex.Message;
+                ShowMsg($"PlaceHoldsForPatron: {ex.Message}");
+            }
+            return bOK;
+        }
+
 
         public void Close() {
             try {
