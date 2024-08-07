@@ -816,8 +816,9 @@ namespace KohaQuick {
         }
 
         public bool SearchForItems(string searchTerm, out ItemSearchResultsCol Results,
-            out string errmsg) {
+            out bool bThereAreMore, out string errmsg) {
             bool bOK = false;
+            bThereAreMore = false;
             errmsg = "";
             Results = new ItemSearchResultsCol();
             try {
@@ -911,6 +912,30 @@ namespace KohaQuick {
                     Results.ResultList.Add(itemSearchResult);
                     ShowMsg($"  {irow}: Checkboxid: {checkboxId} Title: {title} Author: {author}");
 
+                }
+
+                // Now determine whether there are more pages of search results.
+                // We look for an "a" element with the text "Next"; this "a"
+                // element must be within an "li" element.
+
+                // Find all <li> elements
+                IReadOnlyCollection<IWebElement> liElements = driver.FindElements(By.TagName("li"));
+
+                // Iterate through each <li> element
+                foreach (IWebElement liElement in liElements) {
+                    try {
+                        // Find the <a> element within the <li> element
+                        IWebElement aElement = liElement.FindElement(By.TagName("a"));
+
+                        // Check if the text of the <a> element contains "Next"
+                        if (aElement.Text.Contains("Next")) {
+                            bThereAreMore = true;
+                            break;
+                        }
+                    } catch (NoSuchElementException) {
+                        // If no <a> element is found within the <li>, continue to the next <li>
+                        continue;
+                    }
                 }
 
                 bOK = true;

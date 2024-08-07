@@ -321,15 +321,23 @@ namespace KohaQuick {
         private void buttonPlaceHoldSearch_Click(object sender, EventArgs e) {
             ItemSearchResultsCol itemSearchResultsCol;
             string errmsg = "";
+            this.dataGridViewPlaceHold.Rows.Clear();
             string searchTerms = this.textBoxPlaceHoldItemSearch.Text.Trim();
             if (searchTerms.Length == 0) {
                 this.textBoxPlaceHoldMsg.Text = "You must enter search terms";
                 return;
             }
             this.textBoxPlaceHoldMsg.Text = $"Searching for {searchTerms}...";
-            bool bOK = session1.SearchForItems(searchTerms, out itemSearchResultsCol, out errmsg);
+            bool bThereAreMore;
+            bool bOK = session1.SearchForItems(searchTerms, out itemSearchResultsCol, 
+                out bThereAreMore, out errmsg);
             if(bOK) {
-                this.textBoxPlaceHoldMsg.Text = $"Found {itemSearchResultsCol.ResultList.Count} items. Check the ones to hold.";
+                string msg = $"Found {itemSearchResultsCol.ResultList.Count} items.";
+                if (bThereAreMore) {
+                    msg += " (There are more items not shown here).";
+                }
+                msg += " Check the ones to hold.";
+                this.textBoxPlaceHoldMsg.Text = msg;
                 foreach(ItemSearchResult result in itemSearchResultsCol.ResultList) {
                     this.dataGridViewPlaceHold.Rows.Add(false, result.Title, result.Author, result.BiblioID);
                 }

@@ -1,4 +1,7 @@
-﻿namespace KohaQuick
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace KohaQuick
 {
     partial class FormMain
     {
@@ -25,7 +28,6 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.tabControlHolds = new System.Windows.Forms.TabControl();
             this.tabPageTrapHolds = new System.Windows.Forms.TabPage();
@@ -796,14 +798,15 @@
             // 
             this.dataGridViewPlaceHold.AllowUserToAddRows = false;
             this.dataGridViewPlaceHold.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InfoText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewPlaceHold.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            //dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            //dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            //dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            //dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            //dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            //dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InfoText;
+            //dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            //this.dataGridViewPlaceHold.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewPlaceHold.ColumnHeadersDefaultCellStyle.BackColor = Color.LightBlue;
             this.dataGridViewPlaceHold.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPlaceHold.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Hold,
