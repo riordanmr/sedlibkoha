@@ -128,7 +128,7 @@
             this.tabPageTrapHolds.Location = new System.Drawing.Point(8, 39);
             this.tabPageTrapHolds.Name = "tabPageTrapHolds";
             this.tabPageTrapHolds.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTrapHolds.Size = new System.Drawing.Size(1085, 796);
+            this.tabPageTrapHolds.Size = new System.Drawing.Size(1085, 830);
             this.tabPageTrapHolds.TabIndex = 0;
             this.tabPageTrapHolds.Text = "Trap Holds";
             this.tabPageTrapHolds.UseVisualStyleBackColor = true;
@@ -206,7 +206,7 @@
             this.tabPageCheckPIN.Controls.Add(this.labelPatronBarcode);
             this.tabPageCheckPIN.Location = new System.Drawing.Point(8, 39);
             this.tabPageCheckPIN.Name = "tabPageCheckPIN";
-            this.tabPageCheckPIN.Size = new System.Drawing.Size(1085, 796);
+            this.tabPageCheckPIN.Size = new System.Drawing.Size(1085, 830);
             this.tabPageCheckPIN.TabIndex = 1;
             this.tabPageCheckPIN.Text = "Check PIN";
             this.tabPageCheckPIN.UseVisualStyleBackColor = true;
@@ -691,7 +691,7 @@
             this.tabPagePrintCheckouts.Controls.Add(this.labelPrintReceiptHeader);
             this.tabPagePrintCheckouts.Location = new System.Drawing.Point(8, 39);
             this.tabPagePrintCheckouts.Name = "tabPagePrintCheckouts";
-            this.tabPagePrintCheckouts.Size = new System.Drawing.Size(1085, 796);
+            this.tabPagePrintCheckouts.Size = new System.Drawing.Size(1085, 830);
             this.tabPagePrintCheckouts.TabIndex = 3;
             this.tabPagePrintCheckouts.Text = "Print Checkouts";
             this.tabPagePrintCheckouts.UseVisualStyleBackColor = true;
@@ -832,6 +832,7 @@
             this.ClientSize = new System.Drawing.Size(1120, 938);
             this.Controls.Add(this.tabControlHolds);
             this.Controls.Add(this.menuStrip2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
             this.Text = "KohaQuick";
