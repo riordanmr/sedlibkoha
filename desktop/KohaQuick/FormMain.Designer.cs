@@ -90,6 +90,7 @@ namespace KohaQuick
             this.labelPatronBarcodeForReceipt = new System.Windows.Forms.Label();
             this.labelPrintReceiptHeader = new System.Windows.Forms.Label();
             this.tabPagePlaceHold = new System.Windows.Forms.TabPage();
+            this.buttonPlaceHoldsClearInfo = new System.Windows.Forms.Button();
             this.textBoxPlaceHoldMsg = new System.Windows.Forms.TextBox();
             this.buttonPlaceHoldOnCheckedItems = new System.Windows.Forms.Button();
             this.dataGridViewPlaceHold = new System.Windows.Forms.DataGridView();
@@ -317,30 +318,30 @@ namespace KohaQuick
             // 
             // buttonClearInfo
             // 
-            this.buttonClearInfo.Location = new System.Drawing.Point(137, 658);
+            this.buttonClearInfo.Location = new System.Drawing.Point(765, 656);
             this.buttonClearInfo.Name = "buttonClearInfo";
             this.buttonClearInfo.Size = new System.Drawing.Size(200, 44);
-            this.buttonClearInfo.TabIndex = 4;
+            this.buttonClearInfo.TabIndex = 6;
             this.buttonClearInfo.Text = "Clear Info";
             this.buttonClearInfo.UseVisualStyleBackColor = true;
             this.buttonClearInfo.Click += new System.EventHandler(this.buttonClearInfo_Click);
             // 
             // buttonGenerateRandom
             // 
-            this.buttonGenerateRandom.Location = new System.Drawing.Point(440, 656);
+            this.buttonGenerateRandom.Location = new System.Drawing.Point(117, 656);
             this.buttonGenerateRandom.Name = "buttonGenerateRandom";
             this.buttonGenerateRandom.Size = new System.Drawing.Size(200, 44);
-            this.buttonGenerateRandom.TabIndex = 5;
+            this.buttonGenerateRandom.TabIndex = 4;
             this.buttonGenerateRandom.Text = "Generate Random";
             this.buttonGenerateRandom.UseVisualStyleBackColor = true;
             this.buttonGenerateRandom.Click += new System.EventHandler(this.buttonGenerateRandom_Click);
             // 
             // buttonAddPatron
             // 
-            this.buttonAddPatron.Location = new System.Drawing.Point(729, 656);
+            this.buttonAddPatron.Location = new System.Drawing.Point(437, 656);
             this.buttonAddPatron.Name = "buttonAddPatron";
             this.buttonAddPatron.Size = new System.Drawing.Size(200, 44);
-            this.buttonAddPatron.TabIndex = 6;
+            this.buttonAddPatron.TabIndex = 5;
             this.buttonAddPatron.Text = "Add Patron";
             this.buttonAddPatron.UseVisualStyleBackColor = true;
             this.buttonAddPatron.Click += new System.EventHandler(this.buttonAddPatron_Click);
@@ -529,7 +530,7 @@ namespace KohaQuick
             this.textBoxAddress1.Location = new System.Drawing.Point(133, 31);
             this.textBoxAddress1.Name = "textBoxAddress1";
             this.textBoxAddress1.Size = new System.Drawing.Size(360, 31);
-            this.textBoxAddress1.TabIndex = 1;
+            this.textBoxAddress1.TabIndex = 2;
             // 
             // labelAddress2
             // 
@@ -538,7 +539,7 @@ namespace KohaQuick
             this.labelAddress2.Location = new System.Drawing.Point(535, 34);
             this.labelAddress2.Name = "labelAddress2";
             this.labelAddress2.Size = new System.Drawing.Size(109, 25);
-            this.labelAddress2.TabIndex = 2;
+            this.labelAddress2.TabIndex = 3;
             this.labelAddress2.Text = "Address2:";
             this.labelAddress2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -547,21 +548,21 @@ namespace KohaQuick
             this.textBoxAddress2.Location = new System.Drawing.Point(663, 30);
             this.textBoxAddress2.Name = "textBoxAddress2";
             this.textBoxAddress2.Size = new System.Drawing.Size(350, 31);
-            this.textBoxAddress2.TabIndex = 3;
+            this.textBoxAddress2.TabIndex = 4;
             // 
             // textBoxZipcode
             // 
             this.textBoxZipcode.Location = new System.Drawing.Point(666, 78);
             this.textBoxZipcode.Name = "textBoxZipcode";
             this.textBoxZipcode.Size = new System.Drawing.Size(162, 31);
-            this.textBoxZipcode.TabIndex = 9;
+            this.textBoxZipcode.TabIndex = 0;
             // 
             // textBoxCity
             // 
             this.textBoxCity.Location = new System.Drawing.Point(133, 78);
             this.textBoxCity.Name = "textBoxCity";
             this.textBoxCity.Size = new System.Drawing.Size(162, 31);
-            this.textBoxCity.TabIndex = 5;
+            this.textBoxCity.TabIndex = 6;
             // 
             // labelZipcode
             // 
@@ -569,7 +570,7 @@ namespace KohaQuick
             this.labelZipcode.Location = new System.Drawing.Point(549, 81);
             this.labelZipcode.Name = "labelZipcode";
             this.labelZipcode.Size = new System.Drawing.Size(95, 25);
-            this.labelZipcode.TabIndex = 8;
+            this.labelZipcode.TabIndex = 9;
             this.labelZipcode.Text = "Zipcode:";
             this.labelZipcode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -579,7 +580,7 @@ namespace KohaQuick
             this.labelCity.Location = new System.Drawing.Point(59, 78);
             this.labelCity.Name = "labelCity";
             this.labelCity.Size = new System.Drawing.Size(55, 25);
-            this.labelCity.TabIndex = 4;
+            this.labelCity.TabIndex = 5;
             this.labelCity.Text = "City:";
             this.labelCity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -589,7 +590,7 @@ namespace KohaQuick
             this.labelState.Location = new System.Drawing.Point(328, 78);
             this.labelState.Name = "labelState";
             this.labelState.Size = new System.Drawing.Size(68, 25);
-            this.labelState.TabIndex = 6;
+            this.labelState.TabIndex = 7;
             this.labelState.Text = "State:";
             this.labelState.Click += new System.EventHandler(this.label1_Click);
             // 
@@ -650,7 +651,7 @@ namespace KohaQuick
             this.comboBoxState.Location = new System.Drawing.Point(402, 75);
             this.comboBoxState.Name = "comboBoxState";
             this.comboBoxState.Size = new System.Drawing.Size(126, 33);
-            this.comboBoxState.TabIndex = 7;
+            this.comboBoxState.TabIndex = 8;
             this.comboBoxState.SelectedIndexChanged += new System.EventHandler(this.comboBoxState_SelectedIndexChanged);
             // 
             // groupBoxContactInfo
@@ -780,6 +781,7 @@ namespace KohaQuick
             // 
             // tabPagePlaceHold
             // 
+            this.tabPagePlaceHold.Controls.Add(this.buttonPlaceHoldsClearInfo);
             this.tabPagePlaceHold.Controls.Add(this.textBoxPlaceHoldMsg);
             this.tabPagePlaceHold.Controls.Add(this.buttonPlaceHoldOnCheckedItems);
             this.tabPagePlaceHold.Controls.Add(this.dataGridViewPlaceHold);
@@ -794,6 +796,16 @@ namespace KohaQuick
             this.tabPagePlaceHold.TabIndex = 4;
             this.tabPagePlaceHold.Text = "Place Hold";
             this.tabPagePlaceHold.UseVisualStyleBackColor = true;
+            // 
+            // buttonPlaceHoldsClearInfo
+            // 
+            this.buttonPlaceHoldsClearInfo.Location = new System.Drawing.Point(824, 653);
+            this.buttonPlaceHoldsClearInfo.Name = "buttonPlaceHoldsClearInfo";
+            this.buttonPlaceHoldsClearInfo.Size = new System.Drawing.Size(200, 44);
+            this.buttonPlaceHoldsClearInfo.TabIndex = 9;
+            this.buttonPlaceHoldsClearInfo.Text = "Clear Info";
+            this.buttonPlaceHoldsClearInfo.UseVisualStyleBackColor = true;
+            this.buttonPlaceHoldsClearInfo.Click += new System.EventHandler(this.buttonPlaceHoldsClearInfo_Click);
             // 
             // textBoxPlaceHoldMsg
             // 
@@ -1106,6 +1118,7 @@ namespace KohaQuick
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn Author;
         private System.Windows.Forms.DataGridViewTextBoxColumn BibID;
+        private Button buttonPlaceHoldsClearInfo;
     }
 }
 

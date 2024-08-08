@@ -78,10 +78,11 @@ namespace KohaQuick {
     public class ItemSearchResult {
         public string Title { get; set; }
         public string Author { get; set; }
-        public string BiblioID { get; set; }
+        public string BiblioID { get; set; } = "";
     }
 
     public class ItemSearchResultsCol {
+        public bool OnlyOneResult { get; set; } = false;
         public List<ItemSearchResult> ResultList { get; set; } = new List<ItemSearchResult>();
         public int Count {
             get {
@@ -841,9 +842,15 @@ namespace KohaQuick {
                     return false;
                 }
 
-                // If there are multiple results, there will be a "tbody" element.
+                if(!driver.PageSource.Contains("Place hold")) {
+                    errmsg = "No holdable items found";
+                    return false;
+                }
 
-                try {
+                // Parsing out the titles, etc., of the search results is difficult
+                // because they are in a different format for 1 vs. multiple results.
+
+                if (driver.PageSource.Contains("result(s) found for")) {
                     // Find the first <tbody> element
                     IWebElement tbodyElement = driver.FindElement(By.TagName("tbody"));
 
@@ -919,7 +926,6 @@ namespace KohaQuick {
                         };
                         Results.ResultList.Add(itemSearchResult);
                         ShowMsg($"  {irow}: Checkboxid: {checkboxId} Title: {title} Author: {author}");
-
                     }
 
                     // Now determine whether there are more pages of search results.
@@ -947,10 +953,24 @@ namespace KohaQuick {
                     }
 
                     bOK = true;
-                } catch (NoSuchElementException) {
-                    // If we get here, it seems that there was exactly one result,
-                    // so we are going to have to look for it differently.
-                    ShowMsg("SearchForItems: Only one result found");
+                } else {
+                    // If no <tbody> element is found, there's only one result, 
+                    // and we need to handle it differently.
+
+                    // Locate the first h1 element with class 'title'
+                    IWebElement titleElement = driver.FindElement(By.CssSelector("h1.title"));
+                    string title = titleElement.Text;
+                    // Locate the first h5 element with class 'author'
+                    IWebElement authorElement = driver.FindElement(By.CssSelector("h5.author"));
+                    string author = authorElement.Text;
+                    ItemSearchResult itemSearchResult = new ItemSearchResult {
+                        Title = title,
+                        Author = author
+                    };
+                    Results.ResultList.Add(itemSearchResult);
+                    Results.OnlyOneResult = true;
+                    ShowMsg($"Only 1 result found: Title: {title} Author: {author}");
+                    bOK = true;
                 }
             } catch (Exception ex) {
                 errmsg = ex.Message;
@@ -959,39 +979,67 @@ namespace KohaQuick {
             return bOK;
         }
 
-        bool PlaceHoldsForPatron(string cardnumber, ItemSearchResultsCol ItemsToHold, out string errmsg) {
+        public bool PlaceHoldsForPatron(string cardnumber, ItemSearchResultsCol itemsToHold, out string errmsg) {
             bool bOK = false;
             errmsg = "";
             try {
-                string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/members/memberentry.pl?borrowernumber=" + cardnumber;
-                driver.Navigate().GoToUrl(url);
-                WaitForPageToLoad();
+                ShowMsg($"PlaceHoldsForPatron: url={driver.Url}");
+                // Placing the hold(s) is rather different, based on whether the
+                // original search contained only one result or multiple results.
+                if (!itemsToHold.OnlyOneResult) {
+                    // There are multiple results, so we need to check the checkboxes
+                    // for the items to hold.
+                    foreach (ItemSearchResult item in itemsToHold.ResultList) {
+                        // Find the checkbox element with the id of the biblio ID
+                        IWebElement checkboxElement = driver.FindElement(By.Id(item.BiblioID));
 
-                foreach (ItemSearchResult item in ItemsToHold.ResultList) {
-                    // Find the checkbox element with the id of the biblio ID
-                    IWebElement checkboxElement = driver.FindElement(By.Id(item.BiblioID));
+                        // Click the checkbox
+                        checkboxElement.Click();
+                    }
 
-                    // Click the checkbox
-                    checkboxElement.Click();
+                    // Now click on the "Place hold" button, which is not really a button
+                    // and which does not have an ID.  Ugh, Koha is crappy.
+
+                    // Locate the div element.
+                    IWebElement divElement = driver.FindElement(By.Id("placeholdc"));
+
+                    // Locate the first a element under the div element.
+                    IWebElement linkElement = divElement.FindElement(By.TagName("a"));
+                    linkElement.Click();
+                } else {
+                    IWebElement placeHoldLink = driver.FindElement(By.Id("placehold"));
+                    placeHoldLink.Click();
                 }
 
-                // Find the "Place hold" button
-                IWebElement placeHoldButton = driver.FindElement(By.CssSelector("button.btn.btn-primary.place_hold"));
-
-                // Click the "Place hold" button
-                placeHoldButton.Click();
-
                 WaitForPageToLoad();
 
-                // Find the "Place hold" button
-                IWebElement confirmHoldButton = driver.FindElement(By.CssSelector("button.btn.btn-primary.place_hold"));
+                // Enter the patron cardnumber so we can select for whom we are placing the hold.
+                driver.FindElement(By.Id("search_patron_filter")).SendKeys(cardnumber);
 
-                // Click the "Place hold" button
-                confirmHoldButton.Click();
-
+                // Find and click on the Search button. Naturally, it has no name or ID,
+                // so we have to do this the hard way.
+                // Locate the form element with id 'patron_search_form'
+                IWebElement formElement = driver.FindElement(By.Id("patron_search_form"));
+                // Locate the input element of type 'submit' directly under the form element
+                IWebElement submitButton = formElement.FindElement(By.CssSelector("input[type='submit']"));
+                // Click the submit button to search for the patron.
+                submitButton.Click();
                 WaitForPageToLoad();
 
-                bOK = true;
+                if (driver.PageSource.Contains("No entries to show")) {
+                    errmsg = $"Could not find patron with card number {cardnumber}";
+                } else if(driver.PageSource.Contains("Cannot place hold on some items")) {
+                    errmsg = $"Some items are not available for holds; will not place any holds";
+                } else {
+                    // Locate the form element with name 'form'
+                    IWebElement formElementHold = driver.FindElement(By.Name("form"));
+                    // Locate the first button element of type 'submit' within the form element
+                    IWebElement submitButtonHold = formElementHold.FindElement(By.CssSelector("button[type='submit']"));
+                    submitButtonHold.Click();
+                }
+
+                errmsg = "Still under development";
+                //bOK = true;
             } catch (Exception ex) {
                 errmsg = ex.Message;
                 ShowMsg($"PlaceHoldsForPatron: {ex.Message}");

@@ -363,8 +363,11 @@ namespace KohaQuick {
                 return;
             }
 
+            // Create a list of items to hold, based on the checked items in the DataGridView.
             ItemSearchResultsCol itemsToHold = new ItemSearchResultsCol();
-
+            // Note that OnlyOneResult is set to true if there was only one search
+            // result, not if the patron only wanted 1 of those items.
+            itemsToHold.OnlyOneResult = this.dataGridViewPlaceHold.Rows.Count == 1;
             foreach (DataGridViewRow row in dataGridViewPlaceHold.Rows) {
                 // Assuming the checkbox column is the first column (index 0)
                 DataGridViewCheckBoxCell checkBoxCell = row.Cells[0] as DataGridViewCheckBoxCell;
@@ -394,6 +397,21 @@ namespace KohaQuick {
                 msg += "holds";
             }
             this.textBoxPlaceHoldMsg.Text = $"{msg} for patron {cardnumber}...";
+
+            string errmsg;
+            bool bOK = session1.PlaceHoldsForPatron(cardnumber, itemsToHold, out errmsg);
+            if(!bOK) {
+                this.textBoxPlaceHoldMsg.Text = errmsg;
+            } else {
+                this.textBoxPlaceHoldMsg.Text = "Holds placed successfully.";
+            }
+        }
+
+        private void buttonPlaceHoldsClearInfo_Click(object sender, EventArgs e) {
+            textBoxPlaceHoldItemSearch.Text = "";
+            textBoxPlaceHoldMsg.Text = "";
+            textBoxPlaceHoldPatronBarcode.Text = "";
+            dataGridViewPlaceHold.Rows.Clear();
         }
 
         private void buttonCheckPatronPIN_Click(object sender, EventArgs e) {
