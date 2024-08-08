@@ -1013,6 +1013,11 @@ namespace KohaQuick {
 
                 WaitForPageToLoad();
 
+                if (driver.PageSource.Contains("Cannot place hold:")) {
+                    errmsg = "Cannot place hold";
+                    return false;
+                }
+
                 // Enter the patron cardnumber so we can select for whom we are placing the hold.
                 driver.FindElement(By.Id("search_patron_filter")).SendKeys(cardnumber);
 
