@@ -304,7 +304,8 @@ namespace KohaQuick {
                 $" Width {settings.PageWidth};" +
                 $" Patron font: {settings.FontFamilyPatron} {settings.FontSizePatron} {settings.LineSpacingPatron.ToString()};";
             msg += $" Other font: {settings.FontFamilyOther} {settings.FontSizeOther} {settings.LineSpacingOther.ToString()};";
-            msg += $" Fields: ";
+            msg += $" Break long lines on words: {settings.BreakLinesOnWords}; Intent continuations of long lines: {settings.IndentLineContinuations};";
+            msg += $" Holds Fields: ";
             string strFields = "";
             foreach (string field in settings.HoldFields) {
                 if (strFields.Length > 0) {
@@ -312,7 +313,17 @@ namespace KohaQuick {
                 }
                 strFields += field;
             }
-            msg += strFields;
+            msg += strFields + ";";
+
+            strFields = "";
+            foreach (string field in settings.CheckoutItemFields) {
+                if (strFields.Length > 0) {
+                    strFields += ", ";
+                }
+                strFields += field;
+            }
+            msg += "  Checkout Fields: " + strFields + "; ";
+
             ShowMsg(msg);
             if (settings.PrintConfig) {
                 PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
