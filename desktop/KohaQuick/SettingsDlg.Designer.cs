@@ -49,15 +49,6 @@
             this.labelFontInfoOther = new System.Windows.Forms.Label();
             this.checkBoxPrintConfig = new System.Windows.Forms.CheckBox();
             this.labelPrinter = new System.Windows.Forms.Label();
-            this.groupBoxFields = new System.Windows.Forms.GroupBox();
-            this.buttonFieldDown = new System.Windows.Forms.Button();
-            this.buttonFieldUp = new System.Windows.Forms.Button();
-            this.labelConfigured = new System.Windows.Forms.Label();
-            this.labelAvailable = new System.Windows.Forms.Label();
-            this.buttonFieldRemove = new System.Windows.Forms.Button();
-            this.buttonFieldAdd = new System.Windows.Forms.Button();
-            this.listBoxFieldsActual = new System.Windows.Forms.ListBox();
-            this.listBoxFieldsAvailable = new System.Windows.Forms.ListBox();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageURLs = new System.Windows.Forms.TabPage();
             this.textBoxDefaultPickupLibrary = new System.Windows.Forms.TextBox();
@@ -69,7 +60,7 @@
             this.textBoxStaffURL = new System.Windows.Forms.TextBox();
             this.labelPatronURL = new System.Windows.Forms.Label();
             this.labelStaffURL = new System.Windows.Forms.Label();
-            this.tabPagePrintHolds = new System.Windows.Forms.TabPage();
+            this.tabPagePrint = new System.Windows.Forms.TabPage();
             this.tabPageBrowser = new System.Windows.Forms.TabPage();
             this.groupBoxInitialBrowserState = new System.Windows.Forms.GroupBox();
             this.radioButtonBrowserMinimized = new System.Windows.Forms.RadioButton();
@@ -94,18 +85,29 @@
             this.listBoxCheckoutFieldsAvailable = new System.Windows.Forms.ListBox();
             this.checkBoxBreakOnWords = new System.Windows.Forms.CheckBox();
             this.checkBoxIndentLineContinuations = new System.Windows.Forms.CheckBox();
+            this.tabPageHoldSlips = new System.Windows.Forms.TabPage();
+            this.groupBoxFields = new System.Windows.Forms.GroupBox();
+            this.buttonFieldDown = new System.Windows.Forms.Button();
+            this.buttonFieldUp = new System.Windows.Forms.Button();
+            this.labelConfigured = new System.Windows.Forms.Label();
+            this.labelAvailable = new System.Windows.Forms.Label();
+            this.buttonFieldRemove = new System.Windows.Forms.Button();
+            this.buttonFieldAdd = new System.Windows.Forms.Button();
+            this.listBoxFieldsActual = new System.Windows.Forms.ListBox();
+            this.listBoxFieldsAvailable = new System.Windows.Forms.ListBox();
             this.groupBoxFontPatron.SuspendLayout();
             this.groupBoxFontOther.SuspendLayout();
-            this.groupBoxFields.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
             this.tabPageURLs.SuspendLayout();
             this.groupBoxURLs.SuspendLayout();
-            this.tabPagePrintHolds.SuspendLayout();
+            this.tabPagePrint.SuspendLayout();
             this.tabPageBrowser.SuspendLayout();
             this.groupBoxInitialBrowserState.SuspendLayout();
             this.groupBoxBrowser.SuspendLayout();
             this.tabPagePrintCheckouts.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabPageHoldSlips.SuspendLayout();
+            this.groupBoxFields.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonFontPatron
@@ -144,7 +146,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(569, 771);
+            this.buttonOK.Location = new System.Drawing.Point(412, 769);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 41);
             this.buttonOK.TabIndex = 1;
@@ -301,111 +303,17 @@
             this.labelPrinter.Size = new System.Drawing.Size(450, 25);
             this.labelPrinter.TabIndex = 1;
             // 
-            // groupBoxFields
-            // 
-            this.groupBoxFields.Controls.Add(this.buttonFieldDown);
-            this.groupBoxFields.Controls.Add(this.buttonFieldUp);
-            this.groupBoxFields.Controls.Add(this.labelConfigured);
-            this.groupBoxFields.Controls.Add(this.labelAvailable);
-            this.groupBoxFields.Controls.Add(this.buttonFieldRemove);
-            this.groupBoxFields.Controls.Add(this.buttonFieldAdd);
-            this.groupBoxFields.Controls.Add(this.listBoxFieldsActual);
-            this.groupBoxFields.Controls.Add(this.listBoxFieldsAvailable);
-            this.groupBoxFields.Location = new System.Drawing.Point(506, 116);
-            this.groupBoxFields.Name = "groupBoxFields";
-            this.groupBoxFields.Size = new System.Drawing.Size(623, 471);
-            this.groupBoxFields.TabIndex = 13;
-            this.groupBoxFields.TabStop = false;
-            this.groupBoxFields.Text = "Fields";
-            // 
-            // buttonFieldDown
-            // 
-            this.buttonFieldDown.Location = new System.Drawing.Point(580, 255);
-            this.buttonFieldDown.Name = "buttonFieldDown";
-            this.buttonFieldDown.Size = new System.Drawing.Size(37, 48);
-            this.buttonFieldDown.TabIndex = 7;
-            this.buttonFieldDown.Text = "↓";
-            this.buttonFieldDown.UseVisualStyleBackColor = true;
-            this.buttonFieldDown.Click += new System.EventHandler(this.buttonFieldDown_Click);
-            // 
-            // buttonFieldUp
-            // 
-            this.buttonFieldUp.Location = new System.Drawing.Point(580, 150);
-            this.buttonFieldUp.Name = "buttonFieldUp";
-            this.buttonFieldUp.Size = new System.Drawing.Size(37, 48);
-            this.buttonFieldUp.TabIndex = 6;
-            this.buttonFieldUp.Text = "↑";
-            this.buttonFieldUp.UseVisualStyleBackColor = true;
-            this.buttonFieldUp.Click += new System.EventHandler(this.buttonFieldUp_Click);
-            // 
-            // labelConfigured
-            // 
-            this.labelConfigured.AutoSize = true;
-            this.labelConfigured.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelConfigured.Location = new System.Drawing.Point(388, 34);
-            this.labelConfigured.Name = "labelConfigured";
-            this.labelConfigured.Size = new System.Drawing.Size(127, 25);
-            this.labelConfigured.TabIndex = 4;
-            this.labelConfigured.Text = "Configured";
-            // 
-            // labelAvailable
-            // 
-            this.labelAvailable.AutoSize = true;
-            this.labelAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAvailable.Location = new System.Drawing.Point(63, 34);
-            this.labelAvailable.Name = "labelAvailable";
-            this.labelAvailable.Size = new System.Drawing.Size(109, 25);
-            this.labelAvailable.TabIndex = 0;
-            this.labelAvailable.Text = "Available";
-            // 
-            // buttonFieldRemove
-            // 
-            this.buttonFieldRemove.Location = new System.Drawing.Point(258, 255);
-            this.buttonFieldRemove.Name = "buttonFieldRemove";
-            this.buttonFieldRemove.Size = new System.Drawing.Size(52, 37);
-            this.buttonFieldRemove.TabIndex = 3;
-            this.buttonFieldRemove.Text = "←";
-            this.buttonFieldRemove.UseVisualStyleBackColor = true;
-            this.buttonFieldRemove.Click += new System.EventHandler(this.buttonFieldRemove_Click);
-            // 
-            // buttonFieldAdd
-            // 
-            this.buttonFieldAdd.Location = new System.Drawing.Point(256, 150);
-            this.buttonFieldAdd.Name = "buttonFieldAdd";
-            this.buttonFieldAdd.Size = new System.Drawing.Size(52, 37);
-            this.buttonFieldAdd.TabIndex = 2;
-            this.buttonFieldAdd.Text = "→";
-            this.buttonFieldAdd.UseVisualStyleBackColor = true;
-            this.buttonFieldAdd.Click += new System.EventHandler(this.buttonFieldAdd_Click);
-            // 
-            // listBoxFieldsActual
-            // 
-            this.listBoxFieldsActual.FormattingEnabled = true;
-            this.listBoxFieldsActual.ItemHeight = 25;
-            this.listBoxFieldsActual.Location = new System.Drawing.Point(332, 75);
-            this.listBoxFieldsActual.Name = "listBoxFieldsActual";
-            this.listBoxFieldsActual.Size = new System.Drawing.Size(228, 329);
-            this.listBoxFieldsActual.TabIndex = 5;
-            // 
-            // listBoxFieldsAvailable
-            // 
-            this.listBoxFieldsAvailable.FormattingEnabled = true;
-            this.listBoxFieldsAvailable.ItemHeight = 25;
-            this.listBoxFieldsAvailable.Location = new System.Drawing.Point(6, 75);
-            this.listBoxFieldsAvailable.Name = "listBoxFieldsAvailable";
-            this.listBoxFieldsAvailable.Size = new System.Drawing.Size(228, 329);
-            this.listBoxFieldsAvailable.TabIndex = 1;
-            // 
             // tabControlSettings
             // 
             this.tabControlSettings.Controls.Add(this.tabPageURLs);
-            this.tabControlSettings.Controls.Add(this.tabPagePrintHolds);
             this.tabControlSettings.Controls.Add(this.tabPageBrowser);
+            this.tabControlSettings.Controls.Add(this.tabPagePrint);
+            this.tabControlSettings.Controls.Add(this.tabPageHoldSlips);
             this.tabControlSettings.Controls.Add(this.tabPagePrintCheckouts);
             this.tabControlSettings.Location = new System.Drawing.Point(12, 1);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
-            this.tabControlSettings.Size = new System.Drawing.Size(1210, 754);
+            this.tabControlSettings.Size = new System.Drawing.Size(869, 754);
             this.tabControlSettings.TabIndex = 0;
             // 
             // tabPageURLs
@@ -418,7 +326,7 @@
             this.tabPageURLs.Location = new System.Drawing.Point(8, 39);
             this.tabPageURLs.Name = "tabPageURLs";
             this.tabPageURLs.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageURLs.Size = new System.Drawing.Size(1194, 707);
+            this.tabPageURLs.Size = new System.Drawing.Size(853, 707);
             this.tabPageURLs.TabIndex = 0;
             this.tabPageURLs.Text = "Koha";
             this.tabPageURLs.UseVisualStyleBackColor = true;
@@ -467,7 +375,7 @@
             this.groupBoxURLs.Controls.Add(this.labelStaffURL);
             this.groupBoxURLs.Location = new System.Drawing.Point(17, 20);
             this.groupBoxURLs.Name = "groupBoxURLs";
-            this.groupBoxURLs.Size = new System.Drawing.Size(1157, 147);
+            this.groupBoxURLs.Size = new System.Drawing.Size(806, 147);
             this.groupBoxURLs.TabIndex = 0;
             this.groupBoxURLs.TabStop = false;
             this.groupBoxURLs.Text = "Koha URLs";
@@ -476,14 +384,14 @@
             // 
             this.textBoxPatronURL.Location = new System.Drawing.Point(170, 87);
             this.textBoxPatronURL.Name = "textBoxPatronURL";
-            this.textBoxPatronURL.Size = new System.Drawing.Size(710, 31);
+            this.textBoxPatronURL.Size = new System.Drawing.Size(610, 31);
             this.textBoxPatronURL.TabIndex = 3;
             // 
             // textBoxStaffURL
             // 
             this.textBoxStaffURL.Location = new System.Drawing.Point(170, 34);
             this.textBoxStaffURL.Name = "textBoxStaffURL";
-            this.textBoxStaffURL.Size = new System.Drawing.Size(710, 31);
+            this.textBoxStaffURL.Size = new System.Drawing.Size(610, 31);
             this.textBoxStaffURL.TabIndex = 1;
             // 
             // labelPatronURL
@@ -506,30 +414,29 @@
             this.labelStaffURL.Text = "Staff URL:";
             this.labelStaffURL.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // tabPagePrintHolds
+            // tabPagePrint
             // 
-            this.tabPagePrintHolds.Controls.Add(this.checkBoxIndentLineContinuations);
-            this.tabPagePrintHolds.Controls.Add(this.checkBoxBreakOnWords);
-            this.tabPagePrintHolds.Controls.Add(this.labelPrinter);
-            this.tabPagePrintHolds.Controls.Add(this.groupBoxFields);
-            this.tabPagePrintHolds.Controls.Add(this.groupBoxFontOther);
-            this.tabPagePrintHolds.Controls.Add(this.groupBoxFontPatron);
-            this.tabPagePrintHolds.Controls.Add(this.checkBoxPrintConfig);
-            this.tabPagePrintHolds.Controls.Add(this.labelUpperLeft);
-            this.tabPagePrintHolds.Controls.Add(this.labelComma);
-            this.tabPagePrintHolds.Controls.Add(this.textBoxX);
-            this.tabPagePrintHolds.Controls.Add(this.textBoxPageWidth);
-            this.tabPagePrintHolds.Controls.Add(this.textBoxY);
-            this.tabPagePrintHolds.Controls.Add(this.labelPageWidth);
-            this.tabPagePrintHolds.Controls.Add(this.buttonPrinter);
-            this.tabPagePrintHolds.Controls.Add(this.checkBoxPrintToPDF);
-            this.tabPagePrintHolds.Location = new System.Drawing.Point(8, 39);
-            this.tabPagePrintHolds.Name = "tabPagePrintHolds";
-            this.tabPagePrintHolds.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePrintHolds.Size = new System.Drawing.Size(1194, 707);
-            this.tabPagePrintHolds.TabIndex = 1;
-            this.tabPagePrintHolds.Text = "Print Holds";
-            this.tabPagePrintHolds.UseVisualStyleBackColor = true;
+            this.tabPagePrint.Controls.Add(this.checkBoxIndentLineContinuations);
+            this.tabPagePrint.Controls.Add(this.checkBoxBreakOnWords);
+            this.tabPagePrint.Controls.Add(this.labelPrinter);
+            this.tabPagePrint.Controls.Add(this.groupBoxFontOther);
+            this.tabPagePrint.Controls.Add(this.groupBoxFontPatron);
+            this.tabPagePrint.Controls.Add(this.checkBoxPrintConfig);
+            this.tabPagePrint.Controls.Add(this.labelUpperLeft);
+            this.tabPagePrint.Controls.Add(this.labelComma);
+            this.tabPagePrint.Controls.Add(this.textBoxX);
+            this.tabPagePrint.Controls.Add(this.textBoxPageWidth);
+            this.tabPagePrint.Controls.Add(this.textBoxY);
+            this.tabPagePrint.Controls.Add(this.labelPageWidth);
+            this.tabPagePrint.Controls.Add(this.buttonPrinter);
+            this.tabPagePrint.Controls.Add(this.checkBoxPrintToPDF);
+            this.tabPagePrint.Location = new System.Drawing.Point(8, 39);
+            this.tabPagePrint.Name = "tabPagePrint";
+            this.tabPagePrint.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagePrint.Size = new System.Drawing.Size(853, 707);
+            this.tabPagePrint.TabIndex = 1;
+            this.tabPagePrint.Text = "Print";
+            this.tabPagePrint.UseVisualStyleBackColor = true;
             // 
             // tabPageBrowser
             // 
@@ -537,7 +444,7 @@
             this.tabPageBrowser.Controls.Add(this.groupBoxBrowser);
             this.tabPageBrowser.Location = new System.Drawing.Point(8, 39);
             this.tabPageBrowser.Name = "tabPageBrowser";
-            this.tabPageBrowser.Size = new System.Drawing.Size(1194, 707);
+            this.tabPageBrowser.Size = new System.Drawing.Size(853, 707);
             this.tabPageBrowser.TabIndex = 2;
             this.tabPageBrowser.Text = "Browser";
             this.tabPageBrowser.UseVisualStyleBackColor = true;
@@ -549,7 +456,7 @@
             this.groupBoxInitialBrowserState.Controls.Add(this.radioButtonBrowserNormal);
             this.groupBoxInitialBrowserState.Location = new System.Drawing.Point(17, 211);
             this.groupBoxInitialBrowserState.Name = "groupBoxInitialBrowserState";
-            this.groupBoxInitialBrowserState.Size = new System.Drawing.Size(1152, 160);
+            this.groupBoxInitialBrowserState.Size = new System.Drawing.Size(806, 160);
             this.groupBoxInitialBrowserState.TabIndex = 1;
             this.groupBoxInitialBrowserState.TabStop = false;
             this.groupBoxInitialBrowserState.Text = "Initial Browser State";
@@ -597,7 +504,7 @@
             this.groupBoxBrowser.Controls.Add(this.labelBrowserWidth);
             this.groupBoxBrowser.Location = new System.Drawing.Point(17, 24);
             this.groupBoxBrowser.Name = "groupBoxBrowser";
-            this.groupBoxBrowser.Size = new System.Drawing.Size(1152, 163);
+            this.groupBoxBrowser.Size = new System.Drawing.Size(806, 163);
             this.groupBoxBrowser.TabIndex = 0;
             this.groupBoxBrowser.TabStop = false;
             this.groupBoxBrowser.Text = "Size and Position of Automated Browsers";
@@ -656,9 +563,9 @@
             this.tabPagePrintCheckouts.Controls.Add(this.groupBox1);
             this.tabPagePrintCheckouts.Location = new System.Drawing.Point(8, 39);
             this.tabPagePrintCheckouts.Name = "tabPagePrintCheckouts";
-            this.tabPagePrintCheckouts.Size = new System.Drawing.Size(1194, 707);
+            this.tabPagePrintCheckouts.Size = new System.Drawing.Size(853, 707);
             this.tabPagePrintCheckouts.TabIndex = 3;
-            this.tabPagePrintCheckouts.Text = "Print Checkouts";
+            this.tabPagePrintCheckouts.Text = "Checkout Slips";
             this.tabPagePrintCheckouts.UseVisualStyleBackColor = true;
             // 
             // groupBox1
@@ -676,7 +583,7 @@
             this.groupBox1.Size = new System.Drawing.Size(623, 471);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Fields";
+            this.groupBox1.Text = "Fields on Checkout Slips";
             // 
             // buttonCheckoutFieldDown
             // 
@@ -776,11 +683,112 @@
             this.checkBoxIndentLineContinuations.Text = "Indent continuations of long lines";
             this.checkBoxIndentLineContinuations.UseVisualStyleBackColor = true;
             // 
+            // tabPageHoldSlips
+            // 
+            this.tabPageHoldSlips.Controls.Add(this.groupBoxFields);
+            this.tabPageHoldSlips.Location = new System.Drawing.Point(8, 39);
+            this.tabPageHoldSlips.Name = "tabPageHoldSlips";
+            this.tabPageHoldSlips.Size = new System.Drawing.Size(853, 707);
+            this.tabPageHoldSlips.TabIndex = 4;
+            this.tabPageHoldSlips.Text = "Hold Slips";
+            this.tabPageHoldSlips.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxFields
+            // 
+            this.groupBoxFields.Controls.Add(this.buttonFieldDown);
+            this.groupBoxFields.Controls.Add(this.buttonFieldUp);
+            this.groupBoxFields.Controls.Add(this.labelConfigured);
+            this.groupBoxFields.Controls.Add(this.labelAvailable);
+            this.groupBoxFields.Controls.Add(this.buttonFieldRemove);
+            this.groupBoxFields.Controls.Add(this.buttonFieldAdd);
+            this.groupBoxFields.Controls.Add(this.listBoxFieldsActual);
+            this.groupBoxFields.Controls.Add(this.listBoxFieldsAvailable);
+            this.groupBoxFields.Location = new System.Drawing.Point(31, 26);
+            this.groupBoxFields.Name = "groupBoxFields";
+            this.groupBoxFields.Size = new System.Drawing.Size(623, 471);
+            this.groupBoxFields.TabIndex = 14;
+            this.groupBoxFields.TabStop = false;
+            this.groupBoxFields.Text = "Fields on Hold Slips";
+            // 
+            // buttonFieldDown
+            // 
+            this.buttonFieldDown.Location = new System.Drawing.Point(580, 255);
+            this.buttonFieldDown.Name = "buttonFieldDown";
+            this.buttonFieldDown.Size = new System.Drawing.Size(37, 48);
+            this.buttonFieldDown.TabIndex = 7;
+            this.buttonFieldDown.Text = "↓";
+            this.buttonFieldDown.UseVisualStyleBackColor = true;
+            // 
+            // buttonFieldUp
+            // 
+            this.buttonFieldUp.Location = new System.Drawing.Point(580, 150);
+            this.buttonFieldUp.Name = "buttonFieldUp";
+            this.buttonFieldUp.Size = new System.Drawing.Size(37, 48);
+            this.buttonFieldUp.TabIndex = 6;
+            this.buttonFieldUp.Text = "↑";
+            this.buttonFieldUp.UseVisualStyleBackColor = true;
+            // 
+            // labelConfigured
+            // 
+            this.labelConfigured.AutoSize = true;
+            this.labelConfigured.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelConfigured.Location = new System.Drawing.Point(388, 34);
+            this.labelConfigured.Name = "labelConfigured";
+            this.labelConfigured.Size = new System.Drawing.Size(127, 25);
+            this.labelConfigured.TabIndex = 4;
+            this.labelConfigured.Text = "Configured";
+            // 
+            // labelAvailable
+            // 
+            this.labelAvailable.AutoSize = true;
+            this.labelAvailable.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAvailable.Location = new System.Drawing.Point(63, 34);
+            this.labelAvailable.Name = "labelAvailable";
+            this.labelAvailable.Size = new System.Drawing.Size(109, 25);
+            this.labelAvailable.TabIndex = 0;
+            this.labelAvailable.Text = "Available";
+            // 
+            // buttonFieldRemove
+            // 
+            this.buttonFieldRemove.Location = new System.Drawing.Point(258, 255);
+            this.buttonFieldRemove.Name = "buttonFieldRemove";
+            this.buttonFieldRemove.Size = new System.Drawing.Size(52, 37);
+            this.buttonFieldRemove.TabIndex = 3;
+            this.buttonFieldRemove.Text = "←";
+            this.buttonFieldRemove.UseVisualStyleBackColor = true;
+            // 
+            // buttonFieldAdd
+            // 
+            this.buttonFieldAdd.Location = new System.Drawing.Point(256, 150);
+            this.buttonFieldAdd.Name = "buttonFieldAdd";
+            this.buttonFieldAdd.Size = new System.Drawing.Size(52, 37);
+            this.buttonFieldAdd.TabIndex = 2;
+            this.buttonFieldAdd.Text = "→";
+            this.buttonFieldAdd.UseVisualStyleBackColor = true;
+            // 
+            // listBoxFieldsActual
+            // 
+            this.listBoxFieldsActual.FormattingEnabled = true;
+            this.listBoxFieldsActual.ItemHeight = 25;
+            this.listBoxFieldsActual.Location = new System.Drawing.Point(332, 75);
+            this.listBoxFieldsActual.Name = "listBoxFieldsActual";
+            this.listBoxFieldsActual.Size = new System.Drawing.Size(228, 329);
+            this.listBoxFieldsActual.TabIndex = 5;
+            // 
+            // listBoxFieldsAvailable
+            // 
+            this.listBoxFieldsAvailable.FormattingEnabled = true;
+            this.listBoxFieldsAvailable.ItemHeight = 25;
+            this.listBoxFieldsAvailable.Location = new System.Drawing.Point(6, 75);
+            this.listBoxFieldsAvailable.Name = "listBoxFieldsAvailable";
+            this.listBoxFieldsAvailable.Size = new System.Drawing.Size(228, 329);
+            this.listBoxFieldsAvailable.TabIndex = 1;
+            // 
             // SettingsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1230, 827);
+            this.ClientSize = new System.Drawing.Size(884, 827);
             this.Controls.Add(this.tabControlSettings);
             this.Controls.Add(this.buttonOK);
             this.Name = "SettingsDlg";
@@ -789,15 +797,13 @@
             this.groupBoxFontPatron.PerformLayout();
             this.groupBoxFontOther.ResumeLayout(false);
             this.groupBoxFontOther.PerformLayout();
-            this.groupBoxFields.ResumeLayout(false);
-            this.groupBoxFields.PerformLayout();
             this.tabControlSettings.ResumeLayout(false);
             this.tabPageURLs.ResumeLayout(false);
             this.tabPageURLs.PerformLayout();
             this.groupBoxURLs.ResumeLayout(false);
             this.groupBoxURLs.PerformLayout();
-            this.tabPagePrintHolds.ResumeLayout(false);
-            this.tabPagePrintHolds.PerformLayout();
+            this.tabPagePrint.ResumeLayout(false);
+            this.tabPagePrint.PerformLayout();
             this.tabPageBrowser.ResumeLayout(false);
             this.groupBoxInitialBrowserState.ResumeLayout(false);
             this.groupBoxInitialBrowserState.PerformLayout();
@@ -806,6 +812,9 @@
             this.tabPagePrintCheckouts.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPageHoldSlips.ResumeLayout(false);
+            this.groupBoxFields.ResumeLayout(false);
+            this.groupBoxFields.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -833,18 +842,9 @@
         private System.Windows.Forms.TextBox textBoxLineSpacingOther;
         private System.Windows.Forms.CheckBox checkBoxPrintConfig;
         private System.Windows.Forms.Label labelPrinter;
-        private System.Windows.Forms.GroupBox groupBoxFields;
-        private System.Windows.Forms.ListBox listBoxFieldsActual;
-        private System.Windows.Forms.ListBox listBoxFieldsAvailable;
-        private System.Windows.Forms.Button buttonFieldAdd;
-        private System.Windows.Forms.Button buttonFieldRemove;
-        private System.Windows.Forms.Label labelConfigured;
-        private System.Windows.Forms.Label labelAvailable;
-        private System.Windows.Forms.Button buttonFieldUp;
-        private System.Windows.Forms.Button buttonFieldDown;
         private System.Windows.Forms.TabControl tabControlSettings;
         private System.Windows.Forms.TabPage tabPageURLs;
-        private System.Windows.Forms.TabPage tabPagePrintHolds;
+        private System.Windows.Forms.TabPage tabPagePrint;
         private System.Windows.Forms.GroupBox groupBoxURLs;
         private System.Windows.Forms.TextBox textBoxPatronURL;
         private System.Windows.Forms.TextBox textBoxStaffURL;
@@ -878,5 +878,15 @@
         private System.Windows.Forms.Label labelDefaultPickupLibrary;
         private System.Windows.Forms.CheckBox checkBoxBreakOnWords;
         private System.Windows.Forms.CheckBox checkBoxIndentLineContinuations;
+        private System.Windows.Forms.TabPage tabPageHoldSlips;
+        private System.Windows.Forms.GroupBox groupBoxFields;
+        private System.Windows.Forms.Button buttonFieldDown;
+        private System.Windows.Forms.Button buttonFieldUp;
+        private System.Windows.Forms.Label labelConfigured;
+        private System.Windows.Forms.Label labelAvailable;
+        private System.Windows.Forms.Button buttonFieldRemove;
+        private System.Windows.Forms.Button buttonFieldAdd;
+        private System.Windows.Forms.ListBox listBoxFieldsActual;
+        private System.Windows.Forms.ListBox listBoxFieldsAvailable;
     }
 }
