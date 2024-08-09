@@ -712,7 +712,8 @@ namespace KohaQuick {
                 string foundFilePath;
                 if (Util.FindRecentDownloadedFile("Checking out*.csv", 10000, out foundFilePath)) {
                     ShowMsg($"Found {foundFilePath}");
-                    bOK = Util.ParseCheckedOutCSV(foundFilePath, ref checkoutItemCol, out errmsg);
+                    bOK = Util.ParseCheckedOutCSV(foundFilePath, ref checkoutItemCol, out errmsg); 
+                    System.IO.File.Delete(foundFilePath);
                 }
             } catch(Exception ex) {
                 ShowMsg($"GetItemsCheckedOutForPatron: {ex.Message}");
