@@ -341,6 +341,7 @@ namespace KohaQuick {
                 foreach(ItemSearchResult result in itemSearchResultsCol.ResultList) {
                     this.dataGridViewPlaceHold.Rows.Add(false, result.Title, result.Author, result.BiblioID);
                 }
+                this.buttonPlaceHoldOnCheckedItems.Enabled = true;
             } else {
                 this.textBoxPlaceHoldMsg.Text = errmsg;
             }
@@ -398,6 +399,7 @@ namespace KohaQuick {
             }
             this.textBoxPlaceHoldMsg.Text = $"{msg} for patron {cardnumber}...";
 
+            this.buttonPlaceHoldOnCheckedItems.Enabled = false;
             string errmsg;
             bool bOK = session1.PlaceHoldsForPatron(cardnumber, itemsToHold, out errmsg);
             if(!bOK) {
@@ -412,6 +414,7 @@ namespace KohaQuick {
             textBoxPlaceHoldMsg.Text = "";
             textBoxPlaceHoldPatronBarcode.Text = "";
             dataGridViewPlaceHold.Rows.Clear();
+            buttonPlaceHoldOnCheckedItems.Enabled = true;
         }
 
         private void buttonCheckPatronPIN_Click(object sender, EventArgs e) {

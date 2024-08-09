@@ -925,7 +925,7 @@ namespace KohaQuick {
                             BiblioID = checkboxId
                         };
                         Results.ResultList.Add(itemSearchResult);
-                        ShowMsg($"  {irow}: Checkboxid: {checkboxId} Title: {title} Author: {author}");
+                        //ShowMsg($"  {irow}: Checkboxid: {checkboxId} Title: {title} Author: {author}");
                     }
 
                     // Now determine whether there are more pages of search results.
@@ -1013,8 +1013,8 @@ namespace KohaQuick {
 
                 WaitForPageToLoad();
 
-                if (driver.PageSource.Contains("Cannot place hold:")) {
-                    errmsg = "Cannot place hold";
+                if(driver.PageSource.Contains("Cannot place hold:")) {
+                    errmsg = "This item is not available for holds";
                     return false;
                 }
 
@@ -1031,20 +1031,66 @@ namespace KohaQuick {
                 submitButton.Click();
                 WaitForPageToLoad();
 
-                if (driver.PageSource.Contains("No entries to show")) {
-                    errmsg = $"Could not find patron with card number {cardnumber}";
-                } else if(driver.PageSource.Contains("Cannot place hold on some items")) {
+                // The page will reload with the patron's information, even though 
+                // Selenium thinks the page has settled down.  So we'll wait for the URL to change.
+                for(int i = 0; i < 10; i++) {
+                    string curUrl = driver.Url;
+                    if(!curUrl.Contains("findborrower=")) {
+                        break;
+                    }
+                    Thread.Sleep(75);
+                }
+
+                // Determine whether the cardnumber is in the system. If not, it's an error.
+                // This ain't easy.  The error messages we seek don't appear in the page source.
+                try {
+                    // Locate the td element with class 'dataTables_empty'
+                    IWebElement tdElement = driver.FindElement(By.CssSelector("td.dataTables_empty"));
+                    if (tdElement.Text.Contains("No matching records found")) {
+                        errmsg = $"Could not find patron with card number {cardnumber}";
+                        ShowMsg(errmsg + " (No matching records found)");
+                        ShowMsg($"{GetAllElementProperties(tdElement)}");
+                        return false;
+                    }
+                } catch (NoSuchElementException ex) {
+                    // The cardnumber apparently *was* found.
+                    ShowMsg($"Couldn't find \"No matching records found\": {ex.Message}");
+                }
+                try {
+                    IWebElement divElement = driver.FindElement(By.CssSelector("div.dataTables_info"));
+                    if (divElement.Text.Contains("No entries to show")) {
+                        errmsg = $"Could not find patron with card number {cardnumber}";
+                        ShowMsg(errmsg + " (No entries to show)");
+                        return false;
+                    }
+                } catch (NoSuchElementException ex) {
+                    // The cardnumber apparently *was* found.
+                    ShowMsg($"Couldn't find \"No entries to show\": {ex.Message}");
+                }
+
+                if(driver.PageSource.Contains("Cannot place hold on some items")) {
                     errmsg = $"Some items are not available for holds; will not place any holds";
                 } else {
+                    if (itemsToHold.Count > 1) {
+                        // Since there is more than one item, Koha makes us specify the pickup location.
+
+                    }
+
+
+                    // Click the "Place hold" button.
                     // Locate the form element with name 'form'
                     IWebElement formElementHold = driver.FindElement(By.Name("form"));
                     // Locate the first button element of type 'submit' within the form element
                     IWebElement submitButtonHold = formElementHold.FindElement(By.CssSelector("button[type='submit']"));
                     submitButtonHold.Click();
+                    ShowMsg("Clicked on Place hold button");
+                    WaitForPageToLoad();
+                    bOK = true;
                 }
 
-                errmsg = "Still under development";
-                //bOK = true;
+                if(errmsg.Length == 0) {
+                    errmsg = "Still under development";
+                }
             } catch (Exception ex) {
                 errmsg = ex.Message;
                 ShowMsg($"PlaceHoldsForPatron: {ex.Message}");
