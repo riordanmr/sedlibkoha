@@ -939,7 +939,7 @@ namespace KohaQuick
             this.fileToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 0);
             this.menuStrip2.Name = "menuStrip2";
-            this.menuStrip2.Size = new System.Drawing.Size(1120, 40);
+            this.menuStrip2.Size = new System.Drawing.Size(1120, 42);
             this.menuStrip2.TabIndex = 1;
             this.menuStrip2.Text = "menuStrip2";
             // 
@@ -953,48 +953,48 @@ namespace KohaQuick
             this.restartToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(71, 36);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(71, 38);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // printSampleToolStripMenuItem
             // 
             this.printSampleToolStripMenuItem.Name = "printSampleToolStripMenuItem";
-            this.printSampleToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
-            this.printSampleToolStripMenuItem.Text = "&Print Sample";
+            this.printSampleToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
+            this.printSampleToolStripMenuItem.Text = "&Print Sample Hold Slip";
             this.printSampleToolStripMenuItem.Click += new System.EventHandler(this.printSampleToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
             this.settingsToolStripMenuItem.Text = "&Settings...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // loginToolStripMenuItem
             // 
             this.loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            this.loginToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
+            this.loginToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
             this.loginToolStripMenuItem.Text = "&Login...";
             this.loginToolStripMenuItem.Click += new System.EventHandler(this.loginToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
             this.logoutToolStripMenuItem.Text = "Log&out";
             this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
             // 
             // restartToolStripMenuItem
             // 
             this.restartToolStripMenuItem.Name = "restartToolStripMenuItem";
-            this.restartToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
+            this.restartToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
             this.restartToolStripMenuItem.Text = "&Restart";
             this.restartToolStripMenuItem.Click += new System.EventHandler(this.restartToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(282, 44);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 

@@ -60,6 +60,8 @@
             this.listBoxFieldsAvailable = new System.Windows.Forms.ListBox();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageURLs = new System.Windows.Forms.TabPage();
+            this.textBoxDefaultPickupLibrary = new System.Windows.Forms.TextBox();
+            this.labelDefaultPickupLibrary = new System.Windows.Forms.Label();
             this.textBoxDefaultPatronType = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBoxURLs = new System.Windows.Forms.GroupBox();
@@ -90,8 +92,8 @@
             this.buttonCheckoutFieldAdd = new System.Windows.Forms.Button();
             this.listBoxCheckoutFieldsActual = new System.Windows.Forms.ListBox();
             this.listBoxCheckoutFieldsAvailable = new System.Windows.Forms.ListBox();
-            this.textBoxDefaultPickupLibrary = new System.Windows.Forms.TextBox();
-            this.labelDefaultPickupLibrary = new System.Windows.Forms.Label();
+            this.checkBoxBreakOnWords = new System.Windows.Forms.CheckBox();
+            this.checkBoxIndentLineContinuations = new System.Windows.Forms.CheckBox();
             this.groupBoxFontPatron.SuspendLayout();
             this.groupBoxFontOther.SuspendLayout();
             this.groupBoxFields.SuspendLayout();
@@ -145,7 +147,7 @@
             this.buttonOK.Location = new System.Drawing.Point(569, 771);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 41);
-            this.buttonOK.TabIndex = 0;
+            this.buttonOK.TabIndex = 1;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
@@ -195,7 +197,7 @@
             this.textBoxPageWidth.Location = new System.Drawing.Point(194, 185);
             this.textBoxPageWidth.Name = "textBoxPageWidth";
             this.textBoxPageWidth.Size = new System.Drawing.Size(65, 31);
-            this.textBoxPageWidth.TabIndex = 8;
+            this.textBoxPageWidth.TabIndex = 7;
             // 
             // labelFontInfoPatron
             // 
@@ -212,10 +214,10 @@
             this.groupBoxFontPatron.Controls.Add(this.labelLineSpacingPatron);
             this.groupBoxFontPatron.Controls.Add(this.labelFontInfoPatron);
             this.groupBoxFontPatron.Controls.Add(this.buttonFontPatron);
-            this.groupBoxFontPatron.Location = new System.Drawing.Point(20, 245);
+            this.groupBoxFontPatron.Location = new System.Drawing.Point(20, 241);
             this.groupBoxFontPatron.Name = "groupBoxFontPatron";
             this.groupBoxFontPatron.Size = new System.Drawing.Size(440, 155);
-            this.groupBoxFontPatron.TabIndex = 9;
+            this.groupBoxFontPatron.TabIndex = 8;
             this.groupBoxFontPatron.TabStop = false;
             this.groupBoxFontPatron.Text = "Patron font";
             // 
@@ -250,10 +252,10 @@
             this.groupBoxFontOther.Controls.Add(this.labelLineSpacingOther);
             this.groupBoxFontOther.Controls.Add(this.labelFontInfoOther);
             this.groupBoxFontOther.Controls.Add(this.buttonFontOther);
-            this.groupBoxFontOther.Location = new System.Drawing.Point(20, 432);
+            this.groupBoxFontOther.Location = new System.Drawing.Point(20, 422);
             this.groupBoxFontOther.Name = "groupBoxFontOther";
             this.groupBoxFontOther.Size = new System.Drawing.Size(440, 155);
-            this.groupBoxFontOther.TabIndex = 10;
+            this.groupBoxFontOther.TabIndex = 9;
             this.groupBoxFontOther.TabStop = false;
             this.groupBoxFontOther.Text = "Other font";
             // 
@@ -285,10 +287,10 @@
             // checkBoxPrintConfig
             // 
             this.checkBoxPrintConfig.AutoSize = true;
-            this.checkBoxPrintConfig.Location = new System.Drawing.Point(28, 606);
+            this.checkBoxPrintConfig.Location = new System.Drawing.Point(28, 667);
             this.checkBoxPrintConfig.Name = "checkBoxPrintConfig";
             this.checkBoxPrintConfig.Size = new System.Drawing.Size(156, 29);
-            this.checkBoxPrintConfig.TabIndex = 11;
+            this.checkBoxPrintConfig.TabIndex = 12;
             this.checkBoxPrintConfig.Text = "Print Config";
             this.checkBoxPrintConfig.UseVisualStyleBackColor = true;
             // 
@@ -312,7 +314,7 @@
             this.groupBoxFields.Location = new System.Drawing.Point(506, 116);
             this.groupBoxFields.Name = "groupBoxFields";
             this.groupBoxFields.Size = new System.Drawing.Size(623, 471);
-            this.groupBoxFields.TabIndex = 12;
+            this.groupBoxFields.TabIndex = 13;
             this.groupBoxFields.TabStop = false;
             this.groupBoxFields.Text = "Fields";
             // 
@@ -404,7 +406,7 @@
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
             this.tabControlSettings.Size = new System.Drawing.Size(1210, 754);
-            this.tabControlSettings.TabIndex = 14;
+            this.tabControlSettings.TabIndex = 0;
             // 
             // tabPageURLs
             // 
@@ -420,6 +422,24 @@
             this.tabPageURLs.TabIndex = 0;
             this.tabPageURLs.Text = "Koha";
             this.tabPageURLs.UseVisualStyleBackColor = true;
+            // 
+            // textBoxDefaultPickupLibrary
+            // 
+            this.textBoxDefaultPickupLibrary.Font = new System.Drawing.Font("Consolas", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxDefaultPickupLibrary.Location = new System.Drawing.Point(279, 247);
+            this.textBoxDefaultPickupLibrary.Name = "textBoxDefaultPickupLibrary";
+            this.textBoxDefaultPickupLibrary.Size = new System.Drawing.Size(345, 32);
+            this.textBoxDefaultPickupLibrary.TabIndex = 4;
+            // 
+            // labelDefaultPickupLibrary
+            // 
+            this.labelDefaultPickupLibrary.AutoSize = true;
+            this.labelDefaultPickupLibrary.Location = new System.Drawing.Point(42, 247);
+            this.labelDefaultPickupLibrary.Name = "labelDefaultPickupLibrary";
+            this.labelDefaultPickupLibrary.Size = new System.Drawing.Size(220, 25);
+            this.labelDefaultPickupLibrary.TabIndex = 3;
+            this.labelDefaultPickupLibrary.Text = "Default pickup library:";
+            this.labelDefaultPickupLibrary.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBoxDefaultPatronType
             // 
@@ -488,6 +508,8 @@
             // 
             // tabPagePrintHolds
             // 
+            this.tabPagePrintHolds.Controls.Add(this.checkBoxIndentLineContinuations);
+            this.tabPagePrintHolds.Controls.Add(this.checkBoxBreakOnWords);
             this.tabPagePrintHolds.Controls.Add(this.labelPrinter);
             this.tabPagePrintHolds.Controls.Add(this.groupBoxFields);
             this.tabPagePrintHolds.Controls.Add(this.groupBoxFontOther);
@@ -734,23 +756,25 @@
             this.listBoxCheckoutFieldsAvailable.Size = new System.Drawing.Size(228, 329);
             this.listBoxCheckoutFieldsAvailable.TabIndex = 1;
             // 
-            // textBoxDefaultPickupLibrary
+            // checkBoxBreakOnWords
             // 
-            this.textBoxDefaultPickupLibrary.Font = new System.Drawing.Font("Consolas", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxDefaultPickupLibrary.Location = new System.Drawing.Point(279, 247);
-            this.textBoxDefaultPickupLibrary.Name = "textBoxDefaultPickupLibrary";
-            this.textBoxDefaultPickupLibrary.Size = new System.Drawing.Size(345, 32);
-            this.textBoxDefaultPickupLibrary.TabIndex = 4;
+            this.checkBoxBreakOnWords.AutoSize = true;
+            this.checkBoxBreakOnWords.Location = new System.Drawing.Point(28, 591);
+            this.checkBoxBreakOnWords.Name = "checkBoxBreakOnWords";
+            this.checkBoxBreakOnWords.Size = new System.Drawing.Size(393, 29);
+            this.checkBoxBreakOnWords.TabIndex = 10;
+            this.checkBoxBreakOnWords.Text = "Break long lines on word boundaries";
+            this.checkBoxBreakOnWords.UseVisualStyleBackColor = true;
             // 
-            // labelDefaultPickupLibrary
+            // checkBoxIndentLineContinuations
             // 
-            this.labelDefaultPickupLibrary.AutoSize = true;
-            this.labelDefaultPickupLibrary.Location = new System.Drawing.Point(42, 247);
-            this.labelDefaultPickupLibrary.Name = "labelDefaultPickupLibrary";
-            this.labelDefaultPickupLibrary.Size = new System.Drawing.Size(220, 25);
-            this.labelDefaultPickupLibrary.TabIndex = 3;
-            this.labelDefaultPickupLibrary.Text = "Default pickup library:";
-            this.labelDefaultPickupLibrary.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxIndentLineContinuations.AutoSize = true;
+            this.checkBoxIndentLineContinuations.Location = new System.Drawing.Point(28, 629);
+            this.checkBoxIndentLineContinuations.Name = "checkBoxIndentLineContinuations";
+            this.checkBoxIndentLineContinuations.Size = new System.Drawing.Size(359, 29);
+            this.checkBoxIndentLineContinuations.TabIndex = 11;
+            this.checkBoxIndentLineContinuations.Text = "Indent continuations of long lines";
+            this.checkBoxIndentLineContinuations.UseVisualStyleBackColor = true;
             // 
             // SettingsDlg
             // 
@@ -852,5 +876,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxDefaultPickupLibrary;
         private System.Windows.Forms.Label labelDefaultPickupLibrary;
+        private System.Windows.Forms.CheckBox checkBoxBreakOnWords;
+        private System.Windows.Forms.CheckBox checkBoxIndentLineContinuations;
     }
 }

@@ -2,6 +2,7 @@
 // Mark Riordan  2024-06-26
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
@@ -177,6 +178,7 @@ namespace KohaQuick {
         ///     has been advanced.</param>
         private void PrintWrappedLine(string msg, PrintPageEventArgs e, Font font, 
             float lineSpacing, bool bIndent, int x, ref int y) {
+            ShowMsg($"PrintWrappedLine: {msg}");
             int printableWidthInPixels;
             if (settings.PageWidth > 0) {
                 // The user has specified a manual override for the page width.
@@ -196,27 +198,63 @@ namespace KohaQuick {
                 pixelsIndent = (int)(e.Graphics.MeasureString("M", font).Width);
             }
             string thisLine = msg;
-            bool bContinue;
+            // The first part of the line is never indented.
             int pixelsIndentThisLine = 0;
             do {
                 string thisPart = thisLine;
-                bContinue = false;
-                // Take increasingly smaller initial substrings of the line until it fits.
-                while ((int)e.Graphics.MeasureString(thisPart, font).Width > 
-                    maxPrintableWidth-pixelsIndentThisLine) {
-                    thisPart = thisPart.Substring(0, thisPart.Length - 1);
-                    bContinue = true;
+                bool bBreakOnChars = !settings.BreakLinesOnWords;
+                if (settings.BreakLinesOnWords) {
+                    // Take increasingly larger initial substrings of the line until it
+                    // doesn't fit, then back off to the previous word boundary.
+                    int prevISpace = 0;
+                    do {
+                        int iSpace = thisLine.IndexOf(' ', prevISpace);
+                        if (iSpace < 0) {
+                            thisPart = thisLine;
+                        } else {
+                            thisPart = thisLine.Substring(0, iSpace);
+                        }
+                        if ((int)e.Graphics.MeasureString(thisPart, font).Width >
+                            maxPrintableWidth - pixelsIndentThisLine) {
+                            // We've gone too far.  Back up to the previous word boundary.
+                            if (prevISpace > 0) {
+                                thisPart = thisLine.Substring(0, prevISpace);
+                            } else {
+                                // We can't break on a word boundary.  Break on characters.
+                                thisPart = thisLine;
+                                bBreakOnChars = true;
+                            }
+                            break;
+                        } else {
+                            // We haven't hit the right margin yet.
+                            if(iSpace < 0) {
+                                break;
+                            }
+                            prevISpace = iSpace + 1;
+                        }
+                    } while (true);
+                }
+                if(bBreakOnChars) {
+                    // Take increasingly smaller initial substrings of the line until it fits.
+                    while ((int)e.Graphics.MeasureString(thisPart, font).Width >
+                        maxPrintableWidth - pixelsIndentThisLine) {
+                        thisPart = thisPart.Substring(0, thisPart.Length - 1);
+                    }
                 }
                 e.Graphics.DrawString(thisPart, font, Brushes.Black, x+pixelsIndentThisLine, y);
                 y += (int)(lineSpacing * font.Height);
                 thisLine = thisLine.Substring(thisPart.Length);
+                // Remove leading spaces from the next part of the line.
+                while(thisLine.Length > 0 && thisLine[0] == ' ') {
+                    thisLine = thisLine.Substring(1);
+                }
                 pixelsIndentThisLine = pixelsIndent;
-            } while (bContinue);
+            } while (thisLine.Length > 0);
         }
 
         private void PrintLine(string msg, PrintPageEventArgs e, Font font,
             float lineSpacing, int x, ref int y) {
-            PrintWrappedLine(msg, e, font, lineSpacing, false, x, ref y);
+            PrintWrappedLine(msg, e, font, lineSpacing, settings.IndentLineContinuations, x, ref y);
         }
 
         private void PrintHoldSlipHandler(object sender, PrintPageEventArgs e) {
@@ -309,10 +347,10 @@ namespace KohaQuick {
                         PrintLine(msg, e, fontOtherBold, settings.LineSpacingOther, x, ref y);
                     } else if (field == FIELD_CALLNUMBER) {
                         msg = $"{checkoutItem.call_number}";
-                        PrintWrappedLine(msg, e, fontOther, settings.LineSpacingOther, true, x, ref y);
+                        PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
                     } else if (field == FIELD_TITLE) {
                         msg = $"{checkoutItem.title}";
-                        PrintWrappedLine(msg, e, fontOther, settings.LineSpacingOther, true, x, ref y);
+                        PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);
                     } else if (field == FIELD_CHECKOUTDATE) {
                         msg = $"{checkoutItem.checkout_date}";
                         PrintLine(msg, e, fontOther, settings.LineSpacingOther, x, ref y);

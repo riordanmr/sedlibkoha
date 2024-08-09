@@ -23,6 +23,8 @@ namespace KohaQuick {
                 Program.FormMain.printImpl.settings.FontSizePatron.ToString();
             this.labelFontInfoOther.Text = Program.FormMain.printImpl.settings.FontFamilyOther + " " +
                 Program.FormMain.printImpl.settings.FontSizeOther.ToString();
+            this.checkBoxBreakOnWords.Checked = Program.FormMain.printImpl.settings.BreakLinesOnWords;
+            this.checkBoxIndentLineContinuations.Checked = Program.FormMain.printImpl.settings.IndentLineContinuations;
             this.checkBoxPrintConfig.Checked = Program.FormMain.printImpl.settings.PrintConfig;
 
             this.listBoxFieldsAvailable.Items.AddRange(Program.FormMain.printImpl.GetHoldsFieldsAvailable());
@@ -164,6 +166,8 @@ namespace KohaQuick {
                 ok = false;
             }
 
+            Program.FormMain.printImpl.settings.IndentLineContinuations = this.checkBoxIndentLineContinuations.Checked;
+            Program.FormMain.printImpl.settings.BreakLinesOnWords = this.checkBoxBreakOnWords.Checked;
             Program.FormMain.printImpl.settings.PrintConfig = this.checkBoxPrintConfig.Checked;
 
             if (this.radioButtonBrowserNormal.Checked) {

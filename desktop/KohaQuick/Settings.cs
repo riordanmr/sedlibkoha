@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 
 namespace KohaQuick {
@@ -63,6 +64,8 @@ namespace KohaQuick {
         // don't work, probably due to unit conversion problems.  So I allow this
         // manual override.  If 0, we use my calculations.
         public int PageWidth { get; set; } = 300;
+        public bool IndentLineContinuations { get; set; } = true;
+        public bool BreakLinesOnWords { get; set; } = false;
 
         public bool PrintConfig { get; set; } = true;
 
