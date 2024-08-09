@@ -60,6 +60,8 @@
             this.listBoxFieldsAvailable = new System.Windows.Forms.ListBox();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageURLs = new System.Windows.Forms.TabPage();
+            this.textBoxDefaultPatronType = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBoxURLs = new System.Windows.Forms.GroupBox();
             this.textBoxPatronURL = new System.Windows.Forms.TextBox();
             this.textBoxStaffURL = new System.Windows.Forms.TextBox();
@@ -88,8 +90,8 @@
             this.buttonCheckoutFieldAdd = new System.Windows.Forms.Button();
             this.listBoxCheckoutFieldsActual = new System.Windows.Forms.ListBox();
             this.listBoxCheckoutFieldsAvailable = new System.Windows.Forms.ListBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxDefaultPatronType = new System.Windows.Forms.TextBox();
+            this.textBoxDefaultPickupLibrary = new System.Windows.Forms.TextBox();
+            this.labelDefaultPickupLibrary = new System.Windows.Forms.Label();
             this.groupBoxFontPatron.SuspendLayout();
             this.groupBoxFontOther.SuspendLayout();
             this.groupBoxFields.SuspendLayout();
@@ -406,6 +408,8 @@
             // 
             // tabPageURLs
             // 
+            this.tabPageURLs.Controls.Add(this.textBoxDefaultPickupLibrary);
+            this.tabPageURLs.Controls.Add(this.labelDefaultPickupLibrary);
             this.tabPageURLs.Controls.Add(this.textBoxDefaultPatronType);
             this.tabPageURLs.Controls.Add(this.label1);
             this.tabPageURLs.Controls.Add(this.groupBoxURLs);
@@ -416,6 +420,24 @@
             this.tabPageURLs.TabIndex = 0;
             this.tabPageURLs.Text = "Koha";
             this.tabPageURLs.UseVisualStyleBackColor = true;
+            // 
+            // textBoxDefaultPatronType
+            // 
+            this.textBoxDefaultPatronType.Font = new System.Drawing.Font("Consolas", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxDefaultPatronType.Location = new System.Drawing.Point(279, 196);
+            this.textBoxDefaultPatronType.Name = "textBoxDefaultPatronType";
+            this.textBoxDefaultPatronType.Size = new System.Drawing.Size(162, 32);
+            this.textBoxDefaultPatronType.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(62, 198);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(200, 25);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Default patron type:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // groupBoxURLs
             // 
@@ -712,23 +734,23 @@
             this.listBoxCheckoutFieldsAvailable.Size = new System.Drawing.Size(228, 329);
             this.listBoxCheckoutFieldsAvailable.TabIndex = 1;
             // 
-            // label1
+            // textBoxDefaultPickupLibrary
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 198);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(200, 25);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Default patron type:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.textBoxDefaultPickupLibrary.Font = new System.Drawing.Font("Consolas", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxDefaultPickupLibrary.Location = new System.Drawing.Point(279, 247);
+            this.textBoxDefaultPickupLibrary.Name = "textBoxDefaultPickupLibrary";
+            this.textBoxDefaultPickupLibrary.Size = new System.Drawing.Size(345, 32);
+            this.textBoxDefaultPickupLibrary.TabIndex = 4;
             // 
-            // textBoxDefaultPatronType
+            // labelDefaultPickupLibrary
             // 
-            this.textBoxDefaultPatronType.Font = new System.Drawing.Font("Consolas", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxDefaultPatronType.Location = new System.Drawing.Point(248, 196);
-            this.textBoxDefaultPatronType.Name = "textBoxDefaultPatronType";
-            this.textBoxDefaultPatronType.Size = new System.Drawing.Size(200, 32);
-            this.textBoxDefaultPatronType.TabIndex = 2;
+            this.labelDefaultPickupLibrary.AutoSize = true;
+            this.labelDefaultPickupLibrary.Location = new System.Drawing.Point(42, 247);
+            this.labelDefaultPickupLibrary.Name = "labelDefaultPickupLibrary";
+            this.labelDefaultPickupLibrary.Size = new System.Drawing.Size(220, 25);
+            this.labelDefaultPickupLibrary.TabIndex = 3;
+            this.labelDefaultPickupLibrary.Text = "Default pickup library:";
+            this.labelDefaultPickupLibrary.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // SettingsDlg
             // 
@@ -828,5 +850,7 @@
         private System.Windows.Forms.ListBox listBoxCheckoutFieldsAvailable;
         private System.Windows.Forms.TextBox textBoxDefaultPatronType;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBoxDefaultPickupLibrary;
+        private System.Windows.Forms.Label labelDefaultPickupLibrary;
     }
 }

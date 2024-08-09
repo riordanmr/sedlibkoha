@@ -1073,9 +1073,16 @@ namespace KohaQuick {
                 } else {
                     if (itemsToHold.Count > 1) {
                         // Since there is more than one item, Koha makes us specify the pickup location.
+                        // This didn't work:
+                        //driver.FindElement(By.CssSelector(".select2-container--below .select2-selection")).Click();
+                        //driver.FindElement(By.CssSelector(".select2-search__field")).SendKeys(Program.FormMain.settings.DefaultPickupLibrary);
+                        //driver.FindElement(By.CssSelector(".select2-search__field")).SendKeys(OpenQA.Selenium.Keys.Enter);
 
+                        // Locate the select element by its id
+                        IWebElement selectElement = driver.FindElement(By.Id("pickup_multi"));
+                        SelectElement select = new SelectElement(selectElement);
+                        select.SelectByText(Program.FormMain.settings.DefaultPickupLibrary);
                     }
-
 
                     // Click the "Place hold" button.
                     // Locate the form element with name 'form'
