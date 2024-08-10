@@ -718,6 +718,7 @@
             this.buttonFieldDown.TabIndex = 7;
             this.buttonFieldDown.Text = "↓";
             this.buttonFieldDown.UseVisualStyleBackColor = true;
+            this.buttonFieldDown.Click += new System.EventHandler(buttonFieldDown_Click);
             // 
             // buttonFieldUp
             // 
@@ -727,6 +728,7 @@
             this.buttonFieldUp.TabIndex = 6;
             this.buttonFieldUp.Text = "↑";
             this.buttonFieldUp.UseVisualStyleBackColor = true;
+            this.buttonFieldUp.Click += new System.EventHandler(buttonFieldUp_Click);
             // 
             // labelConfigured
             // 
@@ -756,6 +758,7 @@
             this.buttonFieldRemove.TabIndex = 3;
             this.buttonFieldRemove.Text = "←";
             this.buttonFieldRemove.UseVisualStyleBackColor = true;
+            this.buttonFieldRemove.Click += new System.EventHandler(this.buttonFieldRemove_Click);
             // 
             // buttonFieldAdd
             // 
@@ -765,6 +768,7 @@
             this.buttonFieldAdd.TabIndex = 2;
             this.buttonFieldAdd.Text = "→";
             this.buttonFieldAdd.UseVisualStyleBackColor = true;
+            this.buttonFieldAdd.Click += new System.EventHandler(this.buttonFieldAdd_Click);
             // 
             // listBoxFieldsActual
             // 
