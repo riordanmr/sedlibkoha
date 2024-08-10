@@ -9,12 +9,17 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace KohaQuick {
     public class Util {
+        public static string GetDownloadsPath() {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), 
+                "Downloads");
+        }
+
         public static bool FindRecentDownloadedFile(string fileMask, int msMaxAge, 
             out string foundFilePath) {
             bool bFound = false;
             foundFilePath = null;
 
-            string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+            string downloadsPath = GetDownloadsPath();
             Program.FormMain.ShowMsg($"Looking for {fileMask} in {downloadsPath}");
             DirectoryInfo directoryInfo = new DirectoryInfo(downloadsPath);
 

@@ -117,7 +117,9 @@ namespace KohaQuick {
 
         public KohaSession(int sessNum) {
             sessionNum = sessNum;
+
             driver = CreateWebDriver();
+
             // Initialize WebDriverWait with a timeout.
             wait1 = new WebDriverWait(driver, TimeSpan.FromSeconds(MAX_PAGE_WAIT_SECS));
         }
@@ -176,6 +178,12 @@ namespace KohaQuick {
             
             string optionsStr = $"window-position={xPos},{yPos}";
             options.AddArgument(optionsStr);
+
+            // Set Chrome options to enable downloads even when the browser is headless.
+            options.AddUserProfilePreference("download.default_directory", Util.GetDownloadsPath());
+            options.AddUserProfilePreference("download.prompt_for_download", false);
+            options.AddUserProfilePreference("download.directory_upgrade", true);
+            options.AddUserProfilePreference("safebrowsing.enabled", true);
 
             if (Program.FormMain.settings.BrowserWindowState == Settings.BROWSER_WINDOW_STATE_HIDDEN) {
                 ShowMsg($"Setting browser position to hidden");
@@ -728,8 +736,10 @@ namespace KohaQuick {
                 string foundFilePath;
                 if (Util.FindRecentDownloadedFile("Checking out*.csv", 10000, out foundFilePath)) {
                     ShowMsg($"Found {foundFilePath}");
-                    bOK = Util.ParseCheckedOutCSV(foundFilePath, ref checkoutItemCol, out errmsg); 
+                    bOK = Util.ParseCheckedOutCSV(foundFilePath, ref checkoutItemCol, out errmsg);
                     System.IO.File.Delete(foundFilePath);
+                } else {
+                    errmsg = "Error: Unable to find downloaded file with checkouts";
                 }
             } catch(Exception ex) {
                 ShowMsg($"GetItemsCheckedOutForPatron: {ex.Message}");
