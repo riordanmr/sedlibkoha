@@ -52,7 +52,7 @@ namespace KohaQuick {
             return $"Patron: {patronFirstName} {patronLastName}; {items.Count} Items: [{itemsInfo}]";
         }
 
-        public void AddCheckout(string titleParm, string callNumberParm, string checkedOutOnParm, 
+        public void AddCheckout(string titleParm, string callNumberParm, string checkedOutOnParm,
             string due_dateParm) {
             items.Add(new CheckoutItem {
                 title = titleParm,
@@ -72,6 +72,23 @@ namespace KohaQuick {
                 }
             }
             Program.FormMain.ShowMsg($"RemoveCheckoutsNotToday: Removed {nItemsRemoved} items");
+        }
+
+        public void InitSample() {
+            patronFirstName = "John";
+            patronLastName = "Doe";
+            items.Add(new CheckoutItem {
+                title = "The Philosophy Section / by Riordan, Tamara 31234567890123",
+                call_number = "RIORDAN, T.",
+                checkout_date = "08/09/2024",
+                due_date = "08/30/2024"
+            });
+            items.Add(new CheckoutItem {
+                title = "Ship of Theseus / by Straka, V. M. 31234567890124",
+                call_number = "813.54/STR/1949",
+                checkout_date = "08/09/2024",
+                due_date = "08/30/2024"
+            });
         }
     }
 
@@ -459,7 +476,6 @@ namespace KohaQuick {
                         // Click the button
                         confirmButton.Click();
                         ShowMsg("Clicked on Confirm hold (Y) for Hold at");
-
                     } catch (NoSuchElementException) {
                         ShowMsg("Didn't find Hold at");
                     }

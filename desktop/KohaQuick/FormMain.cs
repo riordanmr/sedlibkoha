@@ -94,6 +94,10 @@ namespace KohaQuick {
             printImpl.PrintHoldSample();
         }
 
+        private void printSampleCheckoutSlipToolStripMenuItem_Click(object sender, EventArgs e) {
+            printImpl.PrintCheckoutSlipSample();
+        }
+
         // Event handler for KeyDown event of the TextBox
         private void TextBoxItemBarcode_KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Enter) {

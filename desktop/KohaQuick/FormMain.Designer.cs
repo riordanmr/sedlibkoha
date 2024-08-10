@@ -111,6 +111,7 @@ namespace KohaQuick
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printSampleCheckoutSlipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlHolds.SuspendLayout();
             this.tabPageTrapHolds.SuspendLayout();
             this.tabPageCheckPIN.SuspendLayout();
@@ -947,6 +948,7 @@ namespace KohaQuick
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.printSampleToolStripMenuItem,
+            this.printSampleCheckoutSlipToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.loginToolStripMenuItem,
             this.logoutToolStripMenuItem,
@@ -959,44 +961,51 @@ namespace KohaQuick
             // printSampleToolStripMenuItem
             // 
             this.printSampleToolStripMenuItem.Name = "printSampleToolStripMenuItem";
-            this.printSampleToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
+            this.printSampleToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
             this.printSampleToolStripMenuItem.Text = "&Print Sample Hold Slip";
             this.printSampleToolStripMenuItem.Click += new System.EventHandler(this.printSampleToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
             this.settingsToolStripMenuItem.Text = "&Settings...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // loginToolStripMenuItem
             // 
             this.loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            this.loginToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
+            this.loginToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
             this.loginToolStripMenuItem.Text = "&Login...";
             this.loginToolStripMenuItem.Click += new System.EventHandler(this.loginToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
             this.logoutToolStripMenuItem.Text = "Log&out";
             this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
             // 
             // restartToolStripMenuItem
             // 
             this.restartToolStripMenuItem.Name = "restartToolStripMenuItem";
-            this.restartToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
+            this.restartToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
             this.restartToolStripMenuItem.Text = "&Restart";
             this.restartToolStripMenuItem.Click += new System.EventHandler(this.restartToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(386, 44);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // printSampleCheckoutSlipToolStripMenuItem
+            // 
+            this.printSampleCheckoutSlipToolStripMenuItem.Name = "printSampleCheckoutSlipToolStripMenuItem";
+            this.printSampleCheckoutSlipToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
+            this.printSampleCheckoutSlipToolStripMenuItem.Text = "Print Sample Checkout Slip";
+            this.printSampleCheckoutSlipToolStripMenuItem.Click += new System.EventHandler(this.printSampleCheckoutSlipToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -1119,6 +1128,7 @@ namespace KohaQuick
         private System.Windows.Forms.DataGridViewTextBoxColumn Author;
         private System.Windows.Forms.DataGridViewTextBoxColumn BibID;
         private Button buttonPlaceHoldsClearInfo;
+        private ToolStripMenuItem printSampleCheckoutSlipToolStripMenuItem;
     }
 }
 

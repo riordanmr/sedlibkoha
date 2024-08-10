@@ -73,6 +73,8 @@ namespace KohaQuick {
             Program.FormDebug.AddDebugLine(msg);
         }
 
+        // Print a hold slip for a library patron.
+        // Entry:  holdSlip (member variable) contains the data to print.
         public string PrintHoldSlip() {
             string reply = "";
 
@@ -133,6 +135,14 @@ namespace KohaQuick {
             PrintHoldSlip();
         }
 
+        public void PrintCheckoutSlipSample() {
+            CheckoutItemCol checkoutItemCol = new CheckoutItemCol();
+            checkoutItemCol.InitSample();
+            PrintCheckoutSlip(checkoutItemCol);
+        }
+
+        // Print a slip listing checked-out items for a library patron.
+        // Entry:  checkoutItemCol contains the data to print.
         public void PrintCheckoutSlip(CheckoutItemCol checkoutItemCol) {
             this.checkoutItemCol = checkoutItemCol;
             string reply = "";
@@ -337,6 +347,8 @@ namespace KohaQuick {
             }
         }
 
+        // Print a list of checked-out items for a library patron.
+        // Entry:  checkoutItemCol (member variable) contains the data to print.
         private void PrintCheckedOutSlipHandler(object sender, PrintPageEventArgs e) {
             // This method is called when the print job is to print a list of checked-out items.
             int x = settings.UpperLeftX;
