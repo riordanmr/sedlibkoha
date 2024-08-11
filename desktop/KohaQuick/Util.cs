@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +11,10 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace KohaQuick {
     public class Util {
+        public static void ShowMsg(string msg) {
+            Program.FormMain.ShowMsg(msg);
+        }
+
         public static string GetDownloadsPath() {
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), 
                 "Downloads");
@@ -121,6 +127,44 @@ namespace KohaQuick {
             }
 
             return bOK;
+        }
+
+        public static void CleanUpSeleniumChromeProcesses() {
+            // Get all Chrome processes
+            var chromeProcesses = Process.GetProcessesByName("chrome");
+
+            foreach (var process in chromeProcesses) {
+                try {
+                    // Get the command line arguments of the process
+                    using (var searcher = new ManagementObjectSearcher($"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {process.Id}")) {
+                        foreach (var obj in searcher.Get()) {
+                            var commandLine = obj["CommandLine"]?.ToString();
+
+                            // Check if the process was started by Selenium
+                            if (!string.IsNullOrEmpty(commandLine) &&
+                                (commandLine.Contains("--remote-debugging-port") ||
+                                 commandLine.Contains("--user-data-dir") ||
+                                 commandLine.Contains("--disable-extensions"))) {
+                                // Terminate the process
+                                process.Kill();
+                                ShowMsg($"Terminated Selenium Chrome process with ID: {process.Id}");
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ShowMsg($"Error terminating process {process.Id}: {ex.Message}");
+                }
+            }
+
+            // chromedriver is a command-line program that is used by Selenium to control Chrome.
+            foreach (var process in Process.GetProcessesByName("chromedriver")) {
+                try {
+                    process.Kill();
+                    ShowMsg($"Terminated chromedriver process with ID: {process.Id}");
+                } catch (Exception ex) {
+                    ShowMsg($"Error terminating process {process.Id}: {ex.Message}");
+                }
+            }
         }
     }
 }

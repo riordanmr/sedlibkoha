@@ -76,6 +76,8 @@ namespace KohaQuick {
 
         public string BrowserWindowState { get; set; } = BROWSER_WINDOW_STATE_HIDDEN;
 
+        public bool CleanupSeleniumProcessesAtStartup { get; set; } = true;
+
         public string DefaultPatronCategory { get; set; } = "PATRON";
 
         public string LocalLibraries { get; set; } = "Sedona Public Library,SPL in the Village";
