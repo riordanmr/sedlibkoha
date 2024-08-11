@@ -53,7 +53,8 @@ namespace KohaQuick {
         public string[] HoldFields = new string[] { PrintImpl.FIELD_EXPDATE, PrintImpl.FIELD_PATRON,
             PrintImpl.FIELD_CURRENTDATETIME, PrintImpl.FIELD_LIBRARY, PrintImpl.FIELD_BLANKLINE,
             PrintImpl.FIELD_TITLE, PrintImpl.FIELD_BARCODE,
-            PrintImpl.FIELD_CALLNUMBER, PrintImpl.FIELD_BLANKLINE, PrintImpl.FIELD_BLANKLINE
+            PrintImpl.FIELD_CALLNUMBER, PrintImpl.FIELD_BLANKLINE, PrintImpl.FIELD_BLANKLINE,
+            PrintImpl.FIELD_BLANKLINE, PrintImpl.FIELD_BLANKLINE
         };
 
         public string[] CheckoutItemFields = new string[] { PrintImpl.FIELD_TITLE,
@@ -73,7 +74,7 @@ namespace KohaQuick {
         public int BrowserHeight { get; set; } = 600;
         public int BrowserX { get; set; } = -1;
 
-        public string BrowserWindowState { get; set; } = BROWSER_WINDOW_STATE_NORMAL;
+        public string BrowserWindowState { get; set; } = BROWSER_WINDOW_STATE_HIDDEN;
 
         public string DefaultPatronCategory { get; set; } = "PATRON";
 
