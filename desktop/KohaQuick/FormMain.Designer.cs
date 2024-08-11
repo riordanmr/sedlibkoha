@@ -51,6 +51,10 @@ namespace KohaQuick
             this.buttonGenerateRandom = new System.Windows.Forms.Button();
             this.buttonAddPatron = new System.Windows.Forms.Button();
             this.groupBoxLibraryCard = new System.Windows.Forms.GroupBox();
+            this.comboBoxLibraryForAddPatron = new System.Windows.Forms.ComboBox();
+            this.labelLibraryForAddPatron = new System.Windows.Forms.Label();
+            this.textBoxCircNotes = new System.Windows.Forms.TextBox();
+            this.labelCircNotes = new System.Windows.Forms.Label();
             this.textBoxPIN2 = new System.Windows.Forms.TextBox();
             this.textBoxPIN = new System.Windows.Forms.TextBox();
             this.labelPIN2 = new System.Windows.Forms.Label();
@@ -78,6 +82,8 @@ namespace KohaQuick
             this.labelState = new System.Windows.Forms.Label();
             this.comboBoxState = new System.Windows.Forms.ComboBox();
             this.groupBoxContactInfo = new System.Windows.Forms.GroupBox();
+            this.comboBoxMainContactMethod = new System.Windows.Forms.ComboBox();
+            this.labelMainContactMethod = new System.Windows.Forms.Label();
             this.textBoxEmail = new System.Windows.Forms.TextBox();
             this.textBoxPhone = new System.Windows.Forms.TextBox();
             this.labelPhone = new System.Windows.Forms.Label();
@@ -106,12 +112,12 @@ namespace KohaQuick
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printSampleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printSampleCheckoutSlipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.printSampleCheckoutSlipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlHolds.SuspendLayout();
             this.tabPageTrapHolds.SuspendLayout();
             this.tabPageCheckPIN.SuspendLayout();
@@ -136,7 +142,7 @@ namespace KohaQuick
             this.tabControlHolds.Location = new System.Drawing.Point(12, 58);
             this.tabControlHolds.Name = "tabControlHolds";
             this.tabControlHolds.SelectedIndex = 0;
-            this.tabControlHolds.Size = new System.Drawing.Size(1101, 877);
+            this.tabControlHolds.Size = new System.Drawing.Size(1101, 948);
             this.tabControlHolds.TabIndex = 0;
             // 
             // tabPageTrapHolds
@@ -150,7 +156,7 @@ namespace KohaQuick
             this.tabPageTrapHolds.Location = new System.Drawing.Point(8, 39);
             this.tabPageTrapHolds.Name = "tabPageTrapHolds";
             this.tabPageTrapHolds.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTrapHolds.Size = new System.Drawing.Size(1085, 830);
+            this.tabPageTrapHolds.Size = new System.Drawing.Size(1085, 901);
             this.tabPageTrapHolds.TabIndex = 0;
             this.tabPageTrapHolds.Text = "Trap Holds";
             this.tabPageTrapHolds.UseVisualStyleBackColor = true;
@@ -228,7 +234,7 @@ namespace KohaQuick
             this.tabPageCheckPIN.Controls.Add(this.labelPatronBarcode);
             this.tabPageCheckPIN.Location = new System.Drawing.Point(8, 39);
             this.tabPageCheckPIN.Name = "tabPageCheckPIN";
-            this.tabPageCheckPIN.Size = new System.Drawing.Size(1085, 830);
+            this.tabPageCheckPIN.Size = new System.Drawing.Size(1085, 901);
             this.tabPageCheckPIN.TabIndex = 1;
             this.tabPageCheckPIN.Text = "Check PIN";
             this.tabPageCheckPIN.UseVisualStyleBackColor = true;
@@ -302,7 +308,7 @@ namespace KohaQuick
             this.tabPageAddPatron.Controls.Add(this.groupBoxContactInfo);
             this.tabPageAddPatron.Location = new System.Drawing.Point(8, 39);
             this.tabPageAddPatron.Name = "tabPageAddPatron";
-            this.tabPageAddPatron.Size = new System.Drawing.Size(1085, 830);
+            this.tabPageAddPatron.Size = new System.Drawing.Size(1085, 901);
             this.tabPageAddPatron.TabIndex = 2;
             this.tabPageAddPatron.Text = "Add Patron";
             this.tabPageAddPatron.UseVisualStyleBackColor = true;
@@ -311,15 +317,15 @@ namespace KohaQuick
             // 
             this.textBoxAddPatronMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxAddPatronMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxAddPatronMsg.Location = new System.Drawing.Point(22, 717);
+            this.textBoxAddPatronMsg.Location = new System.Drawing.Point(22, 797);
             this.textBoxAddPatronMsg.Multiline = true;
             this.textBoxAddPatronMsg.Name = "textBoxAddPatronMsg";
-            this.textBoxAddPatronMsg.Size = new System.Drawing.Size(1030, 110);
+            this.textBoxAddPatronMsg.Size = new System.Drawing.Size(1030, 98);
             this.textBoxAddPatronMsg.TabIndex = 7;
             // 
             // buttonClearInfo
             // 
-            this.buttonClearInfo.Location = new System.Drawing.Point(765, 656);
+            this.buttonClearInfo.Location = new System.Drawing.Point(765, 737);
             this.buttonClearInfo.Name = "buttonClearInfo";
             this.buttonClearInfo.Size = new System.Drawing.Size(200, 44);
             this.buttonClearInfo.TabIndex = 6;
@@ -329,7 +335,7 @@ namespace KohaQuick
             // 
             // buttonGenerateRandom
             // 
-            this.buttonGenerateRandom.Location = new System.Drawing.Point(117, 656);
+            this.buttonGenerateRandom.Location = new System.Drawing.Point(117, 737);
             this.buttonGenerateRandom.Name = "buttonGenerateRandom";
             this.buttonGenerateRandom.Size = new System.Drawing.Size(200, 44);
             this.buttonGenerateRandom.TabIndex = 4;
@@ -339,7 +345,7 @@ namespace KohaQuick
             // 
             // buttonAddPatron
             // 
-            this.buttonAddPatron.Location = new System.Drawing.Point(437, 656);
+            this.buttonAddPatron.Location = new System.Drawing.Point(437, 737);
             this.buttonAddPatron.Name = "buttonAddPatron";
             this.buttonAddPatron.Size = new System.Drawing.Size(200, 44);
             this.buttonAddPatron.TabIndex = 5;
@@ -349,48 +355,89 @@ namespace KohaQuick
             // 
             // groupBoxLibraryCard
             // 
+            this.groupBoxLibraryCard.Controls.Add(this.comboBoxLibraryForAddPatron);
+            this.groupBoxLibraryCard.Controls.Add(this.labelLibraryForAddPatron);
+            this.groupBoxLibraryCard.Controls.Add(this.textBoxCircNotes);
+            this.groupBoxLibraryCard.Controls.Add(this.labelCircNotes);
             this.groupBoxLibraryCard.Controls.Add(this.textBoxPIN2);
             this.groupBoxLibraryCard.Controls.Add(this.textBoxPIN);
             this.groupBoxLibraryCard.Controls.Add(this.labelPIN2);
             this.groupBoxLibraryCard.Controls.Add(this.textBoxLibraryCardBarcode);
             this.groupBoxLibraryCard.Controls.Add(this.labelLibraryCardBarcode);
             this.groupBoxLibraryCard.Controls.Add(this.labelPIN);
-            this.groupBoxLibraryCard.Location = new System.Drawing.Point(17, 472);
+            this.groupBoxLibraryCard.Location = new System.Drawing.Point(17, 441);
             this.groupBoxLibraryCard.Name = "groupBoxLibraryCard";
-            this.groupBoxLibraryCard.Size = new System.Drawing.Size(1041, 168);
+            this.groupBoxLibraryCard.Size = new System.Drawing.Size(1041, 268);
             this.groupBoxLibraryCard.TabIndex = 3;
             this.groupBoxLibraryCard.TabStop = false;
             this.groupBoxLibraryCard.Text = "Library card";
             // 
+            // comboBoxLibraryForAddPatron
+            // 
+            this.comboBoxLibraryForAddPatron.FormattingEnabled = true;
+            this.comboBoxLibraryForAddPatron.Location = new System.Drawing.Point(156, 120);
+            this.comboBoxLibraryForAddPatron.Name = "comboBoxLibraryForAddPatron";
+            this.comboBoxLibraryForAddPatron.Size = new System.Drawing.Size(280, 33);
+            this.comboBoxLibraryForAddPatron.TabIndex = 7;
+            // 
+            // labelLibraryForAddPatron
+            // 
+            this.labelLibraryForAddPatron.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelLibraryForAddPatron.AutoSize = true;
+            this.labelLibraryForAddPatron.Location = new System.Drawing.Point(57, 120);
+            this.labelLibraryForAddPatron.Name = "labelLibraryForAddPatron";
+            this.labelLibraryForAddPatron.Size = new System.Drawing.Size(84, 25);
+            this.labelLibraryForAddPatron.TabIndex = 6;
+            this.labelLibraryForAddPatron.Text = "Library:";
+            this.labelLibraryForAddPatron.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textBoxCircNotes
+            // 
+            this.textBoxCircNotes.Location = new System.Drawing.Point(156, 167);
+            this.textBoxCircNotes.Multiline = true;
+            this.textBoxCircNotes.Name = "textBoxCircNotes";
+            this.textBoxCircNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxCircNotes.Size = new System.Drawing.Size(857, 82);
+            this.textBoxCircNotes.TabIndex = 9;
+            // 
+            // labelCircNotes
+            // 
+            this.labelCircNotes.AutoSize = true;
+            this.labelCircNotes.Location = new System.Drawing.Point(31, 167);
+            this.labelCircNotes.Name = "labelCircNotes";
+            this.labelCircNotes.Size = new System.Drawing.Size(115, 25);
+            this.labelCircNotes.TabIndex = 8;
+            this.labelCircNotes.Text = "Circ notes:";
+            // 
             // textBoxPIN2
             // 
-            this.textBoxPIN2.Location = new System.Drawing.Point(176, 112);
+            this.textBoxPIN2.Location = new System.Drawing.Point(372, 74);
             this.textBoxPIN2.Name = "textBoxPIN2";
             this.textBoxPIN2.PasswordChar = '*';
-            this.textBoxPIN2.Size = new System.Drawing.Size(162, 31);
+            this.textBoxPIN2.Size = new System.Drawing.Size(124, 31);
             this.textBoxPIN2.TabIndex = 5;
             // 
             // textBoxPIN
             // 
-            this.textBoxPIN.Location = new System.Drawing.Point(176, 73);
+            this.textBoxPIN.Location = new System.Drawing.Point(156, 74);
             this.textBoxPIN.Name = "textBoxPIN";
             this.textBoxPIN.PasswordChar = '*';
-            this.textBoxPIN.Size = new System.Drawing.Size(162, 31);
+            this.textBoxPIN.Size = new System.Drawing.Size(124, 31);
             this.textBoxPIN.TabIndex = 3;
             // 
             // labelPIN2
             // 
             this.labelPIN2.AutoSize = true;
-            this.labelPIN2.Location = new System.Drawing.Point(36, 112);
+            this.labelPIN2.Location = new System.Drawing.Point(293, 77);
             this.labelPIN2.Name = "labelPIN2";
-            this.labelPIN2.Size = new System.Drawing.Size(111, 25);
+            this.labelPIN2.Size = new System.Drawing.Size(73, 25);
             this.labelPIN2.TabIndex = 4;
-            this.labelPIN2.Text = "PIN again:";
+            this.labelPIN2.Text = "Again:";
             this.labelPIN2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBoxLibraryCardBarcode
             // 
-            this.textBoxLibraryCardBarcode.Location = new System.Drawing.Point(176, 36);
+            this.textBoxLibraryCardBarcode.Location = new System.Drawing.Point(156, 32);
             this.textBoxLibraryCardBarcode.Name = "textBoxLibraryCardBarcode";
             this.textBoxLibraryCardBarcode.Size = new System.Drawing.Size(293, 31);
             this.textBoxLibraryCardBarcode.TabIndex = 1;
@@ -399,7 +446,7 @@ namespace KohaQuick
             // 
             this.labelLibraryCardBarcode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelLibraryCardBarcode.AutoSize = true;
-            this.labelLibraryCardBarcode.Location = new System.Drawing.Point(49, 36);
+            this.labelLibraryCardBarcode.Location = new System.Drawing.Point(49, 32);
             this.labelLibraryCardBarcode.Name = "labelLibraryCardBarcode";
             this.labelLibraryCardBarcode.Size = new System.Drawing.Size(98, 25);
             this.labelLibraryCardBarcode.TabIndex = 0;
@@ -409,7 +456,7 @@ namespace KohaQuick
             // labelPIN
             // 
             this.labelPIN.AutoSize = true;
-            this.labelPIN.Location = new System.Drawing.Point(95, 73);
+            this.labelPIN.Location = new System.Drawing.Point(95, 74);
             this.labelPIN.Name = "labelPIN";
             this.labelPIN.Size = new System.Drawing.Size(52, 25);
             this.labelPIN.TabIndex = 2;
@@ -426,9 +473,9 @@ namespace KohaQuick
             this.groupBoxIdentity.Controls.Add(this.textBoxDateOfBirth);
             this.groupBoxIdentity.Controls.Add(this.labelFirstName);
             this.groupBoxIdentity.Controls.Add(this.textBoxFirstName);
-            this.groupBoxIdentity.Location = new System.Drawing.Point(17, 19);
+            this.groupBoxIdentity.Location = new System.Drawing.Point(17, 9);
             this.groupBoxIdentity.Name = "groupBoxIdentity";
-            this.groupBoxIdentity.Size = new System.Drawing.Size(1041, 142);
+            this.groupBoxIdentity.Size = new System.Drawing.Size(1041, 139);
             this.groupBoxIdentity.TabIndex = 0;
             this.groupBoxIdentity.TabStop = false;
             this.groupBoxIdentity.Text = "Identity";
@@ -469,7 +516,7 @@ namespace KohaQuick
             // labelDateOfBirth
             // 
             this.labelDateOfBirth.AutoSize = true;
-            this.labelDateOfBirth.Location = new System.Drawing.Point(17, 101);
+            this.labelDateOfBirth.Location = new System.Drawing.Point(17, 96);
             this.labelDateOfBirth.Name = "labelDateOfBirth";
             this.labelDateOfBirth.Size = new System.Drawing.Size(275, 25);
             this.labelDateOfBirth.TabIndex = 6;
@@ -477,7 +524,7 @@ namespace KohaQuick
             // 
             // textBoxDateOfBirth
             // 
-            this.textBoxDateOfBirth.Location = new System.Drawing.Point(312, 98);
+            this.textBoxDateOfBirth.Location = new System.Drawing.Point(312, 93);
             this.textBoxDateOfBirth.Name = "textBoxDateOfBirth";
             this.textBoxDateOfBirth.Size = new System.Drawing.Size(162, 31);
             this.textBoxDateOfBirth.TabIndex = 7;
@@ -510,9 +557,9 @@ namespace KohaQuick
             this.groupBoxAddress.Controls.Add(this.labelCity);
             this.groupBoxAddress.Controls.Add(this.labelState);
             this.groupBoxAddress.Controls.Add(this.comboBoxState);
-            this.groupBoxAddress.Location = new System.Drawing.Point(17, 180);
+            this.groupBoxAddress.Location = new System.Drawing.Point(17, 158);
             this.groupBoxAddress.Name = "groupBoxAddress";
-            this.groupBoxAddress.Size = new System.Drawing.Size(1041, 142);
+            this.groupBoxAddress.Size = new System.Drawing.Size(1041, 129);
             this.groupBoxAddress.TabIndex = 1;
             this.groupBoxAddress.TabStop = false;
             this.groupBoxAddress.Text = "Address";
@@ -520,7 +567,7 @@ namespace KohaQuick
             // labelAddress
             // 
             this.labelAddress.AutoSize = true;
-            this.labelAddress.Location = new System.Drawing.Point(17, 34);
+            this.labelAddress.Location = new System.Drawing.Point(25, 34);
             this.labelAddress.Name = "labelAddress";
             this.labelAddress.Size = new System.Drawing.Size(97, 25);
             this.labelAddress.TabIndex = 0;
@@ -531,7 +578,7 @@ namespace KohaQuick
             this.textBoxAddress1.Location = new System.Drawing.Point(133, 31);
             this.textBoxAddress1.Name = "textBoxAddress1";
             this.textBoxAddress1.Size = new System.Drawing.Size(360, 31);
-            this.textBoxAddress1.TabIndex = 2;
+            this.textBoxAddress1.TabIndex = 1;
             // 
             // labelAddress2
             // 
@@ -540,7 +587,7 @@ namespace KohaQuick
             this.labelAddress2.Location = new System.Drawing.Point(535, 34);
             this.labelAddress2.Name = "labelAddress2";
             this.labelAddress2.Size = new System.Drawing.Size(109, 25);
-            this.labelAddress2.TabIndex = 3;
+            this.labelAddress2.TabIndex = 2;
             this.labelAddress2.Text = "Address2:";
             this.labelAddress2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -549,21 +596,21 @@ namespace KohaQuick
             this.textBoxAddress2.Location = new System.Drawing.Point(663, 30);
             this.textBoxAddress2.Name = "textBoxAddress2";
             this.textBoxAddress2.Size = new System.Drawing.Size(350, 31);
-            this.textBoxAddress2.TabIndex = 4;
+            this.textBoxAddress2.TabIndex = 3;
             // 
             // textBoxZipcode
             // 
             this.textBoxZipcode.Location = new System.Drawing.Point(666, 78);
             this.textBoxZipcode.Name = "textBoxZipcode";
             this.textBoxZipcode.Size = new System.Drawing.Size(162, 31);
-            this.textBoxZipcode.TabIndex = 0;
+            this.textBoxZipcode.TabIndex = 9;
             // 
             // textBoxCity
             // 
             this.textBoxCity.Location = new System.Drawing.Point(133, 78);
             this.textBoxCity.Name = "textBoxCity";
             this.textBoxCity.Size = new System.Drawing.Size(162, 31);
-            this.textBoxCity.TabIndex = 6;
+            this.textBoxCity.TabIndex = 5;
             // 
             // labelZipcode
             // 
@@ -571,17 +618,17 @@ namespace KohaQuick
             this.labelZipcode.Location = new System.Drawing.Point(549, 81);
             this.labelZipcode.Name = "labelZipcode";
             this.labelZipcode.Size = new System.Drawing.Size(95, 25);
-            this.labelZipcode.TabIndex = 9;
+            this.labelZipcode.TabIndex = 8;
             this.labelZipcode.Text = "Zipcode:";
             this.labelZipcode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // labelCity
             // 
             this.labelCity.AutoSize = true;
-            this.labelCity.Location = new System.Drawing.Point(59, 78);
+            this.labelCity.Location = new System.Drawing.Point(67, 78);
             this.labelCity.Name = "labelCity";
             this.labelCity.Size = new System.Drawing.Size(55, 25);
-            this.labelCity.TabIndex = 5;
+            this.labelCity.TabIndex = 4;
             this.labelCity.Text = "City:";
             this.labelCity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -591,7 +638,7 @@ namespace KohaQuick
             this.labelState.Location = new System.Drawing.Point(328, 78);
             this.labelState.Name = "labelState";
             this.labelState.Size = new System.Drawing.Size(68, 25);
-            this.labelState.TabIndex = 7;
+            this.labelState.TabIndex = 6;
             this.labelState.Text = "State:";
             this.labelState.Click += new System.EventHandler(this.label1_Click);
             // 
@@ -652,33 +699,56 @@ namespace KohaQuick
             this.comboBoxState.Location = new System.Drawing.Point(402, 75);
             this.comboBoxState.Name = "comboBoxState";
             this.comboBoxState.Size = new System.Drawing.Size(126, 33);
-            this.comboBoxState.TabIndex = 8;
+            this.comboBoxState.TabIndex = 7;
             this.comboBoxState.SelectedIndexChanged += new System.EventHandler(this.comboBoxState_SelectedIndexChanged);
             // 
             // groupBoxContactInfo
             // 
+            this.groupBoxContactInfo.Controls.Add(this.comboBoxMainContactMethod);
+            this.groupBoxContactInfo.Controls.Add(this.labelMainContactMethod);
             this.groupBoxContactInfo.Controls.Add(this.textBoxEmail);
             this.groupBoxContactInfo.Controls.Add(this.textBoxPhone);
             this.groupBoxContactInfo.Controls.Add(this.labelPhone);
             this.groupBoxContactInfo.Controls.Add(this.labelEmail);
-            this.groupBoxContactInfo.Location = new System.Drawing.Point(17, 344);
+            this.groupBoxContactInfo.Location = new System.Drawing.Point(17, 295);
             this.groupBoxContactInfo.Name = "groupBoxContactInfo";
-            this.groupBoxContactInfo.Size = new System.Drawing.Size(1041, 110);
+            this.groupBoxContactInfo.Size = new System.Drawing.Size(1041, 135);
             this.groupBoxContactInfo.TabIndex = 2;
             this.groupBoxContactInfo.TabStop = false;
             this.groupBoxContactInfo.Text = "Contact info";
             // 
+            // comboBoxMainContactMethod
+            // 
+            this.comboBoxMainContactMethod.FormattingEnabled = true;
+            this.comboBoxMainContactMethod.Items.AddRange(new object[] {
+            "Email",
+            "Phone"});
+            this.comboBoxMainContactMethod.Location = new System.Drawing.Point(243, 78);
+            this.comboBoxMainContactMethod.Name = "comboBoxMainContactMethod";
+            this.comboBoxMainContactMethod.Size = new System.Drawing.Size(121, 33);
+            this.comboBoxMainContactMethod.TabIndex = 5;
+            // 
+            // labelMainContactMethod
+            // 
+            this.labelMainContactMethod.AutoSize = true;
+            this.labelMainContactMethod.Location = new System.Drawing.Point(10, 81);
+            this.labelMainContactMethod.Name = "labelMainContactMethod";
+            this.labelMainContactMethod.Size = new System.Drawing.Size(218, 25);
+            this.labelMainContactMethod.TabIndex = 4;
+            this.labelMainContactMethod.Text = "Main contact method:";
+            this.labelMainContactMethod.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // textBoxEmail
             // 
             this.textBoxEmail.Font = new System.Drawing.Font("Lucida Console", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxEmail.Location = new System.Drawing.Point(433, 49);
+            this.textBoxEmail.Location = new System.Drawing.Point(433, 34);
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.Size = new System.Drawing.Size(580, 31);
             this.textBoxEmail.TabIndex = 3;
             // 
             // textBoxPhone
             // 
-            this.textBoxPhone.Location = new System.Drawing.Point(115, 49);
+            this.textBoxPhone.Location = new System.Drawing.Point(115, 34);
             this.textBoxPhone.Name = "textBoxPhone";
             this.textBoxPhone.Size = new System.Drawing.Size(217, 31);
             this.textBoxPhone.TabIndex = 1;
@@ -686,7 +756,7 @@ namespace KohaQuick
             // labelPhone
             // 
             this.labelPhone.AutoSize = true;
-            this.labelPhone.Location = new System.Drawing.Point(11, 51);
+            this.labelPhone.Location = new System.Drawing.Point(11, 36);
             this.labelPhone.Name = "labelPhone";
             this.labelPhone.Size = new System.Drawing.Size(98, 25);
             this.labelPhone.TabIndex = 0;
@@ -696,7 +766,7 @@ namespace KohaQuick
             // labelEmail
             // 
             this.labelEmail.AutoSize = true;
-            this.labelEmail.Location = new System.Drawing.Point(356, 51);
+            this.labelEmail.Location = new System.Drawing.Point(356, 36);
             this.labelEmail.Name = "labelEmail";
             this.labelEmail.Size = new System.Drawing.Size(71, 25);
             this.labelEmail.TabIndex = 2;
@@ -713,7 +783,7 @@ namespace KohaQuick
             this.tabPagePrintCheckouts.Controls.Add(this.labelPrintReceiptHeader);
             this.tabPagePrintCheckouts.Location = new System.Drawing.Point(8, 39);
             this.tabPagePrintCheckouts.Name = "tabPagePrintCheckouts";
-            this.tabPagePrintCheckouts.Size = new System.Drawing.Size(1085, 830);
+            this.tabPagePrintCheckouts.Size = new System.Drawing.Size(1085, 901);
             this.tabPagePrintCheckouts.TabIndex = 3;
             this.tabPagePrintCheckouts.Text = "Print Checkouts";
             this.tabPagePrintCheckouts.UseVisualStyleBackColor = true;
@@ -793,7 +863,7 @@ namespace KohaQuick
             this.tabPagePlaceHold.Controls.Add(this.labelPlaceHoldPatronBarcode);
             this.tabPagePlaceHold.Location = new System.Drawing.Point(8, 39);
             this.tabPagePlaceHold.Name = "tabPagePlaceHold";
-            this.tabPagePlaceHold.Size = new System.Drawing.Size(1085, 830);
+            this.tabPagePlaceHold.Size = new System.Drawing.Size(1085, 901);
             this.tabPagePlaceHold.TabIndex = 4;
             this.tabPagePlaceHold.Text = "Place Hold";
             this.tabPagePlaceHold.UseVisualStyleBackColor = true;
@@ -940,7 +1010,7 @@ namespace KohaQuick
             this.fileToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 0);
             this.menuStrip2.Name = "menuStrip2";
-            this.menuStrip2.Size = new System.Drawing.Size(1120, 42);
+            this.menuStrip2.Size = new System.Drawing.Size(1120, 40);
             this.menuStrip2.TabIndex = 1;
             this.menuStrip2.Text = "menuStrip2";
             // 
@@ -955,7 +1025,7 @@ namespace KohaQuick
             this.restartToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(71, 38);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(71, 36);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // printSampleToolStripMenuItem
@@ -964,6 +1034,13 @@ namespace KohaQuick
             this.printSampleToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
             this.printSampleToolStripMenuItem.Text = "&Print Sample Hold Slip";
             this.printSampleToolStripMenuItem.Click += new System.EventHandler(this.printSampleToolStripMenuItem_Click);
+            // 
+            // printSampleCheckoutSlipToolStripMenuItem
+            // 
+            this.printSampleCheckoutSlipToolStripMenuItem.Name = "printSampleCheckoutSlipToolStripMenuItem";
+            this.printSampleCheckoutSlipToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
+            this.printSampleCheckoutSlipToolStripMenuItem.Text = "Print Sample Checkout Slip";
+            this.printSampleCheckoutSlipToolStripMenuItem.Click += new System.EventHandler(this.printSampleCheckoutSlipToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -1000,18 +1077,11 @@ namespace KohaQuick
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // printSampleCheckoutSlipToolStripMenuItem
-            // 
-            this.printSampleCheckoutSlipToolStripMenuItem.Name = "printSampleCheckoutSlipToolStripMenuItem";
-            this.printSampleCheckoutSlipToolStripMenuItem.Size = new System.Drawing.Size(436, 44);
-            this.printSampleCheckoutSlipToolStripMenuItem.Text = "Print Sample Checkout Slip";
-            this.printSampleCheckoutSlipToolStripMenuItem.Click += new System.EventHandler(this.printSampleCheckoutSlipToolStripMenuItem_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1120, 938);
+            this.ClientSize = new System.Drawing.Size(1120, 1003);
             this.Controls.Add(this.tabControlHolds);
             this.Controls.Add(this.menuStrip2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -1129,6 +1199,12 @@ namespace KohaQuick
         private System.Windows.Forms.DataGridViewTextBoxColumn BibID;
         private Button buttonPlaceHoldsClearInfo;
         private ToolStripMenuItem printSampleCheckoutSlipToolStripMenuItem;
+        private ComboBox comboBoxMainContactMethod;
+        private Label labelMainContactMethod;
+        private TextBox textBoxCircNotes;
+        private Label labelCircNotes;
+        private Label labelLibraryForAddPatron;
+        private ComboBox comboBoxLibraryForAddPatron;
     }
 }
 

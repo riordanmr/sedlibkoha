@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using OpenQA.Selenium.Interactions;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
 
 
 namespace KohaQuick {
@@ -795,6 +796,15 @@ namespace KohaQuick {
 
                 driver.FindElement(By.Id("email")).SendKeys(patron.email);
                 driver.FindElement(By.Id("phone")).SendKeys(patron.phone);
+
+                IWebElement selectPrimaryContactMethodElement = driver.FindElement(By.Id("primary_contact_method"));
+                SelectElement selectPrimaryContact = new SelectElement(selectPrimaryContactMethodElement);
+                string primaryContactMethod = "Primary email";
+                if(patron.main_contact_method == "Phone") {
+                    primaryContactMethod = "Primary phone";
+                }
+                selectPrimaryContact.SelectByText(primaryContactMethod);
+
                 driver.FindElement(By.Id("address")).SendKeys(patron.address);
                 driver.FindElement(By.Id("address2")).SendKeys(patron.address2);
                 driver.FindElement(By.Id("city")).SendKeys(patron.city);
@@ -810,6 +820,12 @@ namespace KohaQuick {
                 driver.FindElement(By.Id("userid")).SendKeys(patron.cardnumber);
                 driver.FindElement(By.Id("password")).SendKeys(patron.password);
                 driver.FindElement(By.Id("password2")).SendKeys(patron.password);
+
+                IWebElement selectLibraryElement = driver.FindElement(By.Id("libraries"));
+                SelectElement selectLibrary = new SelectElement(selectLibraryElement);
+                selectLibrary.SelectByText(patron.main_library);
+
+                driver.FindElement(By.Id("borrowernotes")).SendKeys(patron.circ_notes);
 
                 // Save the new patron.
                 driver.FindElement(By.Id("saverecord")).Click();
@@ -1108,7 +1124,7 @@ namespace KohaQuick {
                         // Locate the select element by its id
                         IWebElement selectElement = driver.FindElement(By.Id("pickup_multi"));
                         SelectElement select = new SelectElement(selectElement);
-                        select.SelectByText(Program.FormMain.settings.DefaultPickupLibrary);
+                        select.SelectByText(Program.FormMain.settings.LocalLibraries);
                     }
 
                     // Click the "Place hold" button.

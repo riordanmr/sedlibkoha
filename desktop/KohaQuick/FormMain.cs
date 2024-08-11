@@ -25,7 +25,27 @@ namespace KohaQuick {
             textBoxPatronBarcodeForReceipt.KeyDown += TextBoxPatronBarcodeForReceipt_KeyDown;
             textBoxPlaceHoldItemSearch.KeyDown += TextBoxPlaceHoldSearch_KeyDown;
             this.Activated += FormMain_Activated;
+            this.Load += new EventHandler(FormMain_Load);
             this.tabControlHolds.SelectedIndexChanged += new System.EventHandler(this.tabControlHolds_SelectedIndexChanged);
+        }
+
+        private void FormMain_Load(object sender, EventArgs e) {
+            // Code to execute when the form is loading
+            PopulateLibraryComboBox();
+            comboBoxMainContactMethod.SelectedIndex = 0;
+        }
+
+        private void PopulateLibraryComboBox() {
+            // Assuming settings.LocalLibraries is a comma-separated string of library names
+            string localLibraries = settings.LocalLibraries;
+            if (!string.IsNullOrEmpty(localLibraries)) {
+                string[] libraries = localLibraries.Split(',');
+                comboBoxLibraryForAddPatron.Items.AddRange(libraries);
+            }
+            // Select the first entry in the ComboBox
+            if (comboBoxLibraryForAddPatron.Items.Count > 0) {
+                comboBoxLibraryForAddPatron.SelectedIndex = 0;
+            }
         }
 
         private void tabControlHolds_SelectedIndexChanged(object sender, EventArgs e) {
@@ -224,6 +244,7 @@ namespace KohaQuick {
             this.textBoxLibraryCardBarcode.Text = $"432{GetRandomDigits(11)}";
             this.textBoxPIN.Text = PIN;
             this.textBoxPIN2.Text = this.textBoxPIN.Text;
+            this.textBoxCircNotes.Text = $"Random patron generated on {DateTime.Now}";
         }
 
         private void buttonAddPatron_Click(object sender, EventArgs e) {
@@ -234,6 +255,7 @@ namespace KohaQuick {
             patron.surname = this.textBoxLastName.Text;
             patron.email = this.textBoxEmail.Text;
             patron.phone = this.textBoxPhone.Text;
+            patron.main_contact_method = this.comboBoxMainContactMethod.Text;
             patron.address = this.textBoxAddress1.Text;
             patron.address2 = this.textBoxAddress2.Text;
             patron.city = this.textBoxCity.Text;
@@ -244,8 +266,9 @@ namespace KohaQuick {
             patron.cardnumber = this.textBoxLibraryCardBarcode.Text;
             patron.date_of_birth = this.textBoxDateOfBirth.Text;
             patron.password = this.textBoxPIN.Text;
-            // Fix this - we have a default but we need to be able to change it
-            patron.category_id = "AD";
+            patron.category_id = settings.DefaultPatronCategory;
+            patron.circ_notes = this.textBoxCircNotes.Text;
+            patron.main_library = this.comboBoxLibraryForAddPatron.Text;
 
             // Check if any property of patron is an empty string
             bool hasEmptyRequiredProperty = patron.GetType().GetProperties()
@@ -277,6 +300,7 @@ namespace KohaQuick {
             this.textBoxDateOfBirth.Text = "";
             this.textBoxEmail.Text = "";
             this.textBoxPhone.Text = "";
+            this.comboBoxMainContactMethod.SelectedIndex = 0;
             this.textBoxAddress1.Text = "";
             this.textBoxAddress2.Text = "";
             this.textBoxCity.Text = "";
@@ -285,7 +309,9 @@ namespace KohaQuick {
             this.textBoxLibraryCardBarcode.Text = "";
             this.textBoxPIN.Text = "";
             this.textBoxPIN2.Text = "";
+            this.comboBoxLibraryForAddPatron.SelectedIndex = 0;
             this.textBoxAddPatronMsg.Text = "";
+            this.textBoxCircNotes.Text = "";
         }
 
         private void restartToolStripMenuItem_Click(object sender, EventArgs e) {

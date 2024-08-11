@@ -77,7 +77,7 @@ namespace KohaQuick {
 
         public string DefaultPatronCategory { get; set; } = "PATRON";
 
-        public string DefaultPickupLibrary { get; set; } = "Sedona Public Library";
+        public string LocalLibraries { get; set; } = "Sedona Public Library,SPL in the Village";
 
         // Serializes the current instance to a JSON string
         public string ToJson() {
