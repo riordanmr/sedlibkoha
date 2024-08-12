@@ -146,7 +146,7 @@ namespace KohaQuick {
             string barcode = textBoxItemBarcode.Text.Trim();
             textBoxBarcodeMsg.Text = $"Barcode scanned: {barcode}";
             textBoxItemBarcode.Text = string.Empty;
-            textBoxTitleMsg.Text = "A unique blend of architecture, design, and comfort give this home character and make it stand out from the rest! ";// string.Empty;
+            textBoxTitleMsg.Text = string.Empty;
             do {
                 if (barcode.Length == 0) {
                     textBoxTrapMsg.Text = "You must enter a barcode";
