@@ -166,11 +166,11 @@ namespace KohaQuick
             this.textBoxTitleMsg.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBoxTitleMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxTitleMsg.Font = new System.Drawing.Font("Arial", 10.875F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTitleMsg.Location = new System.Drawing.Point(40, 146);
+            this.textBoxTitleMsg.Location = new System.Drawing.Point(40, 149);
             this.textBoxTitleMsg.Multiline = true;
             this.textBoxTitleMsg.Name = "textBoxTitleMsg";
             this.textBoxTitleMsg.ReadOnly = true;
-            this.textBoxTitleMsg.Size = new System.Drawing.Size(877, 48);
+            this.textBoxTitleMsg.Size = new System.Drawing.Size(877, 61);
             this.textBoxTitleMsg.TabIndex = 5;
             // 
             // textBoxBarcodeMsg
@@ -178,7 +178,7 @@ namespace KohaQuick
             this.textBoxBarcodeMsg.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBoxBarcodeMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxBarcodeMsg.Font = new System.Drawing.Font("Arial", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxBarcodeMsg.Location = new System.Drawing.Point(40, 103);
+            this.textBoxBarcodeMsg.Location = new System.Drawing.Point(40, 96);
             this.textBoxBarcodeMsg.Multiline = true;
             this.textBoxBarcodeMsg.Name = "textBoxBarcodeMsg";
             this.textBoxBarcodeMsg.ReadOnly = true;
@@ -190,11 +190,11 @@ namespace KohaQuick
             this.textBoxTrapMsg.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBoxTrapMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxTrapMsg.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTrapMsg.Location = new System.Drawing.Point(40, 199);
+            this.textBoxTrapMsg.Location = new System.Drawing.Point(40, 233);
             this.textBoxTrapMsg.Multiline = true;
             this.textBoxTrapMsg.Name = "textBoxTrapMsg";
             this.textBoxTrapMsg.ReadOnly = true;
-            this.textBoxTrapMsg.Size = new System.Drawing.Size(877, 175);
+            this.textBoxTrapMsg.Size = new System.Drawing.Size(877, 181);
             this.textBoxTrapMsg.TabIndex = 3;
             // 
             // buttonTrapHold
