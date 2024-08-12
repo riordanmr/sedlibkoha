@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using OpenQA.Selenium.Interactions;
 using System.Text.RegularExpressions;
 using System.Reflection;
-using static System.Net.Mime.MediaTypeNames;
 
 
 namespace KohaQuick {
@@ -109,12 +108,19 @@ namespace KohaQuick {
         } 
     }
 
+    //==================================================================
     // Represents a browser session to Koha.
     public class KohaSession {
+        //public const int SESSION_MINUTES = 2;
+        public enum SessionType { SESSION_TYPE_UNKNOWN, SESSION_TYPE_PATRON, SESSION_TYPE_STAFF };
+        SessionType sessionType = SessionType.SESSION_TYPE_UNKNOWN;
         const int MAX_PAGE_WAIT_SECS = 7;
         public IWebDriver driver;
         public WebDriverWait wait1;
         public int sessionNum;
+        private string username;
+        private string password;
+        //DateTime lastAccessStamp;
 
         public KohaSession(int sessNum) {
             sessionNum = sessNum;
@@ -198,6 +204,10 @@ namespace KohaQuick {
             return driver;
         }
 
+        //void RecordLastAccess() {
+        //    lastAccessStamp = DateTime.Now;
+        //}
+
         void WaitForPageToLoad() {
             // Wait for the page to load completely by checking the document's ready state
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MAX_PAGE_WAIT_SECS));
@@ -213,7 +223,6 @@ namespace KohaQuick {
                 return null;
             }
         }
-
 
         string GetTitle() {
             // Find all h3 elements
@@ -239,8 +248,9 @@ namespace KohaQuick {
         public bool LoginStaff(string url, string username, string password, out string errmsg) {
             bool bOK = false;
             errmsg = string.Empty;
+            sessionType = SessionType.SESSION_TYPE_STAFF;
             try {
-                driver.Navigate().GoToUrl(url);
+                GoToUrl(url);
                 WaitForPageToLoad();
 
                 IWebElement userIdInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Id("userid")));
@@ -263,7 +273,11 @@ namespace KohaQuick {
                 } else if(driver.PageSource.Contains("You do not have permission")) {
                     errmsg = "You do not have permission to access this page";
                 } else {
+                    ShowMsg($"Logged in OK as {username}");
                     bOK = true; // Login successful
+                    //RecordLastAccess();
+                    this.username = username;
+                    this.password = password;
                 }
             } catch (Exception ex) {
                 ShowMsg(ex.Message);
@@ -278,10 +292,11 @@ namespace KohaQuick {
         public LoginStatus LoginPatron(string url, string username, string password, out string errmsg) {
             LoginStatus loginStatus = LoginStatus.None;
             errmsg = string.Empty;
+            sessionType = SessionType.SESSION_TYPE_PATRON;
             try {
                 LogoutPatron();
 
-                driver.Navigate().GoToUrl(url);
+                GoToUrl(url);
                 WaitForPageToLoad();
 
                 // Bizarrely, the patron login page has two similar login forms, one
@@ -320,6 +335,7 @@ namespace KohaQuick {
                     //IWebElement summaryHeader = wait1.Until(ExpectedConditions.ElementIsVisible(
                     //    By.XPath("//h1[text()='Your summary']")));
                     loginStatus = LoginStatus.Success;
+                    ShowMsg($"Logged in OK as patron {username}");
                 } else {
                     errmsg = "I don't recognize this page. See debug log.";
                     ShowMsg($"LoginPatron doesn't recognize this page: {driver.PageSource}");
@@ -337,7 +353,7 @@ namespace KohaQuick {
 
         public void LogoutStaff() {
             string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/mainpage.pl?logout.x=1";
-            driver.Navigate().GoToUrl(url);
+            GoToUrl(url);
             try {
                 WaitForPageToLoad();
                 wait1.Until((driver) => ((IJavaScriptExecutor)driver).
@@ -349,7 +365,7 @@ namespace KohaQuick {
 
         public void LogoutPatron() {
             string url = Program.FormMain.settings.KohaUrlPatron + "/cgi-bin/koha/opac-main.pl?logout.x=1";
-            driver.Navigate().GoToUrl(url);
+            GoToUrl(url);
             try {
                 WaitForPageToLoad();
                 wait1.Until((driver) => ((IJavaScriptExecutor)driver).
@@ -363,17 +379,42 @@ namespace KohaQuick {
             return url == driver.Url;
         }
 
+        // Returns true if we had to login again.
+        public bool CheckForExpiredSession() {
+            bool bOK = false;
+            if (sessionType == SessionType.SESSION_TYPE_STAFF) {
+                //if (DateTime.Now.Subtract(lastAccessStamp).TotalMinutes > SESSION_MINUTES) {
+                //    ShowMsg("Session expired; logging out");
+                //}
+                if(driver.PageSource.Contains("Session timed out.")) {
+                    ShowMsg("Session expired; will login again.");
+                    if(LoginStaff(driver.Url, username, password, out string errmsg)) {
+                        ShowMsg("Re-login successful");
+                        bOK = true;
+                    } else {
+                        ShowMsg($"Re-login failed: {errmsg}");
+                    }
+                }
+            }
+            return bOK;
+        }
+
+        public void GoToUrl(string url) {
+            ShowMsg($"Navigating to {url}");
+            driver.Navigate().GoToUrl(url);
+        }
+
         public bool EnsureAtUrl(string url) {
             bool bOK = false;
             if (AtUrl(url)) {
                 bOK = true;
             } else {
-                driver.Navigate().GoToUrl(url);
+                GoToUrl(url);
                 try {
                     WaitForPageToLoad();
                     bOK = true;
                 } catch (Exception ex) {
-                    ShowMsg($"Logout patron: {ex.Message}");
+                    ShowMsg($"EnsureAtUrl: {ex.Message}");
                 }
             }
             return bOK;
@@ -383,155 +424,159 @@ namespace KohaQuick {
             out TrapHoldItemStatus statusOut, out string message) {
             statusOut = TrapHoldItemStatus.None;
             message = string.Empty;
+            ShowMsg($"TrapHold: looking for {barcode}");
             string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/circ/returns.pl";
             TrapHoldItemStatus status = TrapHoldItemStatus.None;
             holdSlip.Currentdatetime = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
             try {
-                if (!AtUrl(url)) {
-                    driver.Navigate().GoToUrl(url);
-                    // Wait for the page to load completely by checking the document's ready state
-                    wait1.Until((driver) => ((IJavaScriptExecutor)driver).
-                        ExecuteScript("return document.readyState").Equals("complete"));
-                }
+                for (int itry = 0; itry < 2; itry++) {
+                    EnsureAtUrl(url);
+                    CheckForExpiredSession();
 
-                // Wait until the input element with id 'barcode' is visible
-                IWebElement barcodeInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Id("barcode")));
+                    // Wait until the input element with id 'barcode' is visible
+                    IWebElement barcodeInput = wait1.Until(ExpectedConditions.ElementIsVisible(By.Id("barcode")));
 
-                barcodeInput.SendKeys(barcode);
+                    barcodeInput.SendKeys(barcode);
 
-                // Wait until the button element with text 'Check in' is visible
-                IWebElement checkInButton = wait1.Until(ExpectedConditions.ElementIsVisible
-                    (By.XPath("//button[contains(text(), 'Check in')]")));
+                    // Wait until the button element with text 'Check in' is visible
+                    IWebElement checkInButton = wait1.Until(ExpectedConditions.ElementIsVisible
+                        (By.XPath("//button[contains(text(), 'Check in')]")));
 
-                // Click the button
-                checkInButton.Click();
+                    // Click the button
+                    checkInButton.Click();
 
-                ShowMsg("Clicked on \"Check in\"");
+                    ShowMsg("Clicked on \"Check in\"");
 
-                WaitForPageToLoad();
-
-                IWebElement webElement;
-
-                // Now that the page is displaying the status of the item, figure out what to do.
-
-                // Look for a hold that needs to be transferred to another branch.
-                try {
-                    ShowMsg("Looking for Transfer to:, one time");
-                    webElement = driver.FindElement(By.XPath(
-                        "//h4[strong[contains(text(), 'Transfer to:')]]"));
-                    // If we get here, the element exists, but it might not be visible yet.
-                    // We don't do the wait Until first, because the element might not exist
-                    // at all on the page, and we'd wait until we timeout.
-                    webElement = wait1.Until(ExpectedConditions.ElementIsVisible(By.XPath(
-                        "//h4[strong[contains(text(), 'Transfer to:')]]")));
-                    ShowMsg("Found Transfer to:, one time");
-                    string library = webElement.Text;
-                    ShowMsg($"Found a transfer; Text={webElement.Text} Size={webElement.Size} Displayed={webElement.Displayed}");
-                    library = library.Replace("Transfer to: ", "");
-                    holdSlip.Library = library;
-                    holdSlip.Title = GetTitle();
-                    status = TrapHoldItemStatus.HoldFoundTransfer;
-
-                    ShowMsg("Looking for Confirm hold and transfer button");
-                    try {
-                        // None of these worked. I don't understand why the XPath selector
-                        // for the text on the button doesn't work.
-                        //IWebElement ignoreButton = driver1.FindElement(By.XPath(
-                        //    "//button[contains(text(), 'Ignore (I)')]"));
-                        //IWebElement ignoreButton = driver1.FindElement(By.CssSelector(
-                        //    "button.btn.btn-default.deny"));
-                        //IWebElement ignoreButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.XPath(
-                        //    "//button[contains(text(), 'Ignore (I)')]")));
-                        //ShowMsg("Transfer Ignore button found and is visible");
-                        IWebElement confirmButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(
-                            "button.btn.btn-default.approve")));
-
-                        // Click the button
-                        confirmButton.Click();
-                        ShowMsg("Clicked on Confirm for Transfer");
-                    } catch (NoSuchElementException) {
-                        ShowMsg("Didn't find Confirm button");
+                    WaitForPageToLoad();
+                    if (CheckForExpiredSession()) {
+                        // We needed to login again, so cycle around.
+                        continue;
                     }
-                } catch (NoSuchElementException) {
-                    ShowMsg("Didn't find Transfer to: one time");
-                }
 
-                // Look for a local hold.
-                if (status == TrapHoldItemStatus.None) {
+                    IWebElement webElement;
+
+                    // Now that the page is displaying the status of the item, figure out what to do.
+
+                    // Look for a hold that needs to be transferred to another branch.
                     try {
-                        // Look for an element like:  <h4><strong>Hold at</strong> Franklin</h4>
-                        // This didn't work; apparently the element existed but wasn't yet visible.
+                        ShowMsg("Looking for Transfer to:, one time");
                         webElement = driver.FindElement(By.XPath(
-                            "//h4[strong[contains(text(), 'Hold at')]]"));
+                            "//h4[strong[contains(text(), 'Transfer to:')]]"));
+                        // If we get here, the element exists, but it might not be visible yet.
+                        // We don't do the wait Until first, because the element might not exist
+                        // at all on the page, and we'd wait until we timeout.
                         webElement = wait1.Until(ExpectedConditions.ElementIsVisible(By.XPath(
-                            "//h4[strong[contains(text(), 'Hold at')]]")));
-                        status = TrapHoldItemStatus.HoldFoundLocal;
+                            "//h4[strong[contains(text(), 'Transfer to:')]]")));
+                        ShowMsg("Found Transfer to:, one time");
                         string library = webElement.Text;
-                        ShowMsg($"Hold text is: {library}");
-                        library = library.Replace("Hold at ", "");
-                        ShowMsg($"Found Hold at: {library}");
+                        ShowMsg($"Found a transfer; Text={webElement.Text} Size={webElement.Size} Displayed={webElement.Displayed}");
+                        library = library.Replace("Transfer to: ", "");
                         holdSlip.Library = library;
                         holdSlip.Title = GetTitle();
+                        status = TrapHoldItemStatus.HoldFoundTransfer;
 
-                        // At this point, a human would click the "Print slip and confirm (P)"
-                        // button. But we don't, because we don't want to use the cumbersome
-                        // browser print dialog to print the slip. Plus, we can print a 
-                        // more attractive slip ourselves anyway.
-                        // So we just click the Confirm button.
-                        ShowMsg("Looking for Confirm hold button");
-                        IWebElement confirmButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(
-                           "button.btn.btn-default.approve")));
+                        ShowMsg("Looking for Confirm hold and transfer button");
+                        try {
+                            // None of these worked. I don't understand why the XPath selector
+                            // for the text on the button doesn't work.
+                            //IWebElement ignoreButton = driver1.FindElement(By.XPath(
+                            //    "//button[contains(text(), 'Ignore (I)')]"));
+                            //IWebElement ignoreButton = driver1.FindElement(By.CssSelector(
+                            //    "button.btn.btn-default.deny"));
+                            //IWebElement ignoreButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.XPath(
+                            //    "//button[contains(text(), 'Ignore (I)')]")));
+                            //ShowMsg("Transfer Ignore button found and is visible");
+                            IWebElement confirmButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(
+                                "button.btn.btn-default.approve")));
 
-                        // Click the button
-                        confirmButton.Click();
-                        ShowMsg("Clicked on Confirm hold (Y) for Hold at");
+                            // Click the button
+                            confirmButton.Click();
+                            ShowMsg("Clicked on Confirm for Transfer");
+                        } catch (NoSuchElementException) {
+                            ShowMsg("Didn't find Confirm button");
+                        }
                     } catch (NoSuchElementException) {
-                        ShowMsg("Didn't find Hold at");
+                        ShowMsg("Didn't find Transfer to: one time");
                     }
-                }
 
-                // Look for a message indicating no such item exists.
-                if (status == TrapHoldItemStatus.None) {
-                    try {
-                        webElement = driver.FindElement(By.XPath(
-                            "//p[contains(@class, 'problem ret_badbarcode') and contains(text(), 'No item with barcode:')]"));
-                        status = TrapHoldItemStatus.NoSuchItem;
-                    } catch (NoSuchElementException) {
-                        ShowMsg("Didn't find No item with barcode");
+                    // Look for a local hold.
+                    if (status == TrapHoldItemStatus.None) {
+                        try {
+                            // Look for an element like:  <h4><strong>Hold at</strong> Franklin</h4>
+                            // This didn't work; apparently the element existed but wasn't yet visible.
+                            webElement = driver.FindElement(By.XPath(
+                                "//h4[strong[contains(text(), 'Hold at')]]"));
+                            webElement = wait1.Until(ExpectedConditions.ElementIsVisible(By.XPath(
+                                "//h4[strong[contains(text(), 'Hold at')]]")));
+                            status = TrapHoldItemStatus.HoldFoundLocal;
+                            string library = webElement.Text;
+                            ShowMsg($"Hold text is: {library}");
+                            library = library.Replace("Hold at ", "");
+                            ShowMsg($"Found Hold at: {library}");
+                            holdSlip.Library = library;
+                            holdSlip.Title = GetTitle();
+
+                            // At this point, a human would click the "Print slip and confirm (P)"
+                            // button. But we don't, because we don't want to use the cumbersome
+                            // browser print dialog to print the slip. Plus, we can print a 
+                            // more attractive slip ourselves anyway.
+                            // So we just click the Confirm button.
+                            ShowMsg("Looking for Confirm hold button");
+                            IWebElement confirmButton = wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(
+                               "button.btn.btn-default.approve")));
+
+                            // Click the button
+                            confirmButton.Click();
+                            ShowMsg("Clicked on Confirm hold (Y) for Hold at");
+                        } catch (NoSuchElementException) {
+                            ShowMsg("Didn't find Hold at");
+                        }
                     }
-                }
 
-                if (status == TrapHoldItemStatus.None) {
-                    // Apparently if we get here, there was no hold on the item.
-                    // Unfortunately, the web page doesn't have any direct indication of this.
-                    status = TrapHoldItemStatus.NoHold;
+                    // Look for a message indicating no such item exists.
+                    if (status == TrapHoldItemStatus.None) {
+                        try {
+                            webElement = driver.FindElement(By.XPath(
+                                "//p[contains(@class, 'problem ret_badbarcode') and contains(text(), 'No item with barcode:')]"));
+                            status = TrapHoldItemStatus.NoSuchItem;
+                        } catch (NoSuchElementException) {
+                            ShowMsg("Didn't find No item with barcode");
+                        }
+                    }
 
-                    // Find the title of the item.
-                    // Find the h3 element containing the text "Check in message"
-                    var h3Element = driver.FindElement(By.XPath("//h3[contains(text(), 'Check in message')]"));
+                    if (status == TrapHoldItemStatus.None) {
+                        // Apparently if we get here, there was no hold on the item.
+                        // Unfortunately, the web page doesn't have any direct indication of this.
+                        status = TrapHoldItemStatus.NoHold;
 
-                    if (h3Element != null) {
-                        // Find the first p element following the h3 element
-                        var pElement = h3Element.FindElement(By.XPath("following-sibling::p"));
+                        // Find the title of the item.
+                        // Find the h3 element containing the text "Check in message"
+                        var h3Element = driver.FindElement(By.XPath("//h3[contains(text(), 'Check in message')]"));
 
-                        if (pElement != null) {
-                            // Find the first a element under the p element
-                            var aElement = pElement.FindElement(By.XPath(".//a"));
+                        if (h3Element != null) {
+                            // Find the first p element following the h3 element
+                            var pElement = h3Element.FindElement(By.XPath("following-sibling::p"));
 
-                            if (aElement != null) {
-                                // Get the text of the a element
-                                string linkText = aElement.Text;
-                                ShowMsg("Item apparently not on hold. Link Text: " + linkText);
-                                message = linkText;
+                            if (pElement != null) {
+                                // Find the first a element under the p element
+                                var aElement = pElement.FindElement(By.XPath(".//a"));
+
+                                if (aElement != null) {
+                                    // Get the text of the a element
+                                    string linkText = aElement.Text;
+                                    ShowMsg("Item apparently not on hold. Link Text: " + linkText);
+                                    message = linkText;
+                                } else {
+                                    ShowMsg("No a element found under the p element.");
+                                }
                             } else {
-                                ShowMsg("No a element found under the p element.");
+                                ShowMsg("No p element found following the h3 element.");
                             }
                         } else {
-                            ShowMsg("No p element found following the h3 element.");
+                            ShowMsg("No h3 element containing 'Check in message' found.");
                         }
-                    } else {
-                        ShowMsg("No h3 element containing 'Check in message' found.");
                     }
+                    break;
                 }
             } catch (Exception ex) {
                 ShowMsg(ex.Message);
@@ -542,11 +587,9 @@ namespace KohaQuick {
 
         public bool GetInfoOnTrappedItem(string barcode, ref HoldSlip holdSlip) {
             bool bOK = false;
+            ShowMsg($"GetInfoOnTrappedItem: looking for item {barcode}");
             string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/circ/waitingreserves.pl";
-            if (!AtUrl(url)) {
-                driver.Navigate().GoToUrl(url);
-                WaitForPageToLoad();
-            }
+            EnsureAtUrl(url);
 
             for (int itry = 0; !bOK && (itry < 3); itry++) {
                 try {
@@ -555,6 +598,9 @@ namespace KohaQuick {
                     // Refresh the page
                     driver.Navigate().Refresh();
                     WaitForPageToLoad();
+                    if(CheckForExpiredSession()) {
+                        continue;
+                    }
 
                     IWebElement inputBox = WaitForElement(By.CssSelector(
                         "input[type='search'][aria-controls='holdst']"));
@@ -655,6 +701,8 @@ namespace KohaQuick {
 
             try {
                 EnsureAtUrl(url);
+                CheckForExpiredSession();
+                ShowMsg($"Looking for items checked out for patron with card number {barcode}");
 
                 driver.FindElement(By.Id("findborrower")).SendKeys(barcode);
                 driver.FindElement(By.CssSelector("#patronsearch > button > .fa")).Click();
@@ -752,12 +800,14 @@ namespace KohaQuick {
         public bool AddPatron(Patron patron, out string errmsg) {
             bool bOK = false;
             errmsg = "";
+            ShowMsg($"Adding patron with card number {patron.cardnumber}");
 
             try {
                 string url = Program.FormMain.settings.KohaUrlStaff +
                     $"/cgi-bin/koha/members/memberentry.pl?op=add&categorycode={Program.FormMain.settings.DefaultPatronCategory}" ;
-                driver.Navigate().GoToUrl(url);
+                GoToUrl(url);
                 WaitForPageToLoad();
+                CheckForExpiredSession();
 
                 driver.FindElement(By.Id("firstname")).SendKeys(patron.firstname);
                 driver.FindElement(By.Id("middle_name")).SendKeys(patron.middlename);
@@ -870,10 +920,12 @@ namespace KohaQuick {
             bThereAreMore = false;
             errmsg = "";
             Results = new ItemSearchResultsCol();
+            ShowMsg($"Searching for items with search term: {searchTerm}");
             try {
                 string url = Program.FormMain.settings.KohaUrlStaff + "/cgi-bin/koha/catalogue/search.pl";
-                driver.Navigate().GoToUrl(url);
+                GoToUrl(url);
                 WaitForPageToLoad();
+                CheckForExpiredSession();
 
                 driver.FindElement(By.Name("q")).SendKeys(searchTerm);
 
@@ -1025,6 +1077,7 @@ namespace KohaQuick {
         public bool PlaceHoldsForPatron(string cardnumber, ItemSearchResultsCol itemsToHold, out string errmsg) {
             bool bOK = false;
             errmsg = "";
+            ShowMsg($"Placing holds on {itemsToHold.Count} items for patron with card number {cardnumber}");
             try {
                 ShowMsg($"PlaceHoldsForPatron: url={driver.Url}");
                 // Placing the hold(s) is rather different, based on whether the
